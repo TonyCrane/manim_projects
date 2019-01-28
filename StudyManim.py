@@ -109,33 +109,46 @@ class NumberPlaneTest(Scene):
             FadeInFromDown(grid_title),
         )
         self.wait()
-        grid.prepare_for_nonlinear_transform()
-        self.play(
-            grid.apply_function,
-            lambda p: p * np.array([
-                2,
-                2,
-                1,
-            ]),
-            run_time=3,
-        )
-        self.wait()
-        grid_transform_title = TextMobject(
-            "放大"
-        )
+        grid_transform_title = TextMobject("放大")
         grid_transform_title.to_corner(UP)
-        self.play(
-            Transform(grid_title, grid_transform_title)
-        )
-        self.wait()
+        grid_transform_title.scale(1.5)
         grid.prepare_for_nonlinear_transform()
         self.play(
+            Transform(grid_title, grid_transform_title),
             grid.apply_function,
-            lambda p: p + np.array([
-                2,
-                2,
-                1,
-            ]),
+            lambda p: p * np.array([ 2, 2, 0, ]),
             run_time=3,
         )
         self.wait()
+        grid.prepare_for_nonlinear_transform()
+        grid_transform_title = TextMobject("平移")
+        grid_transform_title.to_corner(UP)
+        grid_transform_title.scale(1.5)
+        self.play(
+            Transform(grid_title, grid_transform_title),
+            grid.apply_function,
+            lambda p: p + np.array([2, 1, 0, ]),
+            run_time=3,
+        )
+        self.wait()
+        grid.prepare_for_nonlinear_transform()
+        grid_transform_title = TextMobject("线性变换")
+        grid_transform_title.to_corner(UP)
+        grid_transform_title.scale(1.5)
+        self.play(
+            Transform(grid_title, grid_transform_title),
+            grid.apply_function,
+            lambda p: p + np.array([ p[1] , 0, 0,]),
+            run_time=3,
+        )
+        self.wait()
+        grid.prepare_for_nonlinear_transform()
+        grid_transform_title = TextMobject("非线性变换")
+        grid_transform_title.to_corner(UP)
+        grid_transform_title.scale(1.5)
+        self.play(
+            Transform(grid_title, grid_transform_title),
+            grid.apply_function,
+            lambda p: p + np.array([ np.sin(p[1]) , np.sin(p[0]) , 0,]),
+            run_time=3,
+        )
