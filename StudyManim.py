@@ -152,3 +152,32 @@ class NumberPlaneTest(Scene):
             lambda p: p + np.array([ np.sin(p[1]) , np.sin(p[0]) , 0,]),
             run_time=3,
         )
+
+class VideoStart(Scene):
+    CONFIG = {
+        "Author"        : "@鹤翔万里",
+        "title_name"    : "测试",
+        "svg_filename"  : "TonySVG",
+        "author_colors" : [BLUE, YELLOW, ORANGE, RED],
+    }
+    def construct(self):
+        author = TextMobject(
+            self.Author,
+            tex_to_color_map={self.Author : self.author_colors}
+        )
+        #author.scale(1)
+        svg_file = SVGMobject(file_name = self.svg_filename)
+        svg_file.to_corner(UP)
+        #svg_file.scale(0.5)
+        #head = VGroup(svg_file, author)
+        #head.to_corner((UP + ORIGIN) / 2)
+
+        title = TextMobject(self.title_name)
+        title.to_corner((DOWN + ORIGIN) / 2)
+        self.play(
+            FadeInFromDown(svg_file),
+            Write(author)
+        )
+        self.play(
+            Write(title)
+        )
