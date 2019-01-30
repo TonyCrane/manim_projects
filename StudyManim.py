@@ -223,10 +223,9 @@ class TryMatrix(Scene):
             [1, 1, 0, 0, 1, 0, 1, 0]]
         )
         self.play(Write(matrix), run_time = 3)
-        trans = TextMobject("1")
-        trans.move_to(matrix[0][0])
+        trans = TextMobject("1").move_to(matrix[0][9])
         self.play(
-            Transform(matrix[0][0], trans)
+            Transform(matrix[0][9], trans)
         )
         self.wait()
 
