@@ -216,6 +216,41 @@ class TrySurroundingRectangle(Scene):
             Transform(text[1], trans_text_1),
             Transform(another_text[1], trans_text_2)
         )
+        self.wait()
 
-#class TryMatrix(Scene):
-#    def construct(self):
+class TryMatrix(Scene):
+    def construct(self):
+        matrix = Matrix(
+            [["0", 0, 0, 1, 0, 1, 0, 1],
+            [1, 0, 1, 1, 0, 1, 0, 1],
+            [1, 1, 0, 0, 1, 0, 1, 0]]
+        )
+        self.play(Write(matrix), run_time = 3)
+        trans = TextMobject("1")
+        trans.move_to(matrix[0][0])
+        self.play(
+            Transform(matrix[0][0], trans)
+        )
+        self.wait()
+
+class TransformPartOfTex(Scene):
+    def construct(self):
+        gauss = TexMobject(
+            "\\def\\ooint{{\\bigcirc}\\kern-12.5pt{\\int}\\kern-6.5pt{\\int}}"
+			"\\ooint_S{E\\cdot dS} = {1\\over{\\epsilon_0}}\\times{{\\int}\\kern-6.5pt{\\int}\\kern-6.5pt{\\int}", "_{Sh}", "{\\rho \\cdot dV}}",
+        )
+        self.play(Write(gauss))
+        trans_tex = TexMobject("_{V}")
+        trans_tex.move_to(gauss[1])
+        self.play(
+            Transform(gauss[1], trans_tex)
+        )
+        self.wait()
+        text = TextMobject("V", tex_to_color_map={"V": BLUE})
+        text.next_to(gauss[1], direction=UP, buff=2)
+        self.play(
+            Transform(trans_tex, text)
+        )
+        text_rect = SurroundingRectangle(text)
+        self.play(ShowCreation(text_rect))
+        self.wait()
