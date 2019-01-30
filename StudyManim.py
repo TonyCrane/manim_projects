@@ -165,15 +165,11 @@ class VideoStart(Scene):
             self.Author,
             tex_to_color_map={self.Author : self.author_colors}
         )
-        #author.scale(1)
         svg_file = SVGMobject(file_name = self.svg_filename)
         svg_file.to_corner(UP)
-        #svg_file.scale(0.5)
-        #head = VGroup(svg_file, author)
-        #head.to_corner((UP + ORIGIN) / 2)
 
         title = TextMobject(self.title_name)
-        title.to_corner((DOWN + ORIGIN) / 2)
+        title.to_corner((BOTTOM + ORIGIN))
         self.play(
             FadeInFromDown(svg_file),
             Write(author)
@@ -181,3 +177,33 @@ class VideoStart(Scene):
         self.play(
             Write(title)
         )
+        self.wait()
+        self.play(
+            LaggedStart(FadeOutAndShiftDown, author),
+            FadeOut(title),
+            run_time = 0.5,
+        )
+
+class TrySurroundingRectangle(Scene):
+    def construct(self):
+        text = TextMobject(
+            "Here is a ", "text",
+        )
+        text.to_edge(TOP)
+        text_rect = SurroundingRectangle(text[1])
+        another_text = TextMobject(
+            "That ", "text", " is created by Tony"
+        )
+        another_text_rect = SurroundingRectangle(another_text[1])
+        text_arrow = Arrow(
+            another_text[1].get_top(), text[1].get_bottom(),
+            tip_length = 0.15
+        )
+
+        self.play(Write(text))
+        self.play(ShowCreation(text_rect))
+        self.wait()
+        self.play(Write(another_text), run_time=0.5)
+        self.play(ShowCreation(another_text_rect))
+        self.play(ShowCreation(text_arrow))
+        self.wait()
