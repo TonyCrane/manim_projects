@@ -197,13 +197,25 @@ class TrySurroundingRectangle(Scene):
         another_text_rect = SurroundingRectangle(another_text[1])
         text_arrow = Arrow(
             another_text[1].get_top(), text[1].get_bottom(),
-            tip_length = 0.15
+            tip_length = 0.1
         )
+
+        trans_text_1 = TextMobject("TEXT", tex_to_color_map={"TEXT": BLUE})
+        trans_text_2 = TextMobject("TEXT", tex_to_color_map={"TEXT": BLUE})
+        trans_text_1.move_to(text[1])
+        trans_text_2.move_to(another_text[1])
 
         self.play(Write(text))
         self.play(ShowCreation(text_rect))
         self.wait()
-        self.play(Write(another_text), run_time=0.5)
+        self.play(Write(another_text), run_time=1)
         self.play(ShowCreation(another_text_rect))
-        self.play(ShowCreation(text_arrow))
+        self.play(ShowCreation(text_arrow), run_time=1.5)
         self.wait()
+        self.play(
+            Transform(text[1], trans_text_1),
+            Transform(another_text[1], trans_text_2)
+        )
+
+#class TryMatrix(Scene):
+#    def construct(self):
