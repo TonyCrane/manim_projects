@@ -1,3 +1,9 @@
+'''
+  > File Name        : StudyManim.py
+  > Author           : Tony
+  > Created Time     : 2019/01/26 16:19:55
+'''
+
 from big_ol_pile_of_manim_imports import *
 
 class Polygon(Scene):
@@ -60,32 +66,23 @@ class MoveText(Scene):
         self.play(Transform(title, transform_title))
         self.wait()
 
-class TabTransform(Scene):
-    def construct(self):
-        tab = TextMobject(
-            "\\begin{tabular}{ccc}"
-            "\\toprule"
-            "Name& Number& Sex\\\\"
-            "\\midrule"
-            "Steve Jobs& 001& Male\\\\"
-            "Bill Gates& 002& Female\\\\"
-            "\\bottomrule"
-            "\\end{tabular}"
-        )
+class GaussLaw(Scene):
+	def construct(self):
+		example_text = TextMobject(
+			"Gauss's Law 高斯定理",
+			tex_to_color_map={"Law": RED}
+		)
+		example_tex = TexMobject(
+			"\\def\\ooint{{\\bigcirc}\\kern-12.5pt{\\int}\\kern-6.5pt{\\int}}"
+			"\\ooint_S{E\\cdot dS} = {1\\over{\\epsilon_0}}\\times{{\\int}\\kern-6.5pt{\\int}\\kern-6.5pt{\\int}_V{\\rho \\cdot dV}}",
+		)
+		group = VGroup(example_text, example_tex)
+		group.arrange_submobjects(DOWN)
+		group.set_width(FRAME_WIDTH - 2 * LARGE_BUFF)
 
-        transform_tab = TextMobject(
-            "\\begin{tabular}{ccc}"
-            "\\toprule"
-            "Name& Number& Sex\\\\"
-            "\\midrule"
-            "Steve Jobs& 001& Male\\\\"
-            "Tony Wang& 002& Female\\\\"
-            "\\bottomrule"
-            "\\end{tabular}"
-        )
-        self.play(Write(tab))
-        self.play(Transform(tab, transform_tab))
-        self.wait()
+		self.play(Write(example_text))
+		self.play(Write(example_tex))
+		self.wait()
 
 class PrintAuthor(Scene):
     def construct(self):
