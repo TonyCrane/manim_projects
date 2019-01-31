@@ -7,13 +7,13 @@
 from big_ol_pile_of_manim_imports import *
 from manim_projects.StudyManim import VideoStart
 
-array_fini = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 3, 3, 3, 3, 3, 3, 3],
-    [0, 0, 3, 4, 4, 7, 7, 7, 7],
-    [0, 0, 3, 4, 5, 7, 8, 9, 9],
-    [0, 0, 3, 4, 5, 7, 8, 9, 10]
-]
+array_fini = np.array([
+    ["0", "0", "0", "0", "0", "0", "0", "0", "0"],
+    ['0', '0', '3', '3', '3', '3', '3', '3', '3'],
+    ['0', '0', "3", "4", "4", '7', '7', '7', '7'],
+    ['0', '0', '3', '4', '5', '7', '8', '9', '9'],
+    ['0', '0', '3', '4', '5', '7', '8', '9', '10']
+])
 
 class VideoTitle(VideoStart):
     CONFIG = {
@@ -56,6 +56,7 @@ class TwoDArraySolve(Scene):
         self.CreateArray()
         self.FirstRow()
         self.SecondRow()
+        self.finish()
 
     def IntroPara(self):
         para = TextMobject(
@@ -132,7 +133,7 @@ class TwoDArraySolve(Scene):
         under2 = TextMobject(
             "基于第一行结果和背包容量，可以选或不选或只选第二件，取最大价值"
         ).scale(0.3).to_corner(UP + RIGHT)
-        under2.next_to(under1, direction=DOWN, buff=0.2)
+        under2.next_to(under1, direction=DOWN, buff=0.1)
 
         self.play(
             Transform(self.title, transtitle),
@@ -161,19 +162,96 @@ class TwoDArraySolve(Scene):
                 rect = SurroundingRectangle(array[0][i])
                 arrow1 = Arrow(array[0][i - 9].get_bottom(), array[0][i].get_top())
                 if i - 12 > 9:
-                    arrow2 = Arrow(arrow[0][i - 12].get_bottom(), array[0][i].get_top())
+                    arrow2 = Arrow(array[0][i - 12].get_bottom(), array[0][i].get_top())
                 else:
                     arrow2 = Arrow(array[0][i - 12].get_right(), array[0][i].get_top())
-                text = TextMobject("+4").move_to(arrow2)
+                text = TextMobject("+4").scale(0.7).move_to(arrow2).set_color(RED)
                 trans = TextMobject(array_fini[2][i - 18]).move_to(array[0][i])
                 
                 self.play(
                     ShowCreation(rect),
                     ShowCreation(arrow1),
-                    ShowCreation(arrow2)
+                    ShowCreation(arrow2),
+                    FadeIn(text)
                 )
                 self.play(
+                    Transform(array[0][i], trans),
+                    run_time = 0.2
+                )
+                self.play(
+                    FadeOut(rect),
+                    FadeOut(arrow1),
+                    FadeOut(arrow2),
+                    FadeOut(text)
+                )
 
+        self.play(
+            Transform(under, under2)
+        )
+        self.wait()
+        self.under2 = under2
+
+    def finish(self):
+        array  = self.array
+        under2 = self.under2
+        transtitle = TextMobject("更新剩余部分")
+        transtitle.scale(0.8).to_corner(UP).set_color(YELLOW)
+        under = TextMobject(
+            "基于前一行结果和背包容量，取最大价值（同上一步）"
+        ).scale(0.7).to_corner(DOWN)
+        under3 = TextMobject(
+            "基于前一行结果和背包容量，取最大价值（同上一步）"
+        ).scale(0.3).to_corner(UP + RIGHT)
+        under3.next_to(under2, direction=DOWN, buff=0.1)
+
+        self.play(
+            Transform(self.title, transtitle),
+            Write(under)
+        )
+        
+        for i in range(28, 36):
+            if (i - 28 < 4):
+                rect = SurroundingRectangle(array[0][i])
+                arrow = Arrow(array[0][i - 9].get_bottom(), array[0][i].get_top())
+                old = array[0][i - 9].copy()
+                trans = old.move_to(array[0][i])
+                self.play(
+                    ShowCreation(rect),
+                    ShowCreation(arrow)
+                )
+                self.play(
+                    Transform(array[0][i], trans),
+                    run_time = 0.2
+                )
+                self.play(
+                    FadeOut(rect),
+                    FadeOut(arrow)
+                )
+            else:
+                rect = SurroundingRectangle(array[0][i])
+                arrow1 = Arrow(array[0][i - 9].get_bottom(), array[0][i].get_top())
+                if i - 12 > 19:
+                    arrow2 = Arrow(array[0][i - 12].get_bottom(), array[0][i].get_top())
+                else:
+                    arrow2 = Arrow(array[0][i - 12].get_right(), array[0][i].get_top())
+                text = TextMobject("+5").scale(0.7).move_to(arrow2).set_color(RED)
+                trans = TextMobject(array_fini[3][i - 27]).move_to(array[0][i])
+                
+                self.play(
+                    ShowCreation(rect),
+                    ShowCreation(arrow1),
+                    ShowCreation(arrow2),
+                    FadeIn(text)
+                )
+                self.play(
+                    Transform(array[0][i], trans),
+                    run_time = 0.2
+                )
+                self.play(
+                    FadeOut(rect),
+                    FadeOut(arrow1),
+                    FadeOut(arrow2),
+                    FadeOut(text)
                 )
 
         self.play(
