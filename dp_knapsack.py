@@ -7,6 +7,14 @@
 from big_ol_pile_of_manim_imports import *
 from manim_projects.StudyManim import VideoStart
 
+array_fini = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 3, 3, 3, 3, 3, 3, 3],
+    [0, 0, 3, 4, 4, 7, 7, 7, 7],
+    [0, 0, 3, 4, 5, 7, 8, 9, 9],
+    [0, 0, 3, 4, 5, 7, 8, 9, 10]
+]
+
 class VideoTitle(VideoStart):
     CONFIG = {
         "title_name"    : "动态规划-01背包问题",
@@ -47,6 +55,7 @@ class TwoDArraySolve(Scene):
         self.IntroPara()
         self.CreateArray()
         self.FirstRow()
+        self.SecondRow()
 
     def IntroPara(self):
         para = TextMobject(
@@ -75,40 +84,99 @@ class TwoDArraySolve(Scene):
         )
         title = TextMobject("初始化数组$F[\\ ][\\ ]$", tex_to_color_map={"初始化数组$F[\\ ][\\ ]$": YELLOW})
         title.to_corner(UP)
-        title.scale(0.7)
+        title.scale(0.8)
         self.play(Write(title))
         self.play(Write(array))
         self.wait()
-        self.play(FadeOut(title))
         self.array = array
+        self.title = title
     
     def FirstRow(self):
         array = self.array
-        title = TextMobject(
+        transtitle = TextMobject(
+            "更新第一行最大价值"
+        )
+        transtitle.scale(0.8).to_corner(UP).set_color(YELLOW)
+        under = TextMobject(
             "当$i=1$时，如果背包可以放下第一个物品，则放入，更新最大价值"
         )
-        title.scale(0.7)
-        title.to_corner(UP)
-        title.set_color(YELLOW)
-        # trans = [TextMobject("3") for i in [2, 3, 4, 5, 6, 7, 8]]
-        # for i in [2, 3, 4, 5, 6, 7, 8]:
-        #     trans[i].move_to(array[0][i + 10])
-        trans_12 = TextMobject("3").move_to(self.array[0][11])
-        trans_13 = TextMobject("3").move_to(self.array[0][12])
-        trans_14 = TextMobject("3").move_to(self.array[0][13])
-        trans_15 = TextMobject("3").move_to(self.array[0][14])
-        trans_16 = TextMobject("3").move_to(self.array[0][15])
-        trans_17 = TextMobject("3").move_to(self.array[0][16])
-        trans_18 = TextMobject("3").move_to(self.array[0][17])
-        self.play(Write(title))
+        under.scale(0.7).to_corner(DOWN)
+
         self.play(
-            Transform(array[0][11], trans_12),
-            Transform(array[0][12], trans_13),
-            Transform(array[0][13], trans_14),
-            Transform(array[0][14], trans_15),
-            Transform(array[0][15], trans_16),
-            Transform(array[0][16], trans_17),
-            Transform(array[0][17], trans_18)
+            Transform(self.title, transtitle),
+            Write(under)
+        )
+        for i in range(11, 18):
+            trans = TextMobject("3").move_to(array[0][i])
+            self.play(
+                Transform(array[0][i], trans),
+                run_time=0.2
+            )
+        under1 = TextMobject(
+            "当$i=1$时，如果背包可以放下第一个物品，则放入，更新最大价值"
+        ).scale(0.3).to_corner(RIGHT + UP)
+        self.play(
+            Transform(under, under1)
         )
         self.wait()
-        self.play(FadeOut(title))
+        self.under1 = under1
+    
+    def SecondRow(self):
+        array  = self.array
+        under1 = self.under1
+        transtitle = TextMobject("更新第二行最大价值")
+        transtitle.scale(0.8).to_corner(UP).set_color(YELLOW)
+        under = TextMobject(
+            "基于第一行结果和背包容量，可以选或不选或只选第二件，取最大价值"
+        ).scale(0.7).to_corner(DOWN)
+        under2 = TextMobject(
+            "基于第一行结果和背包容量，可以选或不选或只选第二件，取最大价值"
+        ).scale(0.3).to_corner(UP + RIGHT)
+        under2.next_to(under1, direction=DOWN, buff=0.2)
+
+        self.play(
+            Transform(self.title, transtitle),
+            Write(under)
+        )
+        
+        for i in range(19, 27):
+            if (i - 18 < 3):
+                rect = SurroundingRectangle(array[0][i])
+                arrow = Arrow(array[0][i - 9].get_bottom(), array[0][i].get_top())
+                old = array[0][i - 9].copy()
+                trans = old.move_to(array[0][i])
+                self.play(
+                    ShowCreation(rect),
+                    ShowCreation(arrow)
+                )
+                self.play(
+                    Transform(array[0][i], trans),
+                    run_time = 0.2
+                )
+                self.play(
+                    FadeOut(rect),
+                    FadeOut(arrow)
+                )
+            else:
+                rect = SurroundingRectangle(array[0][i])
+                arrow1 = Arrow(array[0][i - 9].get_bottom(), array[0][i].get_top())
+                if i - 12 > 9:
+                    arrow2 = Arrow(arrow[0][i - 12].get_bottom(), array[0][i].get_top())
+                else:
+                    arrow2 = Arrow(array[0][i - 12].get_right(), array[0][i].get_top())
+                text = TextMobject("+4").move_to(arrow2)
+                trans = TextMobject(array_fini[2][i - 18]).move_to(array[0][i])
+                
+                self.play(
+                    ShowCreation(rect),
+                    ShowCreation(arrow1),
+                    ShowCreation(arrow2)
+                )
+                self.play(
+
+                )
+
+        self.play(
+            Transform(under, under2)
+        )
+        self.wait()
