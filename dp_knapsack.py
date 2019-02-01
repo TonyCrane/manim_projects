@@ -398,3 +398,103 @@ class TwoDArrayCode(Scene):
         self.play(Write(title))
         self.play(ShowCreation(screen_rect))
         self.wait(6)
+
+class TwoDArrayDetail(Scene):
+    def construct(self):
+        title = TextMobject("再详细看一下二维数组递推方法").set_color(ORANGE).to_edge(UP)
+        array = Matrix(
+            [
+                ["3", "3", "3", "3", "3"],
+                [" ", " ", " ", " ", " "],
+                ["3", "4", "4", "7", "7"]
+            ]
+        ).scale(1.3)
+        rect1 = SurroundingRectangle(array[0][0])
+        rect2 = SurroundingRectangle(array[0][4])
+        rect3 = RedSurroundingRectangle(array[0][14])
+        arrow1 = Arrow(array[0][0].get_bottom(), array[0][14].get_top())
+        arrow2 = Arrow(array[0][4].get_bottom(), array[0][14].get_top())
+        text = TextMobject("+4").scale(0.7).move_to(arrow1).set_color(RED)
+
+        trans_array = Matrix(
+            [
+                ["F[i-1][j-v[i]]", " ", "F[i-1][j]"],
+                [" ", " ", " "],
+                [" ", " ", "F[i][j]"]
+            ]
+        )
+        trans_rect1 = SurroundingRectangle(trans_array[0][0])
+        trans_rect2 = SurroundingRectangle(trans_array[0][2])
+        trans_rect3 = RedSurroundingRectangle(trans_array[0][8])
+        trans_arrow1 = Arrow(trans_array[0][0].get_bottom(), trans_array[0][8].get_top())
+        trans_arrow2 = Arrow(trans_array[0][2].get_bottom(), trans_array[0][8].get_top())
+        trans_text   = TextMobject("+c[i]").scale(0.7).move_to(trans_arrow1).set_color(RED)
+        self.play(Write(title))
+        self.play(FadeIn(array))
+        self.play(
+            ShowCreation(rect1),
+            ShowCreation(rect2),
+            ShowCreation(rect3),
+            ShowCreation(arrow1),
+            ShowCreation(arrow2),
+            Write(text)
+        )
+        self.wait()
+        self.play(
+            FadeOut(rect1),
+            FadeOut(rect2),
+            FadeOut(rect3),
+            FadeOut(arrow1),
+            FadeOut(arrow2),
+            FadeOut(text),
+            Transform(array, trans_array)
+        )
+        self.play(
+            ShowCreation(trans_rect1),
+            ShowCreation(trans_rect2),
+            ShowCreation(trans_rect3),
+            ShowCreation(trans_arrow1),
+            ShowCreation(trans_arrow2),
+            Write(trans_text)
+        )
+        self.wait(2)
+        self.play(
+            FadeOut(array),
+            FadeOut(trans_rect1),
+            FadeOut(trans_rect2),
+            FadeOut(trans_rect3),
+            FadeOut(trans_arrow1),
+            FadeOut(trans_arrow2),
+            FadeOut(trans_text)
+        )
+        self.play(
+            FadeOutAndShiftDown(title)
+        )
+        self.wait()
+
+class TwoDToOneD(Scene):
+    def construct(self):
+        title = TextMobject("但，使用二位数组会增加空间复杂度，可能会导致MLE").to_corner(UP).set_color(YELLOW)
+        text  = TextMobject("我们可以将二维数组降为一位来节省空间").next_to(title, DOWN)
+        text2 = TextMobject("仍需要两层循环，一层列举物品，一层列举容量").next_to(text, DOWN)
+        dp    = TextMobject("$F[j] = max(F[j], F[j - v[i]] + c[i])$").scale(1.2).set_color(ORANGE)
+        self.play(
+            Write(title),
+            Write(text),
+            Write(text2),
+        )
+        self.play(
+            FadeInFromDown(dp)
+        )
+        self.wait(3)
+        self.play(
+            FadeOut(title),
+            FadeOut(text),
+            FadeOut(text2),
+            FadeOut(dp)
+        )
+        self.wait()
+
+class OneDArraySolve(Scene):
+    def construct(self):
+        
