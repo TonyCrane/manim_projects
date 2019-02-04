@@ -388,7 +388,7 @@ class TwoDArrayCode(Scene):
         self.play(
             FadeOut(dp)
         )
-        title = TextMobject("二维数组代码片段")
+        title = TextMobject("二维数组代码")
         title.set_color(YELLOW)
         title.scale(1.2)
         title.to_edge(UP)
@@ -495,6 +495,190 @@ class TwoDToOneD(Scene):
         )
         self.wait()
 
+class TryOneDArray(Scene):
+    def construct(self):
+        array = Matrix(
+            [
+                ["i", "0", "1", "2", "3", "4", "5", "6", "7", "8"],
+                ["F[i]", "0", "0", "0", "0", "0", "0", "0", "0", "0"]
+            ]
+        )
+        title = TextMobject("第一次更新").scale(0.8).to_corner(UP).set_color(YELLOW)
+        self.play(
+            Write(title),
+            Write(array)
+        )
+        for i in range(13, 20):
+            trans = TextMobject("3").move_to(array[0][i])
+            self.play(Transform(array[0][i], trans), run_time=0.3)
+        
+        trans_title = TextMobject("第二次更新").scale(0.8).to_corner(UP).set_color(YELLOW)
+        self.play(Transform(title, trans_title))
+        under = TextMobject("每一个位置的结果都由上一次更新后的本位置和v[i]前的位置决定").scale(0.7).to_corner(DOWN)
+        self.play(Write(under))
+        
+        for i in range(14, 18):
+            if i <= 16:
+                if i <= 15:
+                    trans = TextMobject("4").move_to(array[0][i])
+                else:
+                    trans = TextMobject("7").move_to(array[0][i])
+                rect  = SurroundingRectangle(array[0][i])
+                arrow = Arrow(array[0][i - 3].get_right(), array[0][i].get_left())
+                txt = TextMobject("+4").next_to(arrow, DOWN).set_color(RED)
+                self.play(
+                    ShowCreation(rect),
+                    ShowCreation(arrow),
+                    Write(txt)
+                )
+                self.play(Transform(array[0][i], trans), run_time=0.3)
+                self.play(
+                    FadeOut(rect),
+                    FadeOut(arrow),
+                    FadeOut(txt)
+                )
+            else:
+                trans = TextMobject("8").move_to(array[0][i])
+                rect  = SurroundingRectangle(array[0][i])
+                arrow = Arrow(array[0][i - 3].get_right(), array[0][i].get_left())
+                txt   = TextMobject("+4").next_to(arrow, DOWN).set_color(RED)
+                self.play(
+                    ShowCreation(rect),
+                    ShowCreation(arrow),
+                    Write(txt)
+                )
+                self.play(Transform(array[0][i], trans), run_time=0.3)
+                self.wait()
+
+                rect2 = RedSurroundingRectangle(array[0][i - 3])
+                trans_under = TextMobject("但，", "这里", "的数是本轮才更新的，不能再+4，影响了结果").scale(0.7).to_corner(DOWN)
+                arrow2 = Arrow(trans_under[1].get_top(), rect2.get_bottom())
+                self.play(
+                    Transform(under, trans_under),
+                    ShowCreation(rect2),
+                    ShowCreation(arrow2)
+                )
+                self.wait()
+                self.play(
+                    FadeOut(rect2),
+                    FadeOut(arrow2),
+                    FadeOut(txt),
+                    FadeOut(rect),
+                    FadeOut(arrow)
+                )
+        
+        self.play(
+            FadeOut(array),
+            FadeOut(title),
+            FadeOut(under)
+        )
+        self.wait()
+
 class OneDArraySolve(Scene):
     def construct(self):
-        
+        array = Matrix(
+            [
+                ["i", "0", "1", "2", "3", "4", "5", "6", "7", "8"],
+                ["F[i]", "0", "0", "0", "0", "0", "0", "0", "0", "0"]
+            ]
+        )
+        title = TextMobject("每次更新要倒序").scale(0.8).to_corner(UP).set_color(YELLOW)
+        self.play(
+            Write(title),
+            Write(array)
+        )
+        under = TextMobject("具体步骤省略").scale(0.8).to_corner(DOWN)
+        self.play(Write(under))
+
+        for i in range(1, 5):
+            for j in [8, 7, 6, 5, 4, 3, 2]:
+                k = j + 11
+                trans = TextMobject(array_fini[i][j]).move_to(array[0][k])
+                self.play(
+                    Transform(array[0][k], trans),
+                    run_time = 0.3
+                )
+        rect = RedSurroundingRectangle(array[0][19])
+        trans_title = TextMobject("查找结果").scale(0.8).to_corner(UP).set_color(YELLOW)
+        trans_under = TextMobject("结果仍是$F[8] = 10$").scale(0.8).to_corner(DOWN)
+        self.play(
+            Transform(title, trans_title)
+        )
+        self.play(
+            ShowCreation(rect),
+            Transform(under, trans_under),
+        )
+        self.wait()
+        self.play(
+            FadeOut(array),
+            FadeOut(title),
+            FadeOut(under),
+            FadeOut(rect)
+        )
+        self.wait()
+
+class CompletePack(Scene):
+    def construct(self):
+        title = TextMobject("再来看一下顺推的情形").scale(0.8).to_corner(UP).set_color(YELLOW)
+        array = Matrix(
+            [
+                ["i", "0", "1", "2", "3", "4", "5", "6", "7", "8"],
+                ["F[i]", "0", "0", "3", "4", "4", "7", "8", "11", "11"]
+            ]
+        )
+        rect  = SurroundingRectangle(array[0][17])
+        arrow = Arrow(array[0][14].get_right(), array[0][17].get_left())
+        txt   = TextMobject("+4").next_to(arrow, DOWN).set_color(RED)
+        self.play(
+            Write(title),
+            Write(array),
+            ShowCreation(rect),
+            ShowCreation(arrow),
+            Write(txt)
+        )
+        under = TextMobject("如果此处再次+4，则取了2次此物品，即每件物品可以取多件，这就是\\\\", "完全背包").scale(0.8).to_corner(DOWN)
+        under[1].set_color(RED)
+        self.play(Write(under))
+        self.wait(2)
+        self.play(
+            FadeOut(title),
+            FadeOut(array),
+            FadeOut(rect),
+            FadeOut(arrow),
+            FadeOut(txt),
+            FadeOut(under)
+        )
+        self.wait()
+
+class OneDArrayCode(Scene):
+    def construct(self):
+        title = TextMobject("一维数组代码片段")
+        title.set_color(YELLOW)
+        title.scale(1.2)
+        title.to_edge(UP)
+        screen_rect = ScreenRectangle(height = 6)
+        screen_rect.next_to(title, DOWN)
+
+        self.play(Write(title))
+        self.play(ShowCreation(screen_rect))
+        self.wait(6)
+
+class EndScene(Scene):
+    def construct(self):
+        title = TextMobject("更多算法可参考我的博客\\\\", "https://tony031218.github.io/")
+        title[1].set_color(ORANGE)
+        self.play(
+            Write(title[0])
+        )
+        self.play(
+            FadeInFromDown(title[1])
+        )
+        self.wait(4)
+        self.play(
+            FadeOut(title)
+        )
+
+'''
+  > Finished Time     : 2019/02/04 13:12:18
+  > Video Address     : 
+'''
