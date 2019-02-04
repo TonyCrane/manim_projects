@@ -40,7 +40,7 @@ class IntroProblem(Scene):
         data_num = Matrix(
             [["i", 1, 2, 3, 4],
             ["v", 2, 3, 4, 5],
-            ["w", 3, 4, 5, 6]]
+            ["c", 3, 4, 5, 6]]
         )
         data_num.scale(0.8)
         data_num.next_to(data, direction=DOWN)
