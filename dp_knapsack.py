@@ -5,7 +5,7 @@
 '''
 
 from big_ol_pile_of_manim_imports import *
-from manim_projects.StudyManim import VideoStart
+from manim_projects.custom import *
 
 array_fini = np.array([
     ["0", "0", "0", "0", "0", "0", "0", "0", "0"],
@@ -18,11 +18,6 @@ array_fini = np.array([
 class VideoTitle(VideoStart):
     CONFIG = {
         "title_name"    : "动态规划-01背包问题",
-    }
-
-class RedSurroundingRectangle(SurroundingRectangle):
-    CONFIG = {
-        "color" : RED,
     }
 
 class IntroProblem(Scene):
