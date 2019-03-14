@@ -87,11 +87,15 @@ class QsortSolve(Scene):
         )
         texti = TextMobject("$i$").set_color(RED).next_to(data[0][8], direction=DOWN, buff=1.25)
         textj = TextMobject("$j$").set_color(RED).next_to(data[0][13],direction=DOWN, buff=1.25)
+        textarrowi = Arrow(texti, data[0][8]).set_color(RED)
+        textarrowj = Arrow(textj,data[0][13]).set_color(RED)
+        TextI = VGroup(texti, textarrowi)
+        TextJ = VGroup(textj, textarrowj)
         textk = TextMobject("$key=$""6").set_color(GREEN).scale(0.8).to_corner(RIGHT)
         transdata8 = data[0][8].set_color(GREEN)
         self.play(
-            Write(texti),
-            Write(textj),
+            Write(TextI),
+            Write(TextJ),
             Write(textk),
             Transform(data[0][8], transdata8)
         )
