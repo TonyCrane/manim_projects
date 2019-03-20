@@ -34,9 +34,11 @@ class IntroProblem(Scene):
 class QsortSolve(Scene):
     def construct(self):
         self.add(data)
+        self.wait(1)
         self.color()
         self.mainidea()
         self.step1()
+        self.step2()
 
     def color(self):
         white = TextMobject(
@@ -76,7 +78,7 @@ class QsortSolve(Scene):
 
     def step1(self):
         title = TextMobject(
-            "第一次操作"
+            "初始化"
         ).scale(0.8).set_color(BLUE).to_corner(TOP)
         text = TextMobject(
             "1. 将指针变量$i,j$放在数组两端,最左端的数值设为$key$"
@@ -89,15 +91,38 @@ class QsortSolve(Scene):
         textj = TextMobject("$j$").set_color(RED).next_to(data[0][13],direction=DOWN, buff=1.25)
         textarrowi = Arrow(texti, data[0][8]).set_color(RED)
         textarrowj = Arrow(textj,data[0][13]).set_color(RED)
-        TextI = VGroup(texti, textarrowi)
-        TextJ = VGroup(textj, textarrowj)
-        textk = TextMobject("$key=$""6").set_color(GREEN).scale(0.8).to_corner(RIGHT)
+        self.TextI = VGroup(texti, textarrowi)
+        self.TextJ = VGroup(textj, textarrowj)
+        self.textk = TextMobject("$key=$""6").set_color(GREEN).scale(0.8).to_corner(RIGHT)
         transdata8 = data[0][8].set_color(GREEN)
         self.play(
-            Write(TextI),
-            Write(TextJ),
-            Write(textk),
+            Write(self.TextI),
+            Write(self.TextJ),
+            Write(self.textk),
             Transform(data[0][8], transdata8)
         )
-        self.title = title
-        
+        transtext = TextMobject(
+            "1. 将指针变量$i,j$放在数组两端,最左端的数值设为$key$"
+        ).scale(0.3).next_to(self.MainIdeaText, direction=DOWN, buff=0.1).set_color(YELLOW)
+        self.play(Transform(text, transtext))
+        self.Step1Text = transtext
+
+    def step2(self):
+        title = TextMobject(
+            "第一步操作"
+        ).scale(0.8).set_color(BLUE).to_corner(TOP)
+        text = TextMobject(
+            "将$j$逐个向左移,直至$j < key$"
+        ).scale(0.6).to_corner(DOWN).set_color(YELLOW)
+        self.play(
+            Write(text),
+            Transform(self.title, title)
+        )
+        TextJ = self.TextJ.next_to(data[0][12], direction=DOWN, buff=0.2)
+        self.play(
+            Transform(self.TextJ, TextJ)
+        )
+        ajkey = TextMobject(
+            "$a[j] > key$"
+        ).set_color(YELLOW).next_to(TextJ, direction=RIGHT)
+        self.play(Write(ajkey))
