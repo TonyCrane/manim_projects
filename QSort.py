@@ -41,6 +41,7 @@ class QsortSolve(Scene):
         self.step2()
         self.step3()
         self.step4()
+        self.step5()
 
     def color(self):
         white = TextMobject(
@@ -203,7 +204,7 @@ class QsortSolve(Scene):
     
     def step4(self):
         title = TextMobject(
-            "后续操作"
+            "第一轮后续操作"
         ).scale(0.8).set_color(BLUE).to_corner(TOP)
         text = TextMobject(
             "3. 重复$1,2$步,直至$i = j$,确定下$key$位置"
@@ -242,3 +243,15 @@ class QsortSolve(Scene):
         self.play(Transform(text, transtext))
         self.Step4Text = transtext
         self.wait(1)
+    
+    def step5(self):
+        title = TextMobject(
+            "递归处理左右两侧数组"
+        ).scale(0.8).set_color(BLUE).to_corner(TOP)
+        text = TextMobject(
+            "4. 对没有排好序的子数组执行操作$1,2,3$,直至排好整个数组"
+        ).scale(0.6).to_corner(DOWN).set_color(YELLOW)
+        self.play(
+            Write(text),
+            Transform(self.title, title)
+        )
