@@ -39,6 +39,8 @@ class QsortSolve(Scene):
         self.mainidea()
         self.step1()
         self.step2()
+        self.step3()
+        self.step4()
 
     def color(self):
         white = TextMobject(
@@ -50,14 +52,10 @@ class QsortSolve(Scene):
         red = TextMobject(
             "排序后"
         ).scale(0.4).set_color(RED).next_to(green, direction=DOWN, buff=SMALL_BUFF)
-        grey = TextMobject(
-            "闲置"
-        ).scale(0.4).set_color(GREY).next_to(red, direction=DOWN, buff=SMALL_BUFF)
         self.play(
             FadeIn(white),
             FadeIn(green),
             FadeIn(red),
-            FadeIn(grey),
             run_time=0.3
         )
         
@@ -75,13 +73,14 @@ class QsortSolve(Scene):
         self.play(Transform(text, transtext))
         self.title = title
         self.MainIdeaText = transtext
+        self.wait(1)
 
     def step1(self):
         title = TextMobject(
             "初始化"
         ).scale(0.8).set_color(BLUE).to_corner(TOP)
         text = TextMobject(
-            "1. 将指针变量$i,j$放在数组两端,最左端的数值设为$key$"
+            "0. 将指针变量$i,j$放在数组两端,最左端的数值设为$key$"
         ).scale(0.6).to_corner(DOWN).set_color(YELLOW)
         self.play(
             Write(text),
@@ -99,30 +98,147 @@ class QsortSolve(Scene):
             Write(self.TextI),
             Write(self.TextJ),
             Write(self.textk),
-            Transform(data[0][8], transdata8)
+            Transform(data[0][8], transdata8),
+            run_time=2
         )
         transtext = TextMobject(
-            "1. 将指针变量$i,j$放在数组两端,最左端的数值设为$key$"
+            "0. 将指针变量$i,j$放在数组两端,最左端的数值设为$key$"
         ).scale(0.3).next_to(self.MainIdeaText, direction=DOWN, buff=0.1).set_color(YELLOW)
         self.play(Transform(text, transtext))
         self.Step1Text = transtext
+        self.wait(1)
 
     def step2(self):
         title = TextMobject(
             "第一步操作"
         ).scale(0.8).set_color(BLUE).to_corner(TOP)
         text = TextMobject(
-            "将$j$逐个向左移,直至$j < key$"
+            "1. 将$j$逐个向左移,直至$a[j] < key$,交换$a[i]$与$a[j]$"
         ).scale(0.6).to_corner(DOWN).set_color(YELLOW)
         self.play(
             Write(text),
             Transform(self.title, title)
         )
-        TextJ = self.TextJ.next_to(data[0][12], direction=DOWN, buff=0.2)
+        TextJ = self.TextJ.next_to(data[0][13], direction=DOWN, buff=0.2)
         self.play(
             Transform(self.TextJ, TextJ)
         )
         ajkey = TextMobject(
             "$a[j] > key$"
-        ).set_color(YELLOW).next_to(TextJ, direction=RIGHT)
+        ).scale(0.7).set_color(YELLOW).next_to(TextJ, direction=RIGHT)
         self.play(Write(ajkey))
+        self.play(FadeOut(ajkey))
+        TextJ = self.TextJ.next_to(data[0][12], direction=DOWN, buff=0.2)
+        self.play(
+            Transform(self.TextJ, TextJ)
+        )
+        ajkey.next_to(TextJ, direction=RIGHT)
+        self.play(Transform(self.TextJ, TextJ))
+        self.play(Write(ajkey))
+        self.play(FadeOut(ajkey))
+
+        TextJ = self.TextJ.next_to(data[0][11], direction=DOWN, buff=0.2)
+        ajKey = TextMobject(
+            "$a[j] < key$"
+        ).scale(0.7).set_color(GOLD).next_to(TextJ, direction=RIGHT)
+        self.play(Transform(self.TextJ, TextJ))
+        self.play(Write(ajKey))
+        self.play(FadeOut(ajKey))
+
+        self.play(Swap(data[0][8], data[0][11]))
+
+        transtext = TextMobject(
+            "1. 将$j$逐个向左移,直至$a[j] < key$,交换$a[i]$与$a[j]$"
+        ).scale(0.3).next_to(self.Step1Text, direction=DOWN, buff=0.1).set_color(YELLOW)
+        self.play(Transform(text, transtext))
+        self.Step2Text = transtext
+        self.wait(1)
+    
+    def step3(self):
+        title = TextMobject(
+            "第二步操作"
+        ).scale(0.8).set_color(BLUE).to_corner(TOP)
+        text = TextMobject(
+            "2. 将$j$逐个向左移,直至$a[i] > key$,交换$a[j]$与$a[i]$"
+        ).scale(0.6).to_corner(DOWN).set_color(YELLOW)
+        self.play(
+            Write(text),
+            Transform(self.title, title)
+        )
+        TextI = self.TextI.next_to(data[0][11], direction=DOWN, buff=0.2)
+        self.play(
+            Transform(self.TextI, TextI)
+        )
+        aikey = TextMobject(
+            "$a[i] < key$"
+        ).scale(0.7).set_color(YELLOW).next_to(TextI, direction=LEFT)
+        self.play(Write(aikey))
+        self.play(FadeOut(aikey))
+
+        TextI = self.TextI.next_to(data[0][9], direction=DOWN, buff=0.2)
+        self.play(
+            Transform(self.TextI, TextI)
+        )
+        aikey.next_to(TextI, direction=LEFT)
+        self.play(Transform(self.TextI, TextI))
+        self.play(Write(aikey))
+        self.play(FadeOut(aikey))
+
+        TextI = self.TextI.next_to(data[0][10], direction=DOWN, buff=0.2)
+        aiKey = TextMobject(
+            "$a[i] > key$"
+        ).scale(0.7).set_color(GOLD).next_to(TextI, direction=LEFT)
+        self.play(Transform(self.TextI, TextI))
+        self.play(Write(aiKey))
+        self.play(FadeOut(aiKey))
+
+        self.play(Swap(data[0][8], data[0][10]))
+
+        transtext = TextMobject(
+            "2. 将$j$逐个向左移,直至$a[i] > key$,交换$a[j]$与$a[i]$"
+        ).scale(0.3).next_to(self.Step2Text, direction=DOWN, buff=0.1).set_color(YELLOW)
+        self.play(Transform(text, transtext))
+        self.Step3Text = transtext
+        self.wait(1)
+    
+    def step4(self):
+        title = TextMobject(
+            "后续操作"
+        ).scale(0.8).set_color(BLUE).to_corner(TOP)
+        text = TextMobject(
+            "3. 重复$1,2$步,直至$i = j$,确定下$key$位置"
+        ).scale(0.6).to_corner(DOWN).set_color(YELLOW)
+        self.play(
+            Write(text),
+            Transform(self.title, title)
+        )
+        
+        TextJ = self.TextJ.next_to(data[0][10], direction=DOWN, buff=0.2)
+        self.play(
+            Transform(self.TextJ, TextJ)
+        )
+        ajkey = TextMobject(
+            "$a[j] > key$"
+        ).scale(0.7).set_color(YELLOW).next_to(TextJ, direction=RIGHT)
+        self.play(Write(ajkey))
+        self.play(FadeOut(ajkey))
+        
+        TextJ = self.TextJ.next_to(self.TextI, direction=RIGHT, buff=0.1)
+        self.play(
+            Transform(self.TextJ, TextJ)
+        )
+        iej = TextMobject(
+            "$i = j$"
+        ).scale(0.7).set_color(GOLD).next_to(TextJ, direction=RIGHT)
+        self.play(Write(iej))
+        self.play(FadeOut(iej))
+        
+        transkey = data[0][8].set_color(RED)
+        self.play(Transform(data[0][8], transkey))
+
+        transtext = TextMobject(
+            "3. 重复$1,2$步,直至$i = j$,确定下$key$位置"
+        ).scale(0.3).next_to(self.Step3Text, direction=DOWN, buff=0.1).set_color(YELLOW)
+        self.play(Transform(text, transtext))
+        self.Step4Text = transtext
+        self.wait(1)
