@@ -255,3 +255,58 @@ class QsortSolve(Scene):
             Write(text),
             Transform(self.title, title)
         )
+
+        self.play(FadeOut(self.TextI), FadeOut(self.TextJ))
+        TextI = self.TextI.next_to(data[0][11], direction=DOWN, buff=0.2)
+        TextJ = self.TextJ.next_to(data[0][9] , direction=DOWN, buff=0.2)
+        transk = TextMobject("3").set_color(GREEN).scale(0.8).move_to(self.textk[4])
+        transdata11 = data[0][11].set_color(GREEN)
+        self.play(
+            Transform(self.textk[4], transk),
+            Transform(data[0][11], transdata11),
+            Write(TextI),
+            Write(TextJ),
+            run_time=2
+        )
+
+        ajKey = TextMobject(
+            "$a[j] < key$"
+        ).scale(0.7).set_color(GOLD).next_to(TextJ, direction=RIGHT)
+        self.play(Write(ajKey))
+        self.play(FadeOut(ajKey), Swap(data[0][11], data[0][9]))
+        
+        aikey = TextMobject(
+            "$a[i] < key$"
+        ).scale(0.7).set_color(YELLOW).next_to(TextI, direction=LEFT)
+        self.play(Write(aikey))
+        self.play(FadeOut(aikey))
+        TextI = self.TextI.next_to(self.TextJ, direction=LEFT, buff=0.1)
+        iej = TextMobject(
+            "$i = j$"
+        ).scale(0.7).set_color(GOLD).next_to(TextI, direction=LEFT)
+        self.play(
+            Transform(self.TextI, TextI),
+            Write(iej)
+        )
+        transdata9 = data[0][9].set_color(RED)
+        transdata11= data[0][11].set_color(RED)
+        self.play(
+            Transform(data[0][9], transdata9),
+            Transform(data[0][11], transdata11),
+            FadeOut(iej),
+            FadeOut(self.TextI),
+            FadeOut(self.TextJ)
+        )
+        self.wait(1)
+
+        TextI = self.TextI.next_to(data[0][10], direction=DOWN, buff=0.2)
+        TextJ = self.TextJ.next_to(data[0][13], direction=DOWN, buff=0.2)
+        transk = TextMobject("7").set_color(GREEN).scale(0.8).move_to(self.textk[4])
+        transdata10 = data[0][10].set_color(GREEN)
+        self.play(
+            Transform(self.textk[4], transk),
+            Transform(data[0][10], transdata10),
+            Write(TextI),
+            Write(TextJ)
+        )
+        
