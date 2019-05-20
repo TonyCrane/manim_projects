@@ -385,6 +385,12 @@ class QsortSolve(Scene):
         self.Step5Text = transtext
         self.wait(2)
 
-class QSortCode(Scene):
+class QsortCode(Scene):
     def construct(self):
-        
+        title = TextMobject("所以我们可以轻松地写出代码").set_color(YELLOW).scale(0.9).to_edge(UP)
+        screen_rect = ScreenRectangle(height = 6)
+        screen_rect.next_to(title, DOWN)
+
+        self.play(Write(title))
+        self.play(ShowCreation(screen_rect))
+        self.wait(6)
