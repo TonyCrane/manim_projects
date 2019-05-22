@@ -395,3 +395,5 @@ class QsortCode(Scene):
         self.play(ShowCreation(screen_rect))
         self.wait(6)
 
+# class QsortTLE(Scene):
+#     def construct(self):
