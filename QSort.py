@@ -388,12 +388,98 @@ class QsortSolve(Scene):
 class QsortCode(Scene):
     def construct(self):
         title = TextMobject("所以我们可以轻松地写出代码").set_color(YELLOW).scale(0.9).to_edge(UP)
-        screen_rect = ScreenRectangle(height = 6)
-        screen_rect.next_to(title, DOWN)
+        # screen_rect = ScreenRectangle(height = 6)
+        # screen_rect.next_to(title, DOWN)
 
         self.play(Write(title))
-        self.play(ShowCreation(screen_rect))
+        # self.play(ShowCreation(screen_rect))
         self.wait(6)
 
-# class QsortTLE(Scene):
-#     def construct(self):
+class QsortTime(Scene):
+    def construct(self):
+        title = TextMobject("下面来对时间复杂度进行分析").set_color(YELLOW).scale(1.2)
+        self.play(Write(title));
+        self.wait(1)
+        self.remove(title);
+        self.best()
+        self.worst()
+        self.ave()
+    
+    def best(self):
+        self.title = Title("最好情况").set_color(BLUE)
+        self.play(Write(self.title));
+
+        text = TextMobject(
+            "最好情况发生在整", "个数组被分成两段长度相等的子数组时,递推式如下:"
+        ).scale(0.7).next_to(self.title, DOWN)
+        self.play(Write(text))
+        tex = TexMobject(
+            "\\begin{cases} T(n) = 2T(\\frac{n}{2})+O(n) \\\\ T(1) = 0\\end{cases}"
+        ).next_to(text, DOWN).set_color(YELLOW)
+        self.play(FadeIn(tex));
+        self.wait(1)
+        text2 = TextMobject(
+            "经过数学推导可得:"
+        ).next_to(text[0], DOWN, buff=2)
+        tex2 = TexMobject(
+            "T(n)=O(n\\log_2 n)"
+        ).scale(1.3).next_to(tex, DOWN, buff=1.5).set_color(RED)
+        self.play(Write(text2))
+        self.play(Write(tex2))
+        self.wait(1)
+        self.remove(text, tex, text2, tex2)
+
+    def worst(self):
+        transtitle = Title("最坏情况").set_color(BLUE)
+        self.play(Transform(self.title, transtitle));
+
+        text = TextMobject(
+            "最坏情况发生在整", "个数组被分成长度为$0$和$n-1$的子数组时,递推式如下:"
+        ).scale(0.7).next_to(self.title, DOWN)
+        self.play(Write(text))
+        tex = TexMobject(
+            "\\begin{cases} T(n) =T(n-1)+O(n) \\\\ T(1) = 0\\end{cases}"
+        ).next_to(text, DOWN).set_color(YELLOW)
+        self.play(FadeIn(tex));
+        self.wait(1)
+        text2 = TextMobject(
+            "经过数学推导可得:"
+        ).next_to(text[0], DOWN, buff=2)
+        tex2 = TexMobject(
+            "T(n)=O(n^2)"
+        ).scale(1.3).next_to(tex, DOWN, buff=1.5).set_color(RED)
+        self.play(Write(text2))
+        self.play(Write(tex2))
+        self.wait(1)
+        self.remove(text, tex, text2, tex2)
+    
+    def ave(self):
+        transtitle = Title("平均情况").set_color(BLUE)
+        self.play(Transform(self.title, transtitle));
+
+        text = TextMobject(
+            "实际上", ",除最坏情况外,均会产生深度为$O(\log_2 n)$的递归树,\\\\而每层均是$O(n)$"
+        ).scale(0.8).next_to(self.title, DOWN)
+        self.play(Write(text))
+        text2 = TextMobject(
+            "所以:"
+        ).next_to(text[0], DOWN, buff=1)
+        tex2 = TexMobject(
+            "T(n)=O(n\\log_2 n)"
+        ).scale(1.3).next_to(text, DOWN, buff=1.5).set_color(RED)
+        self.play(Write(text2))
+        self.play(Write(tex2))
+        self.wait(1)
+    
+
+class QsortTLE(Scene):
+    def construct(self):
+        text = TextMobject(
+            "但是,这样做对于某些数据会非常卡,导致$TLE$"
+        ).scale(1.2)
+        text2 = TextMobject(
+            "所以我们要进行一些优化"
+        ).next_to(text, DOWN).set_color(YELLOW)
+        self.play(Write(text))
+        self.play(Write(text2))
+        self.wait(6)
