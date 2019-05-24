@@ -414,7 +414,7 @@ class QsortTime(Scene):
         ).scale(0.7).next_to(self.title, DOWN)
         self.play(Write(text))
         tex = TexMobject(
-            "\\begin{cases} T(n) = 2T(\\frac{n}{2})+O(n) \\\\ T(1) = 0\\end{cases}"
+            "T(n) =\\begin{cases} \\Theta(1)& \\text{n=1} \\\\ 2T(\\frac{n}{2})+\\Theta(n)& \\text{n>1} \\end{cases}"
         ).next_to(text, DOWN).set_color(YELLOW)
         self.play(FadeIn(tex));
         self.wait(1)
@@ -422,11 +422,11 @@ class QsortTime(Scene):
             "经过数学推导可得:"
         ).next_to(text[0], DOWN, buff=2)
         tex2 = TexMobject(
-            "T(n)=O(n\\log_2 n)"
+            "T(n)=\\Theta(n\\log_2 n)"
         ).scale(1.3).next_to(tex, DOWN, buff=1.5).set_color(RED)
         self.play(Write(text2))
         self.play(Write(tex2))
-        self.wait(1)
+        self.wait(2.5)
         self.remove(text, tex, text2, tex2)
 
     def worst(self):
@@ -438,7 +438,7 @@ class QsortTime(Scene):
         ).scale(0.7).next_to(self.title, DOWN)
         self.play(Write(text))
         tex = TexMobject(
-            "\\begin{cases} T(n) =T(n-1)+O(n) \\\\ T(1) = 0\\end{cases}"
+            "T(n) =\\begin{cases} \\Theta(1)& \\text{n=1} \\\\ T(n-1)+\\Theta(n)& \\text{n>1} \\end{cases}"
         ).next_to(text, DOWN).set_color(YELLOW)
         self.play(FadeIn(tex));
         self.wait(1)
@@ -446,11 +446,11 @@ class QsortTime(Scene):
             "经过数学推导可得:"
         ).next_to(text[0], DOWN, buff=2)
         tex2 = TexMobject(
-            "T(n)=O(n^2)"
+            "T(n)=\\Theta(n^2)"
         ).scale(1.3).next_to(tex, DOWN, buff=1.5).set_color(RED)
         self.play(Write(text2))
         self.play(Write(tex2))
-        self.wait(1)
+        self.wait(2.5)
         self.remove(text, tex, text2, tex2)
     
     def ave(self):
@@ -458,18 +458,19 @@ class QsortTime(Scene):
         self.play(Transform(self.title, transtitle));
 
         text = TextMobject(
-            "实际上", ",除最坏情况外,均会产生深度为$O(\log_2 n)$的递归树,\\\\而每层均是$O(n)$"
+            "实际上", ",除最坏情况外,均会产生深度为$\Theta(\log_2 n)$的递归树,\\\\而每层均是$\Theta(n)$"
         ).scale(0.8).next_to(self.title, DOWN)
         self.play(Write(text))
         text2 = TextMobject(
             "所以:"
         ).next_to(text[0], DOWN, buff=1)
         tex2 = TexMobject(
-            "T(n)=O(n\\log_2 n)"
+            "T(n)=\\Theta(n\\log_2 n)"
         ).scale(1.3).next_to(text, DOWN, buff=1.5).set_color(RED)
         self.play(Write(text2))
         self.play(Write(tex2))
-        self.wait(1)
+        self.wait(2.5)
+        self.remove(text, text2, tex2)
     
 
 class QsortTLE(Scene):
@@ -483,3 +484,134 @@ class QsortTLE(Scene):
         self.play(Write(text))
         self.play(Write(text2))
         self.wait(6)
+
+class QsortOptimization(Scene):
+    def construct(self):
+        self.opt1()
+        self.opt2()
+        self.opt3()
+        self.opt4()
+
+    def opt1(self):
+        self.title = Title("I.\\ 减少交换次数").set_color(BLUE)
+        self.play(Write(self.title))
+        self.wait(1.25)
+        text = TextMobject(
+            "在左右分别找到需要交换的元素后,如果$i$和$j$相遇则与基准元素交换,否则将$a[i]$与$a[j]$交换,也可达到目的,同时将交换次数缩短了一半"
+        ).scale(0.7).next_to(self.title, DOWN)
+        self.play(Write(text))
+        self.wait(6)
+        self.remove(text)
+    
+    def opt2(self):
+        transtitle = Title("II.\\ 随机化").set_color(BLUE)
+        self.play(Transform(self.title, transtitle))
+        self.wait(1.25)
+        text = TextMobject(
+            "快速排序的最差时间复杂度很高,而平均和最好几乎一样,为了使时间复杂度达到期望值,可以每次","随机", "选一个数作为基准数"
+        ).scale(0.7).next_to(self.title, DOWN)
+        text[1].set_color(YELLOW)
+        self.play(Write(text))
+        self.wait(6)
+        self.remove(text)
+
+    def opt3(self):
+        transtitle = Title("III.\\ 小区间插入排序").set_color(BLUE)
+        self.play(Transform(self.title, transtitle))
+        self.wait(1.25)
+        text = TextMobject(
+            "在一个小区间内,使用插入排序比快速排序递归效率高。因此,可以在区间长度", "小于$10$", "后改为", "插入排序"
+        ).scale(0.7).next_to(self.title, DOWN)
+        text[1].set_color(YELLOW)
+        text[3].set_color(YELLOW)
+        self.play(Write(text))
+        self.wait(6)
+        self.remove(text)
+    
+    def opt4(self):
+        transtitle = Title("IV.\\ 聚拢重复元素").set_color(BLUE)
+        self.play(Transform(self.title, transtitle))
+        self.wait(1.25)
+        text = TextMobject(
+            "在$j$向前移动时,每次遇到和基准元素", "相同的元素", ",就将其与前方", "第一个异于基准元素的元素", "交换位置,然后继续移动。如果在$i$之前没有找到任何一个异于基准元素的元素,说明此时$i$与$j$之间已经全部都是与基准元素相同的","重复元素","实现了重复元素的聚拢"
+        ).scale(0.7).next_to(self.title, DOWN)
+        text[1].set_color(YELLOW)
+        text[3].set_color(YELLOW)
+        text[5].set_color(YELLOW)
+        text2 = TextMobject(
+            "由于代码相对复杂,在此不展示,可以前往简介中[4]查看完整代码"
+        ).scale(0.5).next_to(text, DOWN, buff=1).set_color(ORANGE)
+        self.play(Write(text))
+        self.wait(1)
+        self.play(FadeInFromDown(text2))
+        self.wait(5)
+        self.remove(text, text2)
+        self.play(FadeOutAndShiftDown(self.title), run_time=0.5)
+
+class CppSTLSort(Scene):
+    def construct(self):
+        self.stlsort()
+        self.timecompare()
+
+    def stlsort(self):
+        text = TextMobject(
+            "C++语言的STL为我们设计好了一个sort()函数(algorithm头中)\\\\它混合了插入排序与堆排序,将时间复杂度稳定在了","$\Theta(n\log_2 n)$"
+        ).scale(0.8)
+        text[1].set_color(RED)
+        self.play(Write(text))
+        self.wait(4)
+        self.remove(text)
+    
+    def timecompare(self):
+        title = Title("时间对比(供参考)").set_color(BLUE)
+        comment = TextMobject("数据来自up主Luogu P1177前4个测试点的时间").scale(0.4).next_to(title, DOWN).to_edge(RIGHT)
+        self.play(Write(title), Write(comment))
+        tab = TexMobject(
+            "\\begin{tabular}{ccccccc} \\hline 优化情况& \\#1& \\#2& \\#3& \\#4\\\\ \\hline 无& 3ms& TLE& TLE& TLE\\\\ I.& 3ms& 46ms& TLE& TLE\\\\ I.II.& 3ms& 45ms& 120ms& 1086ms\\\\ I.II.III.& 3ms& 31ms& 117ms& 668ms\\\\ I.II.III.IV.& 3ms& 42ms& 52ms& 28ms\\\\ sort()& 3ms& 39ms& 26ms& 24ms\\\\ \\hline \\end{tabular}"
+        ).next_to(title, DOWN, buff=1)
+        self.play(Write(tab))
+        self.wait(7)
+        self.play(FadeOutAndShiftDown(title), FadeOutAndShiftDown(comment), FadeOutAndShiftDown(tab), run_time=0.5)
+
+class VideoEnd(Scene):
+    def construct(self):
+        title = Title("参考(链接放在视频简介里)").set_color(RED)
+        text1 = TextMobject("[1] Introduction to Algorithms(Third Edition)").scale(0.8).next_to(title, DOWN, buff=0.7).to_corner(LEFT)
+        text2 = TextMobject("[2] Quicksort\\ -\\ Wikipedia").scale(0.8).next_to(text1, DOWN).to_corner(LEFT)
+        text3 = TextMobject("[3] 快速排序算法\\ -\\ 百度百科").scale(0.8).next_to(text2, DOWN).to_corner(LEFT)
+        text4 = TextMobject("[4] 快速排序题解\\ -\\ Adam\\_Ding的博客").scale(0.8).next_to(text3, DOWN).to_corner(LEFT)
+        text5 = TextMobject("[5] STL sort源码剖析\\ -\\ imAkaka的博客").scale(0.8).next_to(text4, DOWN).to_corner(LEFT)
+
+        self.play(FadeInFromDown(title))
+        self.play(Write(text1), Write(text2), Write(text3), Write(text4), Write(text5))
+        self.wait(4)
+        self.play(
+            FadeOutAndShiftDown(title),
+            FadeOutAndShiftDown(text1),
+            FadeOutAndShiftDown(text2),
+            FadeOutAndShiftDown(text3),
+            FadeOutAndShiftDown(text4),
+            FadeOutAndShiftDown(text5),
+            run_time=0.2
+        )
+
+        title2 = TextMobject("更多算法可参考我的博客\\\\", "https://tony031218.github.io/")
+        title2[1].set_color(ORANGE)
+        title2[1].scale(1.3)
+        self.play(
+            Write(title2[0])
+        )
+        self.play(
+            FadeInFromDown(title2[1])
+        )
+        self.wait(4)
+        self.play(
+            FadeOut(title2)
+        )
+        self.wait(2)
+
+
+'''
+  > Finished Time     : 2019/05/24 16:22:18
+  > Video Address     :
+'''

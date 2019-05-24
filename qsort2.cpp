@@ -8,9 +8,8 @@ void Qsort(T arr[], int l, int r) {
 	T key = arr[i];
 	while (i < j) {
 		while (i < j && arr[j] >= key) j--;
-		swap(arr[i], arr[j]);
 		while (i < j && arr[i] <= key) i++;
-		swap(arr[i], arr[j]);
+		swap(arr[i], (i == j) ? arr[l] : arr[j]);
 	}
 	Qsort(arr, l, j - 1);
 	Qsort(arr, i + 1, r);
