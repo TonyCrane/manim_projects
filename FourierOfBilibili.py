@@ -353,3 +353,22 @@ class Bilibili3000(Bilibili10):
     CONFIG = {
         "n_vectors": 3000,
     }
+
+class N3000(Scene):
+    def construct(self):
+        text = TextMobject("n = ", "3000").scale(5)
+        text[1].set_color(GREEN)
+        self.play(Write(text), run_time=1)
+        self.wait(18)
+        self.play(FadeOut(text), run_time=1)
+
+class Cover(Bilibili10):
+    def construct(self):
+        path = self.get_path()
+        self.add(path)
+        text = TextMobject("用", "傅里叶级数", "画个", "小电视", "?").scale(2)
+        text[1].set_color(YELLOW)
+        text[3].set_color(BLUE)
+        self.add(text)
+        text2 = TextMobject("\\texttt{Fourier Series}").move_to(DOWN * 1.5).set_color(YELLOW).scale(2)
+        self.add(text2)
