@@ -6,6 +6,7 @@
 
 from big_ol_pile_of_manim_imports import *
 from manim_projects.MyUsefulScene.VideoStart import VideoStart
+from manim_projects.MyUsefulScene.VideoCover import VideoCover
 
 
 class VideoTitle(VideoStart):
@@ -13,6 +14,11 @@ class VideoTitle(VideoStart):
         "title_name": "快速排序",
     }
 
+class Cover(VideoCover):
+    CONFIG = {
+        "en_title_name" : "Quick Sort",
+        "title_name"    : "快速排序",
+    }
 
 data = Matrix(
     [["i", "0", "1", "2", "3", "4", "5"],
