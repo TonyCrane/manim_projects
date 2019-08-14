@@ -4,7 +4,7 @@
   > Created Time     : 2019/03/13 14:17:47
 '''
 
-from big_ol_pile_of_manim_imports import *
+from manimlib.imports import *
 
 class VideoStart(Scene):
     CONFIG = {
@@ -18,7 +18,7 @@ class VideoStart(Scene):
         author = TextMobject(
             self.Author,
             tex_to_color_map={self.Author : self.author_colors}
-        )
+        ).scale(1.5)
         svg_file = SVGMobject(file_name = self.svg_filename)
         svg_file.to_corner(UP)
 
@@ -36,7 +36,7 @@ class VideoStart(Scene):
         )
         self.wait()
         self.play(
-            LaggedStart(FadeOutAndShiftDown, author),
+            LaggedStart(FadeOutAndShiftDown(author)),
             FadeOut(title),
             FadeOut(subtitle),
             run_time = 0.5,
