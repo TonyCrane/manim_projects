@@ -24,20 +24,20 @@ class VideoStart(Scene):
 
         title = TextMobject(self.title_name)
         title.to_corner((BOTTOM + ORIGIN))
-        subtitle = TextMobject(self.subtitle_name).scale(0.8).set_color(BLUE)
-        subtitle.next_to(title, DOWN, buff=0.75)
+        # subtitle = TextMobject(self.subtitle_name).scale(0.8).set_color(BLUE)
+        # subtitle.next_to(title, DOWN, buff=0.75)
         self.play(
             FadeInFromDown(svg_file),
             Write(author)
         )
         self.play(
             Write(title),
-            Write(subtitle),
+            # Write(subtitle),
         )
         self.wait()
         self.play(
             LaggedStart(FadeOutAndShiftDown(author)),
             FadeOut(title),
-            FadeOut(subtitle),
+            # FadeOut(subtitle),
             run_time = 0.5,
         )
