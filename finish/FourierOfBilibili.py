@@ -366,9 +366,17 @@ class Cover(Bilibili10):
     def construct(self):
         path = self.get_path()
         self.add(path)
-        text = TextMobject("用", "傅里叶级数", "画个", "小电视", "?").scale(2)
+        text = TextMobject("用", "傅里叶级数", "画个", "小电视", "?").scale(2).move_to(UP*0.8)
         text[1].set_color(YELLOW)
         text[3].set_color(BLUE)
         self.add(text)
         text2 = TextMobject("\\texttt{Fourier Series}").move_to(DOWN * 1.5).set_color(YELLOW).scale(2)
         self.add(text2)
+    
+    def get_path(self):
+        shape = self.get_shape()
+        shape.set_height(6)
+        path = shape.family_members_with_points()[0]
+        path.set_fill(opacity=0.25)
+        path.set_stroke(WHITE, 0.3)
+        return path
