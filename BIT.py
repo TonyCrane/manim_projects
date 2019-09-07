@@ -400,9 +400,85 @@ class BinaryIndexedTree(TreeScene):
             FadeOutAndShift(title1, DOWN),
             FadeInFrom(title2, UP)
         )
+        self.wait(5)
+        title3 = TextMobject("\\texttt{t[x]}节点的父节点为\\texttt{t[x+lowbit(x)]}").set_color(BLUE).scale(0.85).to_edge(UP, buff=LARGE_BUFF+DOWN*0.15)
+        self.play(
+            FadeOutAndShift(title2, DOWN),
+            FadeInFrom(title3, UP)
+        )
+        self.wait(5)
+        title4 = TextMobject("整棵树的深度为$\\mathtt{\log_2n+1}$").set_color(BLUE).scale(0.85).to_edge(UP, buff=LARGE_BUFF+DOWN*0.15)
+        self.play(
+            FadeOut(len1),
+            FadeOut(len2),
+            FadeOut(len4),
+            FadeOut(len8),
+            FadeOut(bit),
+            FadeOutAndShift(title3, DOWN),
+            FadeInFrom(title4, UP)
+        )
+        self.wait(5)
+        self.play(
+            FadeOutAndShift(title4, DOWN),
+            FadeOutAndShift(dots, DOWN)
+        )
+        self.wait(2)
+        formula = TexMobject("\\mathtt{t[x]=\\sum_{i=x-lowbit(x)+1}^x{a[i]}").set_color(BLUE).scale(0.85).to_edge(UP, buff=MED_SMALL_BUFF)
+        self.play(Write(formula))
         self.wait(3)
-            
 
+
+class OperationAndCode(TreeScene):
+    def construct(self):
+        tree = self.build().scale(0.9).move_to(DOWN*0.4)
+        Tree = self.build().scale(0.7).move_to(DOWN*0.4+LEFT*1.7)
+        self.add(tree)
+        self.wait(2)
+        self.play(ReplacementTransform(tree, Tree))
+        dots = VGroup(
+            Dot(color=RED).move_to(LEFT*5),
+            Dot(color=RED).move_to(RIGHT*5)
+        ).to_edge(UP, buff=LARGE_BUFF)
+        self.play(
+            FadeInFrom(dots[0], LEFT),
+            FadeInFrom(dots[1], RIGHT),
+        )
+        title1 = TextMobject("\\texttt{add(x,k)}操作").set_color(RED).scale(0.85).to_edge(UP, buff=LARGE_BUFF+DOWN*0.15)
+        self.play(
+            FadeInFrom(title1, UP)
+        )
+        self.wait(5)
+        eg1 = TextMobject("$e.g.$\\ \\ \\texttt{add(3,5)}").scale(0.8).move_to(RIGHT*4.7+UP*2)
+        self.play(Write(eg1))
+        plus1 = TextMobject("\\texttt{+=k}").next_to(Tree[18], RIGHT).scale(0.7)
+        self.wait()
+        self.play(Write(plus1))
+        arrow1 = Arrow(Tree[34].get_start(), Tree[34].get_end()).set_color(RED).scale(1.4)
+        comment1 = TextMobject("\\texttt{+=lowbit}").scale(0.6).set_color(RED).next_to(arrow1.get_center(), RIGHT)
+        self.play(
+            ShowCreation(arrow1),
+            Write(comment1)
+        )
+        plus2 = TextMobject("\\texttt{+=k}").next_to(Tree[19], RIGHT).scale(0.7)
+        self.play(Write(plus2))
+        arrow2 = Arrow(Tree[35].get_start(), Tree[35].get_end()).set_color(RED).scale(1)
+        comment2 = TextMobject("\\texttt{+=lowbit}").scale(0.6).set_color(RED).next_to(arrow2.get_center()+DOWN*0.3, RIGHT)
+        self.play(
+            ShowCreation(arrow2),
+            Write(comment2)
+        )
+        plus3 = TextMobject("\\texttt{+=k}").next_to(Tree[23], RIGHT).scale(0.7)
+        self.play(Write(plus3))
+        self.wait(4)
+
+        self.remove(arrow1, arrow2, comment1, comment2, plus1, plus2, plus3, eg1)
+        title2 = TextMobject("\\texttt{ask(x)}操作").set_color(RED).scale(0.85).to_edge(UP, buff=LARGE_BUFF+DOWN*0.15)
+        self.play(
+            FadeOutAndShift(title1, DOWN),
+            FadeInFrom(title2, UP)
+        )
+        self.wait(5)
+        eg1 = TextMobject("$e.g.$\\ \\ \\texttt{ask(7)}").scale(0.8).move_to(RIGHT*4.7+UP*2)
 
 
 
@@ -423,3 +499,6 @@ class BinaryIndexedTree(TreeScene):
 # 19.8.27 Write article
 # 19.8.28 Finish 2 main scenes
 # 19.8.29 Finish 1 main scene and video cover
+# 19.8.31 Finish 1 main scene and TreeScene Class
+# 19.8.31~19.9.7 Busy
+# 19.9.7 Finish 1 main scene
