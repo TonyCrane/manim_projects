@@ -6,6 +6,7 @@
 
 from manimlib.imports import *
 from manim_projects.MyUsefulScene.VideoStart import VideoStart
+from manim_projects.MyUsefulScene.bilibili import TripleScene
 
 class TreeScene(Scene):
     def build(self, low_opacity=False):
@@ -478,19 +479,231 @@ class OperationAndCode(TreeScene):
             FadeInFrom(title2, UP)
         )
         self.wait(5)
-        eg1 = TextMobject("$e.g.$\\ \\ \\texttt{ask(7)}").scale(0.8).move_to(RIGHT*4.7+UP*2)
+        eg2 = TextMobject("$e.g.$\\ \\ \\texttt{ask(7)}").scale(0.8).move_to(RIGHT*4.7+UP*2)
+        self.play(Write(eg2))
+        self.play(
+            Tree[11].set_color, YELLOW,
+            Tree[13].set_color, YELLOW,
+            Tree[14].set_color, YELLOW,
+        )
+        ans1 = TextMobject("\\texttt{ans+=}").scale(0.7).next_to(Tree[22], LEFT, buff=0.1)
+        self.play(Write(ans1))
+        carrow1 = CurvedArrow(Tree[22].get_top(), Tree[21].get_right()).set_color(RED).scale(0.8)
+        comment1 = TextMobject("\\texttt{-=lowbit}").scale(0.6).set_color(RED).next_to(carrow1.get_center()+RIGHT*0.3, RIGHT)
+        self.play(
+            ShowCreation(carrow1),
+            Write(comment1)
+        )
+        ans2 = TextMobject("\\texttt{ans+=}").scale(0.7).next_to(Tree[21], LEFT, buff=0.1)
+        self.play(Write(ans2))
+        carrow2 = CurvedArrow(Tree[21].get_top(), Tree[19].get_right()).set_color(RED).scale(0.8)
+        comment2 = TextMobject("\\texttt{-=lowbit}").scale(0.6).set_color(RED).next_to(carrow2.get_center()+RIGHT*0.3, RIGHT)
+        self.play(
+            ShowCreation(carrow2),
+            Write(comment2)
+        )
+        ans3 = TextMobject("\\texttt{ans+=}").scale(0.7).next_to(Tree[19], LEFT, buff=0.1)
+        self.play(Write(ans3))
+        self.wait(6)
 
 
+class ExBIT(Scene):
+    def construct(self):
+        # self.scene1()
+        # self.scene2()
+        # self.scene3()
+        self.scene4()
+
+    def scene1(self):
+        title = Title("树状数组的扩展应用").set_color(BLUE)
+        self.play(Write(title))
+        mind = VGroup(
+            TextMobject("树状数组").set_color(YELLOW),
+            TextMobject("$\\Longrightarrow$动态维护前缀和"),
+            TextMobject("$\\Longrightarrow$工具"),
+            TextMobject("$\\Longrightarrow$","灵活应用")
+        ).arrange_submobjects(
+            RIGHT, buff=MED_SMALL_BUFF
+        ).move_to(UP*1.4)
+        mind[3][1].set_color(RED)
+        self.play(Write(mind[0]))
+        self.wait()
+        self.play(FadeInFrom(mind[1], LEFT))
+        self.wait()
+        self.play(FadeInFrom(mind[2], LEFT))
+        self.wait()
+        self.play(FadeInFrom(mind[3], LEFT))
+        self.wait(2)
+        dots = VGroup(
+            Dot(color=BLUE).move_to(LEFT*3),
+            Dot(color=BLUE).move_to(RIGHT*3)
+        ).move_to(DOWN)
+        self.play(
+            FadeInFrom(dots[0], LEFT),
+            FadeInFrom(dots[1], RIGHT),
+        )
+        func1 = TextMobject("单点修改，区间查询").set_color(BLUE).move_to(DOWN)
+        func2 = TextMobject("区间修改，单点查询").set_color(BLUE).move_to(DOWN)
+        func3 = TextMobject("区间修改，区间查询").set_color(BLUE).move_to(DOWN)
+        self.play(FadeInFrom(func1, UP))
+        self.wait()
+        self.play(
+            FadeOutAndShift(func1, DOWN),
+            FadeInFrom(func2, UP)
+        )
+        self.wait()
+        self.play(
+            FadeOutAndShift(func2, DOWN),
+            FadeInFrom(func3, UP)
+        )
+        self.wait(3)
+        self.remove(title, func3, dots, mind)
+
+    def scene2(self):
+        title = Title("区间修改，单点查询").set_color(BLUE)
+        self.play(Write(title))
+        text1 = TextMobject("引入","差分数组","\\texttt{b}").next_to(title, DOWN, buff=MED_LARGE_BUFF).scale(0.9)
+        text1[1].set_color(YELLOW)
+        text2 = TextMobject("用","树状数组","维护b的前缀和，即\\texttt{a[]}每个元素的","增量").scale(0.9).next_to(text1, DOWN)
+        text2[1].set_color(YELLOW)
+        text2[3].set_color(RED)
+        self.play(Write(text1))
+        self.play(Write(text2))
+        opt1 = TexMobject("[l,r]+d").move_to(LEFT*4).set_color(BLUE)
+        opt12 = TextMobject("\\texttt{add(l,d)\\ \\ add(r+1, -d)}").next_to(opt1, RIGHT, buff=LARGE_BUFF)
+        opt2 = TextMobject("查询\\texttt{a[x]}").next_to(opt1, DOWN).set_color(BLUE)
+        opt22 = TextMobject("\\texttt{ans=a[x]+}","\\texttt{ask(x)}").next_to(opt12, DOWN)
+        self.play(
+            Write(opt1),
+            Write(opt12)
+        )
+        self.wait()
+        self.play(
+            Write(opt2),
+            Write(opt22)
+        )
+        self.wait()
+        rec = SurroundingRectangle(opt22[1])
+        comment = TextMobject("\\texttt{a[x]}的增量").scale(0.8).next_to(rec, DOWN).set_color(GREY)
+        self.play(ShowCreation(rec))
+        self.play(Write(comment))
+        self.wait(4)
+        self.remove(title, text1, text2, opt1, opt2, opt12, opt22, rec, comment)
+
+    def scene3(self):
+        title = Title("区间修改，区间查询").set_color(BLUE)
+        self.play(Write(title))
+        formula = TexMobject(
+            "\\sum_{i=1}^x{b[i]} &\\rightarrow a[x]\\text{增量} \\\\ ","\\sum_{i=1}^x\\sum_{j=1}^i{b[i]}"," &\\rightarrow ","a[x]\\text{前缀和}","\\text{的增量}"
+        )
+        self.play(Write(formula[0]))
+        self.wait(2)
+        self.play(
+            Write(formula[1]), 
+            Write(formula[2]), 
+            Write(formula[3]), 
+            Write(formula[4])
+        )
+        self.wait()
+        rec = SurroundingRectangle(formula[3]).set_color(YELLOW)
+        comment = TextMobject("在输入数据时预处理出\\texttt{sum[]}数组").scale(0.7).next_to(rec, DOWN, aligned_edge=LEFT).set_color(YELLOW)
+        self.play(ShowCreation(rec))
+        self.play(Write(comment))
+        self.wait(2)
+        rec2 = SurroundingRectangle(formula[1]).set_color(RED)
+        comment2 = TextMobject("怎么求？").scale(0.8).next_to(rec2, LEFT).set_color(RED)
+        self.play(ShowCreation(rec2))
+        self.play(Write(comment2))
+        self.wait(4)
+
+        self.play(FadeOut(title))
+        self.remove(formula[0], formula[1], formula[2], formula[3], formula[4], rec, comment, rec2, comment2)
+        self.wait()
+
+    def scene4(self):
+        pass
 
 
+class Summary(Scene):
+    pass
 
 
+class EndScene(TripleScene):
+    def construct(self):
+        title = Title("参考(链接在评论区置顶)").set_color(RED)
+        topics = VGroup(
+            TextMobject("[\\ 1\\ ]","\\ \\ Fenwick\\ tree\\ -\\ Wikipedia"),
+            TextMobject("[\\ 2\\ ]","\\ \\ 树状数组\ -\\ 维基百科"),
+            TextMobject("[\\ 3\\ ]","\\ \\ 算法竞赛进阶指南\\ -\\ 李煜东"),
+            TextMobject("[\\ 4\\ ]","\\ \\ 树状数组1、2\\ -\\ Luogu"),
+        ).scale(0.8)
 
+        topics.arrange_submobjects(
+            DOWN, aligned_edge=LEFT, buff=MED_LARGE_BUFF
+        ).move_to(LEFT)
+        
+        for topic in topics:
+            topic[0].set_color(BLUE)
 
+        self.play(FadeInFromDown(title))
+        self.play(Write(topics))
+        self.wait()
 
+        self.get_svg()
+        good = self.good
+        coin = self.coin
+        favo = self.favo
+        self.play(
+            FadeInFromPoint(good, good.get_center()),
+            FadeInFromPoint(coin, coin.get_center()),
+            FadeInFromPoint(favo, favo.get_center())
+        )
+        self.wait(0.4)
+        circle_coin = Circle().scale(0.7).move_to(coin).set_stroke(PINK, 6)
+        circle_favo = Circle().scale(0.7).move_to(favo).set_stroke(PINK, 6)
+        self.play(
+            ShowCreation(circle_coin),
+            ShowCreation(circle_favo),
+            run_time=1.5
+        )
+        self.play(
+            FadeOut(circle_coin),
+            FadeOut(circle_favo),
+            good.set_color, LIGHT_PINK,
+            coin.set_color, LIGHT_PINK,
+            favo.set_color, LIGHT_PINK,
+            run_time=0.3
+        )
+        self.wait(2)
+        self.play(
+            FadeOut(good),
+            FadeOut(coin),
+            FadeOut(favo),
+            run_time=0.8
+        )
+        self.wait()
+        self.play(
+            FadeOut(title),
+            FadeOutAndShiftDown(topics),
+            run_time=0.5
+        )
 
+        
 
-
+        title2 = TextMobject("更多算法可参考我的博客\\\\", "https://tony031218.github.io/")
+        title2[1].set_color(ORANGE)
+        title2[1].scale(1.3)
+        self.play(
+            Write(title2[0])
+        )
+        self.play(
+            FadeInFromDown(title2[1])
+        )
+        self.wait(4)
+        self.play(
+            FadeOut(title2)
+        )
+        self.wait(2)
 
 
 
@@ -500,5 +713,5 @@ class OperationAndCode(TreeScene):
 # 19.8.28 Finish 2 main scenes
 # 19.8.29 Finish 1 main scene and video cover
 # 19.8.31 Finish 1 main scene and TreeScene Class
-# 19.8.31~19.9.7 Busy
-# 19.9.7 Finish 1 main scene
+# 19.8.31~19.9.6 Busy
+# 19.9.7 Finish 3 main scenes
