@@ -20,6 +20,7 @@ class TripleScene(Scene):
         circle_coin = Circle().scale(0.7).move_to(coin).set_stroke(PINK, 6)
         circle_favo = Circle().scale(0.7).move_to(favo).set_stroke(PINK, 6)
         self.play(
+            good.set_color, LIGHT_PINK,
             ShowCreation(circle_coin),
             ShowCreation(circle_favo),
             run_time=1.5
@@ -27,7 +28,9 @@ class TripleScene(Scene):
         self.play(
             FadeOut(circle_coin),
             FadeOut(circle_favo),
-            good.set_color, LIGHT_PINK,
+            Flash(coin.get_center(), color=PINK, line_length=0.7, flash_radius=1.5),
+            Flash(favo.get_center(), color=PINK, line_length=0.7, flash_radius=1.5),
+            Flash(good.get_center(), color=PINK, line_length=0.7, flash_radius=1.5),
             coin.set_color, LIGHT_PINK,
             favo.set_color, LIGHT_PINK,
             run_time=0.3
