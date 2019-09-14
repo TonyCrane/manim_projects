@@ -511,8 +511,8 @@ class ExBIT(Scene):
     def construct(self):
         # self.scene1()
         # self.scene2()
-        # self.scene3()
-        self.scene4()
+        self.scene3()
+        # self.scene4()
 
     def scene1(self):
         title = Title("树状数组的扩展应用").set_color(BLUE)
@@ -625,7 +625,44 @@ class ExBIT(Scene):
 
 
 class Summary(Scene):
-    pass
+    def construct(self):
+        title = Title("总结").set_color(BLUE)
+        self.play(Write(title))
+        dots = VGroup(
+            Dot(color=BLUE).move_to(LEFT*3),
+            Dot(color=BLUE).move_to(RIGHT*3)
+        ).move_to(UP*2)
+        self.play(
+            FadeInFrom(dots[0], LEFT),
+            FadeInFrom(dots[1], RIGHT),
+        )
+        func1 = TextMobject("单点修改，查询前缀和").set_color(BLUE).move_to(UP*2)
+        func2 = TextMobject("单点修改，单点查询").set_color(BLUE).move_to(UP*2)
+        func3 = TextMobject("单点修改，区间查询").set_color(BLUE).move_to(UP*2)
+        func4 = TextMobject("区间修改，单点查询").set_color(BLUE).move_to(UP*2)
+        func5 = TextMobject("区间修改，区间查询").set_color(BLUE).move_to(UP*2)
+        self.play(FadeInFrom(func1, UP))
+        self.wait(5)
+        self.play(
+            FadeOutAndShift(func1, DOWN),
+            FadeInFrom(func2, UP)
+        )
+        self.wait(5)
+        self.play(
+            FadeOutAndShift(func2, DOWN),
+            FadeInFrom(func3, UP)
+        )
+        self.wait(5)
+        self.play(
+            FadeOutAndShift(func3, DOWN),
+            FadeInFrom(func4, UP)
+        )
+        self.wait(5)
+        self.play(
+            FadeOutAndShift(func4, DOWN),
+            FadeInFrom(func5, UP)
+        )
+        self.wait(5)
 
 
 class EndScene(TripleScene):
@@ -714,3 +751,6 @@ class EndScene(TripleScene):
 # 19.8.31 Finish 1 main scene and TreeScene Class
 # 19.8.31~19.9.6 Busy
 # 19.9.7 Finish 3 main scenes
+# 19.9.8~19.9.12 Busy
+# 19.9.13 Improve bilibili TripleScene
+# 19.9.14 Finish 1 main scene
