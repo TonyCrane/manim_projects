@@ -509,10 +509,10 @@ class OperationAndCode(TreeScene):
 
 class ExBIT(Scene):
     def construct(self):
-        # self.scene1()
-        # self.scene2()
+        self.scene1()
+        self.scene2()
         self.scene3()
-        # self.scene4()
+        self.scene4()
 
     def scene1(self):
         title = Title("树状数组的扩展应用").set_color(BLUE)
@@ -560,8 +560,10 @@ class ExBIT(Scene):
         self.remove(title, func3, dots, mind)
 
     def scene2(self):
+        oldtitle = Title("树状数组的扩展应用").set_color(BLUE)
         title = Title("区间修改，单点查询").set_color(BLUE)
-        self.play(Write(title))
+        self.add(oldtitle)
+        self.play(ReplacementTransform(oldtitle, title))
         text1 = TextMobject("引入","差分数组","\\texttt{b}").next_to(title, DOWN, buff=MED_LARGE_BUFF).scale(0.9)
         text1[1].set_color(YELLOW)
         text2 = TextMobject("用","树状数组","维护b的前缀和，即\\texttt{a[]}每个元素的","增量").scale(0.9).next_to(text1, DOWN)
@@ -591,8 +593,10 @@ class ExBIT(Scene):
         self.remove(title, text1, text2, opt1, opt2, opt12, opt22, rec, comment)
 
     def scene3(self):
+        oldtitle = Title("区间修改，单点查询").set_color(BLUE)
         title = Title("区间修改，区间查询").set_color(BLUE)
-        self.play(Write(title))
+        self.add(oldtitle)
+        self.play(ReplacementTransform(oldtitle, title))
         formula = TexMobject(
             "\\sum_{i=1}^x{b[i]} &\\rightarrow a[x]\\text{增量} \\\\ ","\\sum_{i=1}^x\\sum_{j=1}^i{b[i]}"," &\\rightarrow ","a[x]\\text{前缀和}","\\text{的增量}"
         )
@@ -621,7 +625,9 @@ class ExBIT(Scene):
         self.wait()
 
     def scene4(self):
-        pass
+        oldtitle = Title("区间修改，区间查询").set_color(BLUE)
+        self.add(oldtitle)
+        self.play(FadeOut(oldtitle))
 
 
 class Summary(Scene):
