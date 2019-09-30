@@ -89,7 +89,7 @@ class TableOfContents(Scene):
             TextMobject("前置知识\\ -\\ \\texttt{lowbit()}操作"),
             TextMobject("树状数组\\ -\\ 思想及实现"),
             TextMobject("树状数组的扩展应用"),
-            TextMobject("总结"),
+            TextMobject("总结与代码"),
         )
         for topic in topics:
             dot = Dot(color=BLUE)
@@ -437,8 +437,8 @@ class OperationAndCode(TreeScene):
         self.wait(2)
         self.play(ReplacementTransform(tree, Tree))
         dots = VGroup(
-            Dot(color=RED).move_to(LEFT*5),
-            Dot(color=RED).move_to(RIGHT*5)
+            Dot(color=RED).move_to(LEFT*3),
+            Dot(color=RED).move_to(RIGHT*3)
         ).to_edge(UP, buff=LARGE_BUFF)
         self.play(
             FadeInFrom(dots[0], LEFT),
@@ -512,7 +512,6 @@ class ExBIT(Scene):
         self.scene1()
         self.scene2()
         self.scene3()
-        self.scene4()
 
     def scene1(self):
         title = Title("树状数组的扩展应用").set_color(BLUE)
@@ -557,7 +556,7 @@ class ExBIT(Scene):
             FadeInFrom(func3, UP)
         )
         self.wait(3)
-        self.remove(title, func3, dots, mind)
+        self.clear()
 
     def scene2(self):
         oldtitle = Title("树状数组的扩展应用").set_color(BLUE)
@@ -620,19 +619,237 @@ class ExBIT(Scene):
         self.play(Write(comment2))
         self.wait(4)
 
-        self.play(FadeOut(title))
         self.remove(formula[0], formula[1], formula[2], formula[3], formula[4], rec, comment, rec2, comment2)
         self.wait()
+        
 
-    def scene4(self):
+class ExBIT_2(Scene):
+    def construct(self):
         oldtitle = Title("区间修改，区间查询").set_color(BLUE)
         self.add(oldtitle)
         self.play(FadeOut(oldtitle))
+        self.wait(3)
+
+        self.graphscene()
+        self.wait(2)
+        self.formulascene()
+    
+    def graphscene(self):
+        a = VGroup()
+        a.add(Rectangle(height=0.6, width=0.7).move_to(UP*2.6+LEFT*5.25))
+        for i in range(1, 7):
+            a.add(a[0].copy().next_to(a[0], RIGHT, buff=0.7*(i-2)))
+        for ob in a:
+            self.play(Write(ob), run_time=0.2)
+        block = VGroup(
+            Rectangle(height=0.6, width=3.5).move_to(UP*2+LEFT*5.25+RIGHT*1.4),
+            Rectangle(height=0.6, width=2.8).move_to(UP*2+DOWN*0.6+LEFT*5.25+RIGHT*1.05),
+            Rectangle(height=0.6, width=2.1).move_to(UP*2+DOWN*1.2+LEFT*5.25+RIGHT*0.7),
+            Rectangle(height=0.6, width=1.4).move_to(UP*2+DOWN*1.8+LEFT*5.25+RIGHT*0.35),
+            Rectangle(height=0.6, width=0.7).move_to(UP*2+DOWN*2.4+LEFT*5.25),
+        ).set_color(BLUE).set_fill(BLUE, 0.5)
+        self.wait(1)
+        self.play(FadeInFrom(block, UP))
+
+        comment = []
+        for i in range(5):
+            tmp = TexMobject("\\sum_{j=1}^{","{}".format(5 - i),"}b[j]").move_to(UP)
+            comment.append(tmp)
+        arrow = []
+        for i in range(5):
+            arrow.append(Arrow(comment[i].get_left(), block[i].get_right()).set_color(RED))
+        self.play(
+            Write(comment[0]),
+            ShowCreation(arrow[0])
+        )
+        self.wait()
+        for i in range(1, 5):
+            self.play(
+                ReplacementTransform(comment[i - 1], comment[i]),
+                ReplacementTransform(arrow[i - 1], arrow[i])
+            )
+            self.wait()
+        self.play(FadeOut(comment[4]), FadeOut(arrow[4]))
+
+        big = Rectangle(height=3.6, width=3.5).move_to(UP*2+DOWN*1.5+LEFT*5.25+RIGHT*1.4).scale(1.02).set_color(RED)
+        self.wait()
+        self.play(ShowCreation(big))
+        big_comment = TexMobject("(5+1)\\sum_{i=1}^5b[i]").set_color(RED).move_to(DOWN*3+LEFT*2)
+        big_arrow = Arrow(big_comment.get_top(), big.get_bottom()).set_color(RED)
+        self.play(Write(big_comment), Write(big_arrow))
+        self.wait(2)
+        self.play(FadeOut(big_comment), FadeOut(big_arrow))
+        small = Rectangle(height=1.8, width=0.7).move_to(UP*2+DOWN*2.4+LEFT*5.25+RIGHT*1.4).set_color(YELLOW)
+        small_comment = TexMobject("i\\times b[i]").set_color(YELLOW).move_to(DOWN*3+LEFT*2)
+        small_arrow = Arrow(small_comment.get_top(), small.get_bottom()).set_color(YELLOW)
+
+        small2 = Rectangle(height=0.6, width=0.7).move_to(UP*2+DOWN*3+LEFT*5.25).set_color(YELLOW)
+        small3 = Rectangle(height=1.2, width=0.7).move_to(UP*2+DOWN*2.7+LEFT*5.25+RIGHT*0.7).set_color(YELLOW)
+        small4 = Rectangle(height=2.4, width=0.7).move_to(UP*2+DOWN*2.1+LEFT*5.25+RIGHT*2.1).set_color(YELLOW)
+        small5 = Rectangle(height=3.0, width=0.7).move_to(UP*2+DOWN*1.8+LEFT*5.25+RIGHT*2.8).set_color(YELLOW)
+        self.wait()
+        self.play(ShowCreation(small))
+        self.play(Write(small_comment), Write(small_arrow))
+        self.play(
+            ShowCreation(small2),
+            ShowCreation(small3),
+            ShowCreation(small4),
+            ShowCreation(small5),
+            run_time=0.6
+        )
+        transcomment = TexMobject("\\sum_{i=1}^5i\\times b[i]").set_color(YELLOW).move_to(DOWN*3+LEFT*2)
+        transarrow = Arrow(transcomment.get_top(), small.get_bottom()).set_color(YELLOW)
+        self.play(
+            ReplacementTransform(small_comment, transcomment),
+            ReplacementTransform(small_arrow, transarrow)
+        )
+        self.wait(2)
+        self.play(FadeOut(transcomment), FadeOut(transarrow))
+        self.wait(4)
+        self.clear()
+
+    def formulascene(self):
+        formula = TexMobject(
+            "\\sum_{i=1}^x\\sum_{j=1}^ib[j] \\\\",
+            "=", "(x+1)\\sum_{i=1}^xb[i]", "\\\\-", "\\sum_{i=1}^xi\\times b[i]"
+        ).move_to(UP*0.5)
+        formula[2].set_color(RED)
+        formula[4].set_color(YELLOW)
+        formula[0].set_color(BLUE)
+        self.play(Write(formula[0]))
+        self.wait(2)
+        self.play(Write(formula[1]))
+        self.wait()
+        self.play(Write(formula[2]), Write(formula[3]))
+        self.wait(2)
+        self.play(Write(formula[4]))
+        self.wait()
+        rec = SurroundingRectangle(formula[4]).set_color(GREEN)
+        comment = TextMobject("使用另一个树状数组来维护").set_color(GREEN).scale(0.6).next_to(rec, DOWN)
+        self.play(
+            ShowCreation(rec),
+            Write(comment)
+        )
+        self.wait(4)
+
+
+class ExBIT_3(Scene):
+    def construct(self):
+        oldtitle = Title("区间修改，区间查询").set_color(BLUE)
+        self.play(FadeIn(oldtitle))
+        text = TextMobject("设树状数组$\\mathtt{t_1}$维护$\\texttt{b[i]}$前缀和，$\\mathtt{t_2}$维护$\\texttt{i*b[i]}$前缀和").scale(0.8).next_to(oldtitle, DOWN)
+        self.play(Write(text))
+        opt1 = TextMobject("区间$\\mathtt{[l,r]}$加上$d$").set_color(YELLOW).move_to(LEFT*4+UP*1.5+DOWN*0.6)
+        self.wait(2)
+        self.play(Write(opt1))
+        opt_1 = VGroup(
+            TextMobject("对于$\\mathtt{t_1}$, $\\texttt{add1(l,d)}$"),
+            TextMobject("对于$\\mathtt{t_1}$, $\\texttt{add1(r+1,-d)}$"),
+            TextMobject("对于$\\mathtt{t_2}$, $\\texttt{add2(l,l*d)}$"),
+            TextMobject("对于$\\mathtt{t_2}$, $\\texttt{add2(r+1,-(r+1)*d)}$"),
+        )
+        for opt in opt_1:
+            dot = Dot(color=BLUE)
+            dot.next_to(opt, LEFT)
+            opt.add(dot)
+        opt_1.arrange_submobjects(
+            DOWN, aligned_edge=LEFT, buff=SMALL_BUFF
+        ).scale(0.8).move_to(LEFT*3+DOWN*0.6)
+        for opt in opt_1:
+            self.play(Write(opt), run_time=0.3)
+        
+        self.wait(3)
+        line = DashedLine(UP*1.5, DOWN*3)
+        self.play(ShowCreation((line)))
+
+        opt2 = TextMobject("查询区间$\\mathtt{[l,r]}$的和").set_color(YELLOW).move_to(RIGHT*2.5+UP*1.5+DOWN*0.6)
+        self.wait()
+        self.play(Write(opt2))
+        opt_2 = VGroup(
+            TexMobject("\\mathtt{ans=}"),
+            TexMobject("\\mathtt{(sum[r]+(r+1)*ask1(r)-ask2(r))}").scale(0.65),
+            TexMobject("\\mathtt{-(sum[l-1]+l*ask1(l-1)-ask2(l-1))}").scale(0.65),
+        ).arrange_submobjects(
+            DOWN, aligned_edge=LEFT, buff=MED_SMALL_BUFF
+        ).move_to(DOWN*0.5+RIGHT*3.6)
+        
+        self.wait(2)
+        self.play(Write(opt_2))
+        self.wait(5)
+
+        self.clear()
+        self.add(oldtitle)
+        title = Title("树状数组的扩展应用").set_color(BLUE)
+        self.play(ReplacementTransform(oldtitle, title))
+
+        mind = VGroup(
+            TextMobject("数组").set_color(YELLOW),
+            TextMobject("$\\Longrightarrow$树状数组"),
+            TextMobject("$\\Longrightarrow$前缀区间维护"),
+            TextMobject("$\\Longrightarrow$","和")
+        ).arrange_submobjects(
+            RIGHT, buff=MED_SMALL_BUFF
+        ).move_to(UP*1.4)
+        mind[3][1].set_color(RED)
+        self.play(Write(mind[0]))
+        self.wait()
+        self.play(FadeInFrom(mind[1], LEFT))
+        self.wait()
+        self.play(FadeInFrom(mind[2], LEFT))
+        self.wait()
+        self.play(FadeInFrom(mind[3], LEFT))
+        self.wait()
+        transmind1 = TextMobject("异或和").set_color(RED).move_to(mind[3][1], aligned_edge=LEFT)
+        transmind2 = TextMobject("最大值").set_color(RED).move_to(mind[3][1], aligned_edge=LEFT)
+        transmind3 = TextMobject("最小值").set_color(RED).move_to(mind[3][1], aligned_edge=LEFT)
+        transmind4 = TextMobject("……").set_color(RED).move_to(mind[3][1], aligned_edge=LEFT)
+        self.play(
+            FadeOutAndShiftDown(mind[3][1]),
+            FadeInFrom(transmind1, UP)
+        )
+        self.play(
+            FadeOutAndShiftDown(transmind1),
+            FadeInFrom(transmind2, UP)
+        )
+        self.play(
+            FadeOutAndShiftDown(transmind2),
+            FadeInFrom(transmind3, UP)
+        )
+        self.play(
+            FadeOutAndShiftDown(transmind3),
+            FadeInFrom(transmind4, UP)
+        )
+        self.wait(2)
+
+        mind2 = VGroup(
+            TextMobject("复杂区间问题").set_color(YELLOW),
+            TextMobject("$\\Longrightarrow$","树状数组"),
+            TextMobject("$\\Longrightarrow$","线段树")
+        ).arrange_submobjects(
+            RIGHT, buff=MED_SMALL_BUFF
+        ).move_to(DOWN*0.5)
+        mind2[2][1].set_color(RED)
+        self.play(Write(mind2[0]))
+        self.wait()
+        self.play(FadeInFrom(mind2[1], LEFT))
+        self.wait()
+        cr = Cross(mind2[1][1]).set_color(RED)
+        self.play(ShowCreation(cr))
+        self.play(FadeInFrom(mind2[2], LEFT))
+        self.wait(3)
+        self.play(
+            FadeOut(title),
+            FadeOut(mind),
+            FadeOut(mind2),
+            FadeOut(cr),
+            FadeOut(transmind4)
+        )
+        self.wait(2)
 
 
 class Summary(Scene):
     def construct(self):
-        title = Title("总结").set_color(BLUE)
+        title = Title("总结与代码").set_color(BLUE)
         self.play(Write(title))
         dots = VGroup(
             Dot(color=BLUE).move_to(LEFT*3),
@@ -760,3 +977,6 @@ class EndScene(TripleScene):
 # 19.9.8~19.9.12 Busy
 # 19.9.13 Improve bilibili TripleScene
 # 19.9.14 Finish 1 main scene
+# 19.9.15~19.9.28 Busy
+# 19.9.29 Make a script of audio
+# 19.9.30 Finish all scenes
