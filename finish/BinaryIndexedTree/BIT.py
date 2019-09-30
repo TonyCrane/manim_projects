@@ -839,7 +839,10 @@ class ExBIT_3(Scene):
         self.wait(3)
         self.play(
             FadeOut(title),
-            FadeOut(mind),
+            FadeOut(mind[0]),
+            FadeOut(mind[1]),
+            FadeOut(mind[2]),
+            FadeOut(mind[3][0]),
             FadeOut(mind2),
             FadeOut(cr),
             FadeOut(transmind4)
