@@ -4,7 +4,7 @@
   > Created Time     : 2019/01/26 16:19:55
 '''
 
-from big_ol_pile_of_manim_imports import *
+from manimlib.imports import *
 
 class Polygon(Scene):
     def construct(self):
@@ -250,3 +250,29 @@ class TransformPartOfTex(Scene):
         text_rect = SurroundingRectangle(text)
         self.play(ShowCreation(text_rect))
         self.wait()
+
+class TryVideoSeries(Scene):
+    def construct(self):
+        series = VideoSeries(num_videos=6)
+        series.scale(0.8)
+        series.arrange_submobjects(RIGHT, aligned_edge=LEFT, buff=1.6)
+        series.to_edge(UP, buff=1)
+        this_video = series[0]
+        this_video.set_color(YELLOW)
+        this_video.save_state()
+        this_video.set_fill(opacity = 0)
+        this_video.center()
+        this_video.set_height(FRAME_HEIGHT)
+
+        self.play(
+            FadeIn(
+                series,
+                lag_ratio = 0.5,
+                run_time = 2
+            )
+        )
+        self.wait()
+        self.play(
+            this_video.restore, run_time=3
+        )
+        self.wait(2)
