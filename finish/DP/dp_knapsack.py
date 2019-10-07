@@ -4,8 +4,8 @@
   > Created Time     : 2019/01/30 16:23:28
 '''
 
-from big_ol_pile_of_manim_imports import *
-from manim_projects.custom import *
+from manimlib.imports import *
+from manim_projects.MyUsefulScene.VideoStart import *
 
 array_fini = np.array([
     ["0", "0", "0", "0", "0", "0", "0", "0", "0"],
@@ -19,6 +19,25 @@ class VideoTitle(VideoStart):
     CONFIG = {
         "title_name"    : "动态规划-01背包问题",
     }
+
+class VideoCover(Scene):
+    def construct(self):
+        back = Matrix(array_fini).set_opacity(0.45).scale(1.15).move_to(UP*1.3)
+        back[0][44].set_color(RED)
+        for i in range(0, 10):
+            back[0][i].set_color(GREEN)
+        back[0][18].set_color(GREEN)
+        back[0][27].set_color(GREEN)
+        back[0][36].set_color(GREEN)
+
+        dp1 = TextMobject("\\texttt{F[i][j] = max(F[i-1][j], F[i-1][j-v[i]]+c[i])}").move_to(DOWN*1.5).set_color(RED).set_opacity(0.5)
+        dp2 = TextMobject("\\texttt{F[j] = max(F[j], F[j - v[i]] + c[i])}").move_to(DOWN*2.3).set_color(RED).set_opacity(0.5)
+
+        title = TextMobject("0/1\\ 背\\ 包\\ 问\\ 题").scale(2.7).set_color(BLUE).move_to(UP*0.5)
+        entitle = TextMobject("\\texttt{0/1 Knapsack Problem}").scale(1.8).next_to(title, UP).set_color(YELLOW)
+        author = TextMobject("@鹤翔万里").set_color([BLUE, YELLOW, ORANGE, RED]).next_to(title, DOWN, buff=1.2)
+
+        self.add(back, dp1, dp2, title, entitle, author)
 
 class IntroProblem(Scene):
     def construct(self):

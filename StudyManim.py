@@ -4,7 +4,7 @@
   > Created Time     : 2019/01/26 16:19:55
 '''
 
-from big_ol_pile_of_manim_imports import *
+from manimlib.imports import *
 
 class Polygon(Scene):
     def construct(self):
@@ -250,3 +250,9 @@ class TransformPartOfTex(Scene):
         text_rect = SurroundingRectangle(text)
         self.play(ShowCreation(text_rect))
         self.wait()
+
+class TryOmega(Scene):
+    def construct(self):
+        omega = SVGMobject("OmegaCreatures_plain")
+        omega.set_width(3).set_color(BLUE)
+        self.add(omega)
