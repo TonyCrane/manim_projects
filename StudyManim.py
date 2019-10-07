@@ -256,3 +256,18 @@ class TryOmega(Scene):
         omega = SVGMobject("OmegaCreatures_plain")
         omega.set_width(3).set_color(BLUE)
         self.add(omega)
+
+class TryOmegaCreature(TeacherStudentsScene):
+    def construct(self):
+        self.student_says(
+            "What is a derivative?",
+            run_time = 2
+        )
+        self.play(self.get_teacher().change_mode, "happy")
+        self.wait()
+        self.teacher_says(
+            "It's actually a \\\\",
+            "very subtle idea",
+            target_mode = "well"
+        )
+        self.wait()
