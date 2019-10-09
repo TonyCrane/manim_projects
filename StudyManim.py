@@ -276,3 +276,9 @@ class TryVideoSeries(Scene):
             this_video.restore, run_time=3
         )
         self.wait(2)
+        
+class TryOmega(Scene):
+    def construct(self):
+        omega = SVGMobject("OmegaCreatures_plain")
+        omega.set_width(3).set_color(BLUE)
+        self.add(omega)
