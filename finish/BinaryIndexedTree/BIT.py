@@ -983,3 +983,6 @@ class EndScene(TripleScene):
 # 19.9.15~19.9.28 Busy
 # 19.9.29 Make a script of audio
 # 19.9.30 Finish all scenes
+# 19.10.1 Finish editing and Publish
+
+# Video Address > https://www.bilibili.com/video/av69667943

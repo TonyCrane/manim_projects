@@ -5,4 +5,4 @@
 - [x] 快速排序-演示、优化：[av53521391](https://www.bilibili.com/video/av53521391)
 - [x] 傅里叶级数画小电视：[av63091959](https://www.bilibili.com/video/av63091959)
 - [x] 莫比乌斯反演：[av63694400](https://www.bilibili.com/video/av63694400)
-- [x] 树状数组
+- [x] 树状数组： [av69667943](https://www.bilibili.com/video/av69667943)
