@@ -286,14 +286,14 @@ class TryOmega(Scene):
 class TryOmegaCreature(TeacherStudentsScene):
     def construct(self):
         self.student_says(
-            "What is a derivative?",
+            "尝试一下$\omega$酱",
             run_time = 2
         )
-        self.play(self.get_teacher().change_mode, "happy")
+        # self.play(self.get_teacher().change_mode, "happy")
         self.wait()
         self.teacher_says(
-            "It's actually a \\\\",
-            "very subtle idea",
-            target_mode = "well"
+            "还可以吧 \\\\",
+            "虽然没有$\pi$酱好看",
+            # target_mode = "well"
         )
         self.wait()

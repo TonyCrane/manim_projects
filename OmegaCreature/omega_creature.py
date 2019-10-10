@@ -100,7 +100,7 @@ class OmegaCreature(SVGMobject):
         SVGMobject.init_colors(self)
         if not self.parts_named:
             self.name_parts()
-        self.mouth.set_fill(BLACK, opacity=1)
+        self.mouth.set_fill(WHITE, opacity=1)
         self.body.set_fill(self.color, opacity=1)
         self.eyes.set_fill(WHITE, opacity=1)
         self.init_pupils()
