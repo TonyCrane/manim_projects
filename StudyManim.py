@@ -297,3 +297,8 @@ class TryOmegaCreature(TeacherStudentsScene):
             # target_mode = "well"
         )
         self.wait()
+
+class TryFont(Scene):
+    def construct(self):
+        text = Text("test fonts", font='Consolas')
+        self.add(text)
