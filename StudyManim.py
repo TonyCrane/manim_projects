@@ -5,6 +5,7 @@
 '''
 
 from manimlib.imports import *
+from manim_projects.tony_useful.imports import *
 
 class Polygon(Scene):
     def construct(self):
@@ -300,5 +301,20 @@ class TryOmegaCreature(TeacherStudentsScene):
 
 class TryFont(Scene):
     def construct(self):
-        text = Text("test fonts", font='Consolas')
+        # text = Text("test fonts", font='Consolas').shift(UP*2)
+        # text2 = Text("test      blanks", font='Consolas').next_to(text, DOWN)
+        # text3 = Text("test \n test", font='Consolas').next_to(text2, DOWN)
+        text = Text(
+            "line1\n"
+            "line2",
+            font='Consolas'
+        )
         self.add(text)
+
+class TryCode(Scene):
+    def construct(self):
+        code = Code(
+            "#include <bits/stdc++.h>",
+            "using namespace std;",
+        )
+        self.add(code)
