@@ -306,7 +306,7 @@ class TryFont(Scene):
         # text3 = Text("test \n test", font='Consolas').next_to(text2, DOWN)
         text = Text(
             "line1\n"
-            "line2",
+            "line3",
             font='Consolas'
         )
         self.add(text)
@@ -315,6 +315,19 @@ class TryCode(Scene):
     def construct(self):
         code = Code(
             "#include <bits/stdc++.h>",
-            "using namespace std;",
+            "using namespace std; ",
         )
-        self.add(code)
+        self.play(Write(code))
+
+class TryLinedCode(Scene):
+    def construct(self):
+        code = LinedCode(
+            "#include <bits/stdc++.h>",
+            "using namespace std;",
+            "",
+            "int main() {",
+            "    printf(\"Hello World\\n\");",
+            "    return 0;",
+            "}",
+        )
+        self.play(Write(code))
