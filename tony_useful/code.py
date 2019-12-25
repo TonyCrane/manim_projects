@@ -2,7 +2,7 @@ from manimlib.imports import *
 
 class Code(Text):
     CONFIG = {
-        'font'         : 'Consolas',
+        'font'         : 'Monaco for Powerline',
         'size'         : 0.5,
         'color'        : WHITE,
         'stroke_color' : WHITE,
