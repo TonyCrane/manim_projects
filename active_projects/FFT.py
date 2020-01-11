@@ -45,7 +45,67 @@ class VideoCover(Scene):
 
 class FFTScene(Scene):
     def construct(self):
-        lines = [[] for i in range(0, 8)]
+        self.set_up()
+
+    def set_up(self):
+        lines = []
+        line1 = VGroup(
+            *[
+                Line(np.array([-5.5, 0.5 + i, 0]), np.array([-4.5, 0.5 + i, 0])).add_tip(tip_length=0.15)
+                for i in range(3, -5, -1)
+            ]
+        )
+        for line in line1:
+            line.get_tip().shift(LEFT * 0.5)
+        
+        start2 = [3.5, 2.5, 1.5, 0.5, -0.5, -1.5, -2.5, -3.5]
+        end2 = [3.5, -0.5, 1.5, -2.5, 2.5, -1.5, 0.5, -3.5]
+        line2 = VGroup(
+            *[
+                Line(np.array([-4.66, start2[i], 0]), np.array([-3.5, end2[i], 0]))
+                for i in range(0, 8)
+            ]
+        )
+
+        line3 = VGroup(
+            *[
+                Line(np.array([-3.51, 0.5 + i, 0]), np.array([5.5, 0.5 + i, 0])).add_tip(tip_length=0.15)
+                for i in range(3, -5, -1)
+            ]
+        )
+
+        #TODO, replace place and todo with right things
+        place = VGroup(
+            DashedLine(np.array([-3.4, 5, 0]), np.array([-3.4, -5, 0])).set_color(GREEN),
+            DashedLine(np.array([-2, 5, 0]), np.array([-2, -5, 0])).set_color(GREEN),
+            DashedLine(np.array([1, 5, 0]), np.array([1, -5, 0])).set_color(GREEN),
+            DashedLine(np.array([5, 5, 0]), np.array([5, -5, 0])).set_color(GREEN),
+        )
+
+        todo = VGroup(
+            DashedLine(np.array([-4, 3, 0]), np.array([-1, 3, 0])).set_color(BLUE_A),
+            DashedLine(np.array([-4, 1, 0]), np.array([-1, 1, 0])).set_color(BLUE_A),
+            DashedLine(np.array([-4, -1, 0]), np.array([-1, -1, 0])).set_color(BLUE_A),
+            DashedLine(np.array([-4, -3, 0]), np.array([-1, -3, 0])).set_color(BLUE_A),
+            DashedLine(np.array([-1.5, 2, 0]), np.array([1.5, 2, 0])).set_color(BLUE_B),
+            DashedLine(np.array([-1.5, 1, 0]), np.array([1.5, 1, 0])).set_color(BLUE_B),
+            DashedLine(np.array([-1.5, -2, 0]), np.array([1.5, -2, 0])).set_color(BLUE_B),
+            DashedLine(np.array([-1.5, -3, 0]), np.array([1.5, -3, 0])).set_color(BLUE_B),
+            DashedLine(np.array([0.5, 0, 0]), np.array([6, 0, 0])).set_color(BLUE_C),
+            DashedLine(np.array([0.5, -1, 0]), np.array([6, -1, 0])).set_color(BLUE_C),
+            DashedLine(np.array([0.5, -2, 0]), np.array([6, -2, 0])).set_color(BLUE_C),
+            DashedLine(np.array([0.5, -3, 0]), np.array([6, -3, 0])).set_color(BLUE_C),
+        )
+
+        self.play(ShowCreation(line1))
+        self.wait()
+        self.play(ShowCreation(line2))
+        self.wait()
+        self.play(ShowCreation(line3))
+        self.wait()
+        self.play(ShowCreation(place))
+        self.wait()
+        self.play(ShowCreation(todo))
 
 
 class DotMap(Scene):
@@ -66,3 +126,4 @@ class DotMap(Scene):
 # 19.12.13 ~ 19.12.17 write notes
 # 19.12.18 create FFT.py
 # 19.12.19 ~ 19.12.?? write split scene scripts
+# 20.01.11 Finish VideoCover's subscript and some of the background images
