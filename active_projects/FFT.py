@@ -7,6 +7,8 @@
 from manimlib.imports import *
 from manim_projects.tony_useful.imports import *
 
+BROWN = "#8B4513"
+
 class VideoTitle(VideoStart):
     CONFIG = {
         "title_name": "快速傅里叶变换($Fast\ Fourier\ Transform$)",
@@ -49,9 +51,11 @@ class FFTScene(Scene):
 
     def set_up(self):
         lines = []
+
+        #TODO, add a_i tex
         line1 = VGroup(
             *[
-                Line(np.array([-5.5, 0.5 + i, 0]), np.array([-4.5, 0.5 + i, 0])).add_tip(tip_length=0.15)
+                Line([-5.5, 0.5 + i, 0], [-4.5, 0.5 + i, 0]).add_tip(tip_length=0.15)
                 for i in range(3, -5, -1)
             ]
         )
@@ -62,39 +66,80 @@ class FFTScene(Scene):
         end2 = [3.5, -0.5, 1.5, -2.5, 2.5, -1.5, 0.5, -3.5]
         line2 = VGroup(
             *[
-                Line(np.array([-4.66, start2[i], 0]), np.array([-3.5, end2[i], 0]))
+                Line([-4.66, start2[i], 0], [-3.5, end2[i], 0])
                 for i in range(0, 8)
             ]
         )
 
         line3 = VGroup(
             *[
-                Line(np.array([-3.51, 0.5 + i, 0]), np.array([5.5, 0.5 + i, 0])).add_tip(tip_length=0.15)
+                Line([-3.51, 0.5 + i, 0], [5.5, 0.5 + i, 0]).add_tip(tip_length=0.15)
                 for i in range(3, -5, -1)
+            ]
+        )
+        
+        block1 = VGroup(
+            *[
+                VGroup(
+                    Rectangle(height=1.3, width=0.6).move_to([-2.5, i, 0]).set_fill(BROWN, 0.5).set_stroke(BROWN, 3),
+                    Line([-2.7, i + 0.5, 0], [-2.3, i - 0.5, 0]),
+                    Line([-2.7, i - 0.5, 0], [-2.3, i + 0.5, 0]),
+                    TexMobject("\\omega_2^0").scale(0.6).set_color(BLUE).move_to([-3.6, i, 0]),
+                    Line([-3.3, i, 0], [-2.8, i, 0]).add_tip(tip_length=0.15).set_color(BLUE),
+                    Line([-2.8, i + 0.5, 0], [-2.69, i + 0.5, 0]),
+                    Line([-2.8, i - 0.5, 0], [-2.69, i - 0.5, 0]),
+                    Line([-2.2, i + 0.5, 0], [-2.31, i + 0.5, 0]),
+                    Line([-2.2, i - 0.5, 0], [-2.31, i - 0.5, 0]),
+                )
+                for i in [3, 1, -1, -3]
+            ]
+        )
+
+        block2 = VGroup(
+            *[
+                VGroup(
+                    Rectangle(height=2.3, width=0.6).move_to([-0.7, i, 0]).set_fill(BROWN, 0.5).set_stroke(BROWN, 3),
+                    Line([-0.9, i + 1, 0], [-0.5, i - 1, 0]),
+                    Line([-0.9, i - 1, 0], [-0.5, i + 1, 0]),
+                    TexMobject("\\omega_4^0").scale(0.6).set_color(BLUE).move_to([-1.8, i - 0.5, 0]),
+                    Line([-1.5, i - 0.5, 0], [-1.0, i - 0.5, 0]).add_tip(tip_length=0.15).set_color(BLUE),
+                    Line([-1.0, i + 1, 0], [-0.89, i + 1, 0]),
+                    Line([-1.0, i - 1, 0], [-0.89, i - 1, 0]),
+                    Line([-0.4, i + 1, 0], [-0.51, i + 1, 0]),
+                    Line([-0.4, i - 1, 0], [-0.51, i - 1, 0]),
+                )
+                for i in [2.5, -1.5]
+            ]
+        )
+
+        block3 = VGroup(
+            *[
+                VGroup(
+                    Rectangle(height=2.3, width=0.6).move_to([0.2, i, 0]).set_fill(BROWN, 0.5).set_stroke(BROWN, 3),
+                    Line([0, i + 1, 0], [0.4, i - 1, 0]),
+                    Line([0, i - 1, 0], [0.4, i + 1, 0]),
+                    TexMobject("\\omega_4^1").scale(0.6).set_color(BLUE).move_to([-1.8, i - 0.5, 0]),
+                    Line([-1.5, i - 0.5, 0], [-0.1, i - 0.5, 0]).add_tip(tip_length=0.15).set_color(BLUE),
+                    Line([-0.1, i + 1, 0], [0.01, i + 1, 0]),
+                    Line([-0.1, i - 1, 0], [0.01, i - 1, 0]),
+                    Line([0.5, i + 1, 0], [0.39, i + 1, 0]),
+                    Line([0.5, i - 1, 0], [0.39, i - 1, 0]),
+                )
+                for i in [1.5, -2.5]
             ]
         )
 
         #TODO, replace place and todo with right things
         place = VGroup(
-            DashedLine(np.array([-3.4, 5, 0]), np.array([-3.4, -5, 0])).set_color(GREEN),
-            DashedLine(np.array([-2, 5, 0]), np.array([-2, -5, 0])).set_color(GREEN),
-            DashedLine(np.array([1, 5, 0]), np.array([1, -5, 0])).set_color(GREEN),
-            DashedLine(np.array([5, 5, 0]), np.array([5, -5, 0])).set_color(GREEN),
+            DashedLine([1, 5, 0], [1, -5, 0]).set_color(GREEN),
+            DashedLine([5, 5, 0], [5, -5, 0]).set_color(GREEN),
         )
 
         todo = VGroup(
-            DashedLine(np.array([-4, 3, 0]), np.array([-1, 3, 0])).set_color(BLUE_A),
-            DashedLine(np.array([-4, 1, 0]), np.array([-1, 1, 0])).set_color(BLUE_A),
-            DashedLine(np.array([-4, -1, 0]), np.array([-1, -1, 0])).set_color(BLUE_A),
-            DashedLine(np.array([-4, -3, 0]), np.array([-1, -3, 0])).set_color(BLUE_A),
-            DashedLine(np.array([-1.5, 2, 0]), np.array([1.5, 2, 0])).set_color(BLUE_B),
-            DashedLine(np.array([-1.5, 1, 0]), np.array([1.5, 1, 0])).set_color(BLUE_B),
-            DashedLine(np.array([-1.5, -2, 0]), np.array([1.5, -2, 0])).set_color(BLUE_B),
-            DashedLine(np.array([-1.5, -3, 0]), np.array([1.5, -3, 0])).set_color(BLUE_B),
-            DashedLine(np.array([0.5, 0, 0]), np.array([6, 0, 0])).set_color(BLUE_C),
-            DashedLine(np.array([0.5, -1, 0]), np.array([6, -1, 0])).set_color(BLUE_C),
-            DashedLine(np.array([0.5, -2, 0]), np.array([6, -2, 0])).set_color(BLUE_C),
-            DashedLine(np.array([0.5, -3, 0]), np.array([6, -3, 0])).set_color(BLUE_C),
+            DashedLine([0.5, 0, 0], [6, 0, 0]).set_color(BLUE_C),
+            DashedLine([0.5, -1, 0], [6, -1, 0]).set_color(BLUE_C),
+            DashedLine([0.5, -2, 0], [6, -2, 0]).set_color(BLUE_C),
+            DashedLine([0.5, -3, 0], [6, -3, 0]).set_color(BLUE_C),
         )
 
         self.play(ShowCreation(line1))
@@ -106,6 +151,9 @@ class FFTScene(Scene):
         self.play(ShowCreation(place))
         self.wait()
         self.play(ShowCreation(todo))
+
+        #TODO, FadeIn these objects
+        self.add(block1, block2, block3)
 
 
 class DotMap(Scene):
@@ -127,3 +175,4 @@ class DotMap(Scene):
 # 19.12.18 create FFT.py
 # 19.12.19 ~ 19.12.?? write split scene scripts
 # 20.01.11 Finish VideoCover's subscript and some of the background images
+# 20.01.13 write some of the background images
