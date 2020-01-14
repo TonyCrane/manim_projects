@@ -15,44 +15,19 @@ class VideoTitle(VideoStart):
     }
 
 
-class VideoCover(Scene):
-    def construct(self):
-        # self.add_main()
-        self.add_background()
-        # self.add_subscripts()
-
-    def add_main(self):
-        title  = TextMobject("快\\ 速\\ 傅\\ 里\\ 叶\\ 变\\ 换").scale(2.3).set_color(BLUE).move_to(UP*0.5)
-        entitle = TextMobject("\\texttt{Fast }","\\texttt{Fourier }", "\\texttt{Transform}").next_to(title, UP).set_color(YELLOW).set_width(title.get_width())
-        fast1 = TextMobject("\\texttt{Fast }").set_color(GRAY).set_width(entitle[0].get_width()).next_to(entitle[0], UP)
-        fast2 = TextMobject("\\texttt{Fast }").set_color(GRAY).set_width(entitle[0].get_width()).next_to(entitle[1], UP)
-        tle   = TextMobject("\\texttt{TLE}").set_color(GRAY).set_height(entitle[0].get_height()).next_to(entitle[2], UP)
-        xentitle = VGroup(fast1, fast2, tle)
-        author = TextMobject("@鹤翔万里").scale(1.2).set_color([BLUE, YELLOW, ORANGE, RED]).next_to(title, DOWN, buff=1.2)
-        line = Line(fast1.get_left(), entitle.get_right()+fast1.get_left()-entitle.get_left()).set_color(GRAY)
-        
-        self.add(title, entitle, author, xentitle, line)
-
-    def add_background(self):
-        pass
-
-    def add_subscripts(self):
-        square = Square().rotate(PI / 4).scale(1.5).set_fill(BLUE, 1).set_color(BLUE)
-        square.move_to(LEFT * 7.3 + UP * 4.6)
-        text = Text("???", font='AR PL KaitiM GB', stroke_width=1.5).scale(0.8).rotate(PI / 4).next_to(square.get_edge_center(DOWN), buff=0)
-        text.shift(UP * 1.3 + RIGHT * 0.24)
-
-        self.add(square, text)
-        
-
 class FFTScene(Scene):
     def construct(self):
-        self.set_up()
+        FFTGraph = self.set_up()
+        self.add(FFTGraph)
 
     def set_up(self):
-        lines = []
+        Input = VGroup(
+            *[
+                TexMobject("a_{}".format(down)).move_to([-5.8, 0.5 + i, 0]).scale(0.7).set_color(RED)
+                for down, i in zip(range(0, 8), range(3, -5, -1))
+            ]
+        )
 
-        #TODO, add a_i tex
         line1 = VGroup(
             *[
                 Line([-5.5, 0.5 + i, 0], [-4.5, 0.5 + i, 0]).add_tip(tip_length=0.15)
@@ -75,6 +50,13 @@ class FFTScene(Scene):
             *[
                 Line([-3.51, 0.5 + i, 0], [5.5, 0.5 + i, 0]).add_tip(tip_length=0.15)
                 for i in range(3, -5, -1)
+            ]
+        )
+
+        Output = VGroup(
+            *[
+                TexMobject("y_{}".format(down)).move_to([5.8, 0.5 + i, 0]).scale(0.7).set_color(RED)
+                for down, i in zip(range(0, 8), range(3, -5, -1))
             ]
         )
         
@@ -129,31 +111,66 @@ class FFTScene(Scene):
             ]
         )
 
-        #TODO, replace place and todo with right things
-        place = VGroup(
-            DashedLine([1, 5, 0], [1, -5, 0]).set_color(GREEN),
-            DashedLine([5, 5, 0], [5, -5, 0]).set_color(GREEN),
+        block4 = VGroup(
+            *[
+                VGroup(
+                    Rectangle(height=4.3, width=0.6).move_to([j, i, 0]).set_fill(BROWN, 0.5).set_stroke(BROWN, 3),
+                    Line([j - 0.2, i + 2, 0], [j + 0.2, i - 2, 0]),
+                    Line([j - 0.2, i - 2, 0], [j + 0.2, i + 2, 0]),
+                    Line([j - 0.3, i + 2, 0], [j - 0.19, i + 2, 0]),
+                    Line([j - 0.3, i - 2, 0], [j - 0.19, i - 2, 0]),
+                    Line([j + 0.3, i + 2, 0], [j + 0.19, i + 2, 0]),
+                    Line([j + 0.3, i - 2, 0], [j + 0.19, i - 2, 0]),
+                )
+                for i, j in zip([1.5, 0.5, -0.5, -1.5], [2, 2.8, 3.6, 4.4])
+            ],
+            *[
+                VGroup(
+                    TexMobject("\\omega_8^{}".format(i)).scale(0.6).set_color(BLUE).move_to([1, -i, 0]),
+                    Line([1.3, -i, 0], [1.7 + i * 0.8, -i, 0]).add_tip(tip_length=0.15).set_color(BLUE),
+                )
+                for i in [0, 1, 2, 3]
+            ]
         )
 
-        todo = VGroup(
-            DashedLine([0.5, 0, 0], [6, 0, 0]).set_color(BLUE_C),
-            DashedLine([0.5, -1, 0], [6, -1, 0]).set_color(BLUE_C),
-            DashedLine([0.5, -2, 0], [6, -2, 0]).set_color(BLUE_C),
-            DashedLine([0.5, -3, 0], [6, -3, 0]).set_color(BLUE_C),
+        return VGroup(
+            Input, line1, line2, line3, block1, block2, block3, block4, Output
         )
 
-        self.play(ShowCreation(line1))
-        self.wait()
-        self.play(ShowCreation(line2))
-        self.wait()
-        self.play(ShowCreation(line3))
-        self.wait()
-        self.play(ShowCreation(place))
-        self.wait()
-        self.play(ShowCreation(todo))
 
-        #TODO, FadeIn these objects
-        self.add(block1, block2, block3)
+class VideoCover(FFTScene):
+    def construct(self):
+        self.add_background()
+        block = Rectangle(
+            height=3, width=13
+        ).shift(UP * 1.2)
+        self.add(block)
+        self.add_main()
+        self.add_subscripts()
+
+    def add_main(self):
+        title  = TextMobject("快\\ 速\\ 傅\\ 里\\ 叶\\ 变\\ 换").scale(2.3).set_color(BLUE).move_to(UP*0.5)
+        entitle = TextMobject("\\texttt{Fast }","\\texttt{Fourier }", "\\texttt{Transform}").next_to(title, UP).set_color(YELLOW).set_width(title.get_width())
+        fast1 = TextMobject("\\texttt{Fast }").set_color(GRAY).set_width(entitle[0].get_width()).next_to(entitle[0], UP)
+        fast2 = TextMobject("\\texttt{Fast }").set_color(GRAY).set_width(entitle[0].get_width()).next_to(entitle[1], UP)
+        tle   = TextMobject("\\texttt{TLE}").set_color(GRAY).set_height(entitle[0].get_height()).next_to(entitle[2], UP)
+        xentitle = VGroup(fast1, fast2, tle)
+        author = TextMobject("@鹤翔万里").scale(1.2).set_color([BLUE, YELLOW, ORANGE, RED]).next_to(title, DOWN, buff=1.2)
+        line = Line(fast1.get_left(), entitle.get_right()+fast1.get_left()-entitle.get_left()).set_color(GRAY)
+        
+        self.add(title, entitle, author, xentitle, line)
+
+    def add_background(self):
+        FFTGraph = self.set_up().set_opacity(0.2)
+        self.add(FFTGraph)
+
+    def add_subscripts(self):
+        square = Square().rotate(PI / 4).scale(1.5).set_fill(BLUE, 1).set_color(BLUE)
+        square.move_to(LEFT * 7.3 + UP * 4.6)
+        text = Text("???", font='AR PL KaitiM GB', stroke_width=1.5).scale(0.8).rotate(PI / 4).next_to(square.get_edge_center(DOWN), buff=0)
+        text.shift(UP * 1.3 + RIGHT * 0.24)
+
+        self.add(square, text)
 
 
 class DotMap(Scene):
