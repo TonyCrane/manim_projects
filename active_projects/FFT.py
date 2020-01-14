@@ -15,6 +15,17 @@ class VideoTitle(VideoStart):
     }
 
 
+class DotMap(Scene):
+    def construct(self):
+        dots = VGroup()
+        for x in range(-7, 8):
+            for y in range(-4, 5):
+                dots.add(Dot().move_to(RIGHT * x + UP * y))
+        text1 = Text("(-7, -4)", font='Consolas').scale(0.5).move_to(dots[0]).shift(RIGHT * 0.9 + UP * 0.5)
+        text2 = Text("(7, 4)", font='Consolas').scale(0.5).move_to(dots[-1]).shift(DOWN * 0.5 + LEFT * 0.9)
+        self.add(dots, text1, text2)
+
+
 class FFTScene(Scene):
     def construct(self):
         FFTGraph = self.set_up()
@@ -142,8 +153,8 @@ class VideoCover(FFTScene):
     def construct(self):
         self.add_background()
         block = Rectangle(
-            height=3, width=13
-        ).shift(UP * 1.2)
+            height=2, width=11.5, stroke_width=0
+        ).shift(UP * 0.85).set_fill(DARK_GRAY, 0.9)
         self.add(block)
         self.add_main()
         self.add_subscripts()
@@ -173,16 +184,49 @@ class VideoCover(FFTScene):
         self.add(square, text)
 
 
-class DotMap(Scene):
+class TableOfContents(Scene):
     def construct(self):
-        dots = VGroup()
-        for x in range(-7, 8):
-            for y in range(-4, 5):
-                dots.add(Dot().move_to(RIGHT * x + UP * y))
-        text1 = Text("(-7, -4)", font='Consolas').scale(0.5).move_to(dots[0]).shift(RIGHT * 0.9 + UP * 0.5)
-        text2 = Text("(7, 4)", font='Consolas').scale(0.5).move_to(dots[-1]).shift(DOWN * 0.5 + LEFT * 0.9)
-        self.add(dots, text1, text2)
-                
+        topics = VGroup(
+            #TODO, finish it
+        )
+        for topic in topics:
+            dot = Dot(color=BLUE)
+            dot.next_to(topic, LEFT)
+            topic.add(dot)
+        topics.arrange_submobjects(
+            DOWN, aligned_edge=LEFT, buff=LARGE_BUFF
+        ).move_to(LEFT)
+        self.add(topics)
+        self.wait()
+        for i in range(len(topics)):
+            self.play(
+                topics[i + 1:].set_fill, {"opacity": 0.25},
+                topics[:i].set_fill, {"opacity": 0.25},
+                topics[i].set_fill, {"opacity": 1},
+            )
+            self.wait(2)
+
+
+class SubTitleOfComplexNumber(Scene):
+    CONFIG = {
+        "subtitle" : "复数"
+    }
+    def construct(self):
+        main = TextMobject(
+            "$\\langle$", self.subtitle, "$\\rangle$"
+        )
+        new_langle = TexMobject("\\langle/")
+        new_langle.scale(2)
+        main.scale(2)
+        new_langle.move_to(main[0], RIGHT)
+
+        self.wait(2)
+        self.play(Write(main))
+        self.wait(2)
+        self.play(Transform(main[0], new_langle))
+        self.wait(2)
+
+#TODO, finish other subtitle
 
 
 ##------Time Line------##
@@ -193,3 +237,4 @@ class DotMap(Scene):
 # 19.12.19 ~ 19.12.?? write split scene scripts
 # 20.01.11 Finish VideoCover's subscript and some of the background images
 # 20.01.13 write some of the background images
+# 20.01.14 Finish VideoCover and FFTScene
