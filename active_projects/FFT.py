@@ -184,29 +184,6 @@ class VideoCover(FFTScene):
         self.add(square, text)
 
 
-class TableOfContents(Scene):
-    def construct(self):
-        topics = VGroup(
-            #TODO, finish it
-        )
-        for topic in topics:
-            dot = Dot(color=BLUE)
-            dot.next_to(topic, LEFT)
-            topic.add(dot)
-        topics.arrange_submobjects(
-            DOWN, aligned_edge=LEFT, buff=LARGE_BUFF
-        ).move_to(LEFT)
-        self.add(topics)
-        self.wait()
-        for i in range(len(topics)):
-            self.play(
-                topics[i + 1:].set_fill, {"opacity": 0.25},
-                topics[:i].set_fill, {"opacity": 0.25},
-                topics[i].set_fill, {"opacity": 1},
-            )
-            self.wait(2)
-
-
 class SubTitleOfComplexNumber(Scene):
     CONFIG = {
         "subtitle" : "复数"
@@ -226,7 +203,96 @@ class SubTitleOfComplexNumber(Scene):
         self.play(Transform(main[0], new_langle))
         self.wait(2)
 
-#TODO, finish other subtitle
+
+class SubTitleOfUnitRoot(SubTitleOfComplexNumber):
+    CONFIG = {
+        "subtitle" : "单位根"
+    }
+
+
+class SubTitleOfPolynomial(SubTitleOfComplexNumber):
+    CONFIG = {
+        "subtitle" : "多项式"
+    }
+
+
+class SubTitleOfFFT(SubTitleOfComplexNumber):
+    CONFIG = {
+        "subtitle" : "DFT及FFT原理推导"
+    }
+
+
+class SubTitleOfCode(SubTitleOfComplexNumber):
+    CONFIG = {
+        "subtitle" : "C++代码实现"
+    }
+
+
+class SubTitleOfFastFFT(SubTitleOfComplexNumber):
+    CONFIG = {
+        "subtitle" : "FFT高效实现"
+    }
+
+
+class SubTitleOfIFFT(SubTitleOfComplexNumber):
+    CONFIG = {
+        "subtitle" : "FFT逆变换"
+    }
+
+
+class SubTitleOfConvolution(SubTitleOfComplexNumber):
+    CONFIG = {
+        "subtitle" : "FFT求多项式卷积"
+    }
+    
+
+class PreviewVideo(Scene):
+    def construct(self):
+        screen_rect = ScreenRectangle(height=6).shift(UP * 0.4)
+        self.wait(1)
+        self.play(ShowCreation(screen_rect))
+        self.wait(5)
+
+
+class IndexOfPreKnowledge(Scene):
+    def construct(self):
+        title = Title("前置知识索引").set_color(BLUE)
+        self.play(Write(title))
+        topics = VGroup(
+            TextMobject("复数"),
+            TextMobject("单位根"),
+            TextMobject("多项式"),
+        )
+        for topic in topics:
+            topic.scale(1.3)
+            dot = Dot(color=BLUE).scale(1.5)
+            dot.next_to(topic, LEFT)
+            topic.add(dot)
+        topics.arrange_submobjects(
+            DOWN, aligned_edge=LEFT, buff=LARGE_BUFF
+        ).move_to(LEFT * 2 + DOWN * 0.3)
+        
+        self.play(Write(topics))
+
+        self.wait(3)
+        for i in range(len(topics)):
+            self.play(
+                topics[i + 1:].set_fill, {"opacity": 0.25},
+                topics[:i].set_fill, {"opacity": 0.25},
+                topics[i].set_fill, {"opacity": 1},
+            )
+            self.wait(4)
+        self.play(
+            topics[0].set_fill, {"opacity": 1},
+            topics[1].set_fill, {"opacity": 1},
+        )
+        self.wait(4)
+    
+
+class ComplexNumber(Scene):
+    def construct(self):
+        
+
 
 
 ##------Time Line------##
@@ -238,3 +304,4 @@ class SubTitleOfComplexNumber(Scene):
 # 20.01.11 Finish VideoCover's subscript and some of the background images
 # 20.01.13 write some of the background images
 # 20.01.14 Finish VideoCover and FFTScene
+# 20.01.16 Finish all Subtitles and two other scenes
