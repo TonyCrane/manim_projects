@@ -172,13 +172,13 @@ class VideoCover(FFTScene):
         self.add(title, entitle, author, xentitle, line)
 
     def add_background(self):
-        FFTGraph = self.set_up().set_opacity(0.2)
+        FFTGraph = self.set_up().set_opacity(0.4)
         self.add(FFTGraph)
 
     def add_subscripts(self):
         square = Square().rotate(PI / 4).scale(1.5).set_fill(BLUE, 1).set_color(BLUE)
         square.move_to(LEFT * 7.3 + UP * 4.6)
-        text = Text("???", font='AR PL KaitiM GB', stroke_width=1.5).scale(0.8).rotate(PI / 4).next_to(square.get_edge_center(DOWN), buff=0)
+        text = Text("???", font='Source Han Serif CN', stroke_width=1.5).scale(0.7).rotate(PI / 4).next_to(square.get_edge_center(DOWN), buff=0)
         text.shift(UP * 1.3 + RIGHT * 0.24)
 
         self.add(square, text)
@@ -291,7 +291,169 @@ class IndexOfPreKnowledge(Scene):
 
 class ComplexNumber(Scene):
     def construct(self):
-        
+        title = VGroup(
+            Text("复数", font="Source Han Sans CN").set_color(BLUE).scale(0.8),
+            Text("Complex Number", font="Monaco for Powerline").set_color(BLUE).scale(0.5)
+        ).arrange_submobjects(
+            RIGHT, buff=0.5, aligned_edge=DOWN
+        ).move_to([-1, 3.2, 0])
+        line = Line(LEFT, RIGHT).next_to([0, 2.8, 0], DOWN, buff=MED_SMALL_BUFF).set_color(BLUE).set_width(FRAME_WIDTH - 2)
+        title.add(line)
+        t2c = {
+            "a" : BLUE_B,
+            "b" : BLUE_E,
+            "c" : TEAL_A,
+            "d" : TEAL_E,
+            "i" : GREEN,
+            "e" : BLUE,
+            "\\theta" : ORANGE,
+            "\\over" : WHITE,
+            "^2" : YELLOW_B,
+            "\\sin" : WHITE,
+            "\\cos" : WHITE
+        }
+        topics = VGroup(
+            TextMobject("定义: ", "$z=a+bi$\ \ ", "其中$a,b\in \mathbb{R}\ \ i=\sqrt{-1}$", "$z=re^{i\\theta}$"),
+            TexMobject("\\text{加法法则: }", "(", "a", "+", "b", "i", ")", "+", "(", "c", "+", "d", "i", ")", \
+                       "=", "(", "a", "+", "c", ")", "+", "(", "b", "+", "d", ")", "i").set_color_by_tex_to_color_map(t2c),
+            TexMobject("\\text{乘法法则: }", "(", "a", "+", "b", "i", ")", "(", "c", "+", "d", "i", ")", "=", \
+                       "a", "c", "+", "a", "d", "i", "+", "b", "c", "i", "+", "b", "d", "i", "^2").set_color_by_tex_to_color_map(t2c),
+            TexMobject("\\text{除法法则: }", "{{a", "+", "b", "i}", "\\over", "{c", "+", "d", "i}}", \
+                       "=", "{{a", "c", "+", "b", "d}", "\\over", "{c", "^2", "+", "d", "^2}}", "+", \
+                       "{{b", "c", "-", "a", "d}", "\\over", "{c", "^2", "+", "d", "^2}}", "i").set_color_by_tex_to_color_map(t2c),
+            TexMobject("\\text{欧拉定理: }", "e", "^{i", "\\theta}", "=", "\\cos", "\\theta", "+", "i", "\\sin", "\\theta").set_color_by_tex_to_color_map(t2c)
+        )
+        for topic in topics:
+            topic.scale(0.8)
+            dot = Dot()
+            dot.next_to(topic, LEFT)
+            topic[0].add(dot)
+            topic[0].set_color(GOLD)
+        topics.arrange_submobjects(
+            DOWN, aligned_edge=LEFT, buff=0.5
+        ).shift(DOWN * 0.5)
+        topics[0][2].scale(0.8, about_edge=DOWN).set_color(LIGHT_GRAY)
+        topics.next_to(title, DOWN, aligned_edge=LEFT, buff=0.5)
+
+        self.play(Write(title))
+        self.wait(2)
+        self.play(Write(topics[0][0]))
+        self.wait(0.5)
+        self.play(
+            Write(topics[0][1]),
+            Write(topics[0][2])
+        )
+        self.wait(2)
+        self.play(Write(topics[1][0]))
+        self.play(
+            *[
+                Write(topics[1][i])
+                for i in range(1, 15)
+            ]
+        )
+        self.wait(2)
+        self.play(
+            TransformFromCopy(topics[1][2], topics[1][16]),
+            TransformFromCopy(topics[1][7], topics[1][17]),
+            TransformFromCopy(topics[1][9], topics[1][18]),
+            run_time=2
+        )
+        self.play(FadeIn(topics[1][15]), FadeIn(topics[1][19]))
+        self.play(Write(topics[1][20]))
+        self.play(
+            TransformFromCopy(topics[1][4], topics[1][22]),
+            TransformFromCopy(topics[1][7], topics[1][23]),
+            TransformFromCopy(topics[1][11], topics[1][24]),
+            run_time=2
+        )
+        self.play(FadeIn(topics[1][21]), FadeIn(topics[1][25]))
+        self.play(
+            TransformFromCopy(VGroup(topics[1][5], topics[1][12]), topics[1][26], run_time = 1.5)
+        )
+        self.wait(0.5)
+        self.play(ShowCreationThenDestructionAround(VGroup(*[topics[1][i] for i in range(15, 27)])))
+        self.wait(3)
+        self.play(
+            topics[1][7].set_color, YELLOW
+        )
+        self.play(
+            topics[1][17].set_color, YELLOW,
+            topics[1][23].set_color, YELLOW
+        )
+        self.wait(3)
+        self.play(
+            topics[1][7].set_color, WHITE,
+            topics[1][17].set_color, WHITE,
+            topics[1][23].set_color, WHITE,
+        )
+        self.wait(2)
+
+        self.play(Write(topics[2][0]))
+        self.play(
+            *[
+                Write(topics[2][i])
+                for i in range(1, 14)
+            ]
+        )
+        self.wait(2)
+        self.play(
+            TransformFromCopy(topics[2][2], topics[2][14]),
+            TransformFromCopy(topics[2][8], topics[2][15]),
+            run_time=1.25
+        )
+        self.play(Write(topics[2][16]))
+        self.play(
+            TransformFromCopy(topics[2][2], topics[2][17]),
+            TransformFromCopy(topics[2][10], topics[2][18]),
+            TransformFromCopy(topics[2][11], topics[2][19]),
+            run_time=1.25
+        )
+        self.play(Write(topics[2][20]))
+        self.play(
+            TransformFromCopy(topics[2][4], topics[2][21]),
+            TransformFromCopy(topics[2][5], topics[2][23]),
+            TransformFromCopy(topics[2][8], topics[2][22]),
+            run_time=1.25
+        )
+        self.play(Write(topics[2][24]))
+        self.play(
+            TransformFromCopy(topics[2][4], topics[2][25]),
+            TransformFromCopy(topics[2][10], topics[2][26]),
+            TransformFromCopy(VGroup(topics[2][5], topics[2][11]), topics[2][27:]),
+            run_time=1.25
+        )
+        self.wait(3)
+        self.play(
+            Transform(topics[2][24], TexMobject("-").scale(0.8).move_to(topics[2][24])),
+            FadeOut(topics[2][27:])
+        )
+        self.wait(2)
+        Final_x = TexMobject("(", "a", "c", "-", "b", "d", ")", "+", "(", "a", "d", "+", "b", "c", ")", "i").scale(0.8).move_to(topics[2][14], LEFT).set_color_by_tex_to_color_map(t2c)
+        self.play(
+            Transform(
+                VGroup(
+                    *[topics[2][i] for i in range(14, 27)]
+                ), Final_x
+            )
+        )
+        self.wait(0.5)
+        self.play(ShowCreationThenDestructionAround(Final_x))
+        self.wait(3)
+        self.play(Write(topics[3][0]))
+        self.wait(1)
+        self.play(Write(topics[3][1:]))
+        self.wait(3)
+        self.play(Write(topics[4][0]))
+        self.wait(1)
+        self.play(Write(topics[4][1:]))
+        self.wait(3)
+        self.play(FadeInFromLarge(topics[0][3]))
+        self.wait(5)
+
+
+class UnitRoot(Scene):
+    def construct(self):
+
 
 
 
@@ -305,3 +467,4 @@ class ComplexNumber(Scene):
 # 20.01.13 write some of the background images
 # 20.01.14 Finish VideoCover and FFTScene
 # 20.01.16 Finish all Subtitles and two other scenes
+# 20.01.17 Finish ComplexNumber Scene. Thanks @cigar666
