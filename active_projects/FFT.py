@@ -451,9 +451,95 @@ class ComplexNumber(Scene):
         self.wait(5)
 
 
-class UnitRoot(Scene):
+class ComplexNumberex(Scene):
     def construct(self):
+        plane = ComplexPlane()
+        plane.add_coordinates()
+        self.play(ShowCreation(plane, run_time=3, lag_ratio=0.1))
+        self.wait(1)
+        t2c = {
+            "a" : BLUE_B,
+            "b" : BLUE_E,
+            "i" : GOLD,
+            "e" : BLUE,
+            "\\theta" : YELLOW,
+            "r" : GREEN
+        }
+        point = Dot([2.75, 2.25, 0]).set_color(RED)
+        label_p = TexMobject("a", "+", "b", "i").set_color_by_tex_to_color_map(t2c)
+        label_p.add_updater(lambda m: m.next_to(point, UP))
+        self.play(ShowCreation(point))
+        self.play(Write(label_p))
+        self.wait()
+        dl_a = DashedLine()
+        dl_a.add_updater(lambda m: m.put_start_and_end_on(point.get_center(), [point.get_center()[0], 0, 0]))
+        dl_bi= DashedLine()
+        dl_bi.add_updater(lambda m: m.put_start_and_end_on(point.get_center(), [0, point.get_center()[1], 0]))
+        label_a = TexMobject("a").set_color_by_tex_to_color_map(t2c)
+        label_a.add_updater(lambda m: m.next_to(dl_a, DOWN))
+        label_bi= TexMobject("b","i").set_color_by_tex_to_color_map(t2c)
+        label_bi.add_updater(lambda m: m.next_to(dl_bi, LEFT))
+        self.play(ShowCreation(dl_a), ShowCreation(dl_bi))
+        self.play(Write(label_a), Write(label_bi))
+        self.play(point.shift, LEFT * 4.5 + DOWN * 2, run_time=3)
+        self.play(MoveAlongPath(point, ArcBetweenPoints(point.get_center(), [2.75, 2.25, 0])), run_time=3)
+        self.wait(2)
+        r = Line(ORIGIN, point.get_center())
+        label_r = TexMobject("r").set_color(GREEN).next_to(r.get_center(), UP)
+        self.play(ShowCreation(r))
+        self.play(Write(label_r))
+        angle = Angle([point.get_center()[0], 0, 0], ORIGIN, point.get_center(), color=YELLOW)
+        label_theta = TexMobject("\\theta").set_color(YELLOW).next_to(angle, RIGHT)
+        self.play(ShowCreation(angle))
+        self.play(Write(label_theta))
+        self.wait(2)
+        zeq = TexMobject("=", "r", "e", "^{i", "\\theta}").set_color_by_tex_to_color_map(t2c).next_to(label_p, RIGHT)
+        self.play(Write(zeq))
+        self.wait(2)
 
+
+class VideoFrom3B1B(Scene):
+    def construct(self):
+        icon1 = SVGMobject("video_icon").set_color(PINK).scale(0.5)
+        av1   = TextMobject("av11339177")
+        screen1 = ScreenRectangle(height=3)
+        title1 = Text("欧拉公式与初等群论", font="Source Han Sans CN").scale(0.5)
+        av1.next_to(icon1, RIGHT)
+        screen1.next_to(VGroup(icon1, av1), DOWN)
+        title1.next_to(screen1, DOWN)
+        av11339177 = VGroup(icon1, av1, screen1, title1)
+        av11339177.move_to([-3, 1, 0])
+
+        icon2 = SVGMobject("video_icon").set_color(PINK).scale(0.5)
+        av2   = TextMobject("av63666593")
+        screen2 = ScreenRectangle(height=3)
+        title2 = Text("在3.14分钟内理解e^iπ", font="Source Han Sans CN").scale(0.5)
+        av2.next_to(icon2, RIGHT)
+        screen2.next_to(VGroup(icon2, av2), DOWN)
+        title2.next_to(screen2, DOWN)
+        av63666593 = VGroup(icon2, av2, screen2, title2)
+        av63666593.move_to([3, 1, 0])
+        
+        self.play(
+            ShowCreation(av11339177[2]),
+            ShowCreation(av63666593[2])
+        )
+        self.play(
+            Write(av11339177[3]),
+            Write(av63666593[3])
+        )
+        self.play(
+            FadeIn(av11339177[0]),
+            FadeIn(av63666593[0]),
+            FadeIn(av11339177[1]),
+            FadeIn(av63666593[1]),
+        )
+        self.wait(3)
+
+
+# class UnitRoot(Scene):
+#     def construct(self):
+        
 
 
 

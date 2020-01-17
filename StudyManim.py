@@ -331,3 +331,8 @@ class TryLinedCode(Scene):
             "}",
         )
         self.play(Write(code))
+    
+class TryNumberPlane(Scene):
+    def construct(self):
+        grid = ComplexPlane().add_coordinates()
+        self.add(grid)
