@@ -541,6 +541,96 @@ class VideoFrom3B1B(Scene):
 #     def construct(self):
         
 
+class Polynomial_part1(Scene):
+    def construct(self):
+        title = Title2("多项式", font="Source Han Sans CN").set_color(BLUE)
+        self.play(Write(title))
+        self.wait()
+        t2c = {
+            
+        }
+        formula = TexMobject("F", "(", "x", ")", "=", "a", "_0", "+", "a", "_1", "x", "+", "a", "_2", "x", "^2", \
+                             "+", "\\cdots", "+", "a", "_n", "x", "^n").set_color_by_tex_to_color_map(
+            {
+                "F" : ORANGE,
+                "x" : RED,
+                "a" : GREEN,
+                "_0": BLUE_D,
+                "_1": BLUE_D,
+                "_2": BLUE_D,
+                "_n": BLUE_D,
+                "^2": BLUE_E,
+                "^n": BLUE_E,
+            }
+        )
+        formula.next_to(title, DOWN)
+        formula2 = TexMobject("=", "\\sum", "_{i", "=", "0}", "^n", "a", "_i", "x", "^i").set_color_by_tex_to_color_map(
+            {
+                "x" : RED,
+                "a" : GREEN,
+                "_i": BLUE_D,
+                "^i": BLUE_E,
+            }
+        ).next_to(formula[4], DOWN, aligned_edge=LEFT)
+        formula2[3].set_color(BLUE)
+        formula2[1].set_color(GOLD)
+        self.play(Write(formula))
+        self.wait(2)
+        self.play(Write(formula2[:6]))
+        self.play(
+            TransformFromCopy(
+                VGroup(*[formula[i] for i in [4, 5, 7, 8, 11, 12, 16, 18, 19]]),
+                VGroup(formula2[6], formula2[7])
+            ), run_time=2
+        )
+        self.play(
+            TransformFromCopy(
+                VGroup(*[formula[i] for i in [9, 13, 14, 16, 20, 21]]),
+                VGroup(formula2[8], formula2[9])
+            ), run_time=2
+        )
+        self.wait(2)
+        deg = Text("次数: ", font="Source Han Serif CN").scale(0.6).move_to([-5, formula2.get_center()[1] - 2, 0])
+        deg.set_color(GOLD)
+        dot = Dot().next_to(deg, LEFT).set_color(GOLD)
+        deg.add(dot)
+        degree = TextMobject("degree(", "$F$", ")", "=", "$n$").next_to(deg, RIGHT)
+        degree[1].set_color(ORANGE)
+        degree[4].set_color(GOLD)
+        self.wait(1)
+        self.play(Write(deg))
+        self.wait()
+        self.play(Write(degree[0]), Write(degree[2]))
+        self.play(TransformFromCopy(formula[0], degree[1]), run_time=1.5)
+        self.play(Write(degree[3]))
+        self.play(TransformFromCopy(formula2[1], degree[4]), run_time=1.5)
+        self.wait(2)
+        maxdeg = Text("次数界: ", font="Source Han Serif CN").scale(0.6).move_to([1.5, deg.get_center()[1], 0])
+        maxdeg.set_color(GOLD)
+        dot2 = Dot().next_to(maxdeg, LEFT).set_color(GOLD)
+        maxdeg.add(dot2)
+        maxdegree = TextMobject(">", "degree(", "$F$", ")", "=", "$n$").next_to(maxdeg, RIGHT)
+        maxdegree[2].set_color(ORANGE)
+        maxdegree[5].set_color(GOLD)
+        self.play(Write(maxdeg))
+        self.wait()
+        self.play(Write(maxdegree[0]))
+        self.wait()
+        self.play(
+            TransformFromCopy(degree, maxdegree[1:]), run_time=1.5
+        )
+        self.wait(3)
+
+
+class Polynomial_part2(Scene):
+    def construct(self):
+        title = Title2("多项式", font="Source Han Sans CN").set_color(BLUE)
+        self.add(title)
+        
+
+
+
+
 
 
 ##------Time Line------##
@@ -554,3 +644,5 @@ class VideoFrom3B1B(Scene):
 # 20.01.14 Finish VideoCover and FFTScene
 # 20.01.16 Finish all Subtitles and two other scenes
 # 20.01.17 Finish ComplexNumber Scene. Thanks @cigar666
+# 20.01.18 ~ 20.01.23 homework
+# 20.01.24 Finish Polynomial part1
