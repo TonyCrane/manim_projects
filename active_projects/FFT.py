@@ -451,6 +451,7 @@ class ComplexNumber(Scene):
         self.wait(5)
 
 
+#TODO, improve this scene
 class ComplexNumberex(Scene):
     def construct(self):
         plane = ComplexPlane()
@@ -626,10 +627,481 @@ class Polynomial_part2(Scene):
     def construct(self):
         title = Title2("多项式", font="Source Han Sans CN").set_color(BLUE)
         self.add(title)
-        
+        self.wait()
+        title_plus = SubTopic("多项式加法").scale(0.8).move_to([-4, title.get_bottom()[1] - 0.5, 0])
+        self.play(Write(title_plus))
+        self.wait()
+        t2c = {
+            "A" : ORANGE,
+            "B" : ORANGE,
+            "C" : ORANGE,
+            "x" : RED,
+            "a" : GREEN,
+            "b" : GREEN,
+            "c" : GREEN,
+            "_0": BLUE_D,
+            "_1": BLUE_D,
+            "_2": BLUE_D,
+            "_n": BLUE_D,
+            "^2": BLUE_E,
+            "^n": BLUE_E,
+            "\\cdots": WHITE
+        }
+        formula_A = TexMobject("A", "(", "x", ")", "=", "a", "_0", "+", "a", "_1", "x", "+", "a", "_2", "x", "^2", \
+                               "+", "\\cdots", "+", "a", "_n", "x", "^n").set_color_by_tex_to_color_map(t2c)
+        formula_B = TexMobject("B", "(", "x", ")", "=", "b", "_0", "+", "b", "_1", "x", "+", "b", "_2", "x", "^2", \
+                               "+", "\\cdots", "+", "b", "_n", "x", "^n").set_color_by_tex_to_color_map(t2c)
+        formula_C = TexMobject("C", "(", "x", ")", "=", "(", "a", "_0", "+", "b", "_0", ")", "+", "(", "a", "_1", \
+                               "+", "b", "_1", ")", "x", "+", "(", "a", "_2", "+", "b", "_2", ")", "x", "^2", "\\\\", \
+                               "+", "\\cdots", "+", "(", "a", "_n", "+", "b", "_n", ")", "x", "^n").set_color_by_tex_to_color_map(t2c)
+        formula_A.next_to(title_plus, DOWN, aligned_edge=LEFT)
+        formula_B.next_to(formula_A[4].get_center(), DOWN, index_of_submobject_to_align=4, buff=1.3)
+        plus = TexMobject("+").next_to(formula_A[:4], DOWN)
+        equal = TexMobject("=").rotate(PI / 2).next_to(formula_B[:4], DOWN)
+        formula_C.next_to(equal.get_bottom(), DOWN, index_of_submobject_to_align=1)
+        formula_C[-12:].next_to(formula_C[5], DOWN, aligned_edge=LEFT)
+        self.play(Write(formula_A))
+        self.wait()
+        self.play(Write(formula_B))
+        self.wait()
+        self.play(Write(plus))
+        self.wait(0.2)
+        self.play(Write(equal))
+        self.play(Write(formula_C[:5]))
+        self.wait()
+        self.play(
+            TransformFromCopy(formula_A[5:7], formula_C[6:8]),
+            TransformFromCopy(formula_B[5:7], formula_C[9:11]),
+            run_time=1.5
+        )
+        self.play(FadeIn(formula_C[5]), FadeIn(formula_C[8]), FadeIn(formula_C[11]))
+        self.play(TransformFromCopy(VGroup(formula_A[7], formula_B[7]), formula_C[12]))
+        self.wait(2)
+        self.play(
+            TransformFromCopy(formula_A[8:10], formula_C[14:16]),
+            TransformFromCopy(formula_B[8:10], formula_C[17:19]),
+            run_time=1.5
+        )
+        self.play(FadeIn(formula_C[13]), FadeIn(formula_C[16]), FadeIn(formula_C[19]))
+        self.play(
+            TransformFromCopy(VGroup(formula_A[10], formula_B[10]), formula_C[20]),
+            run_time=1.5
+        )
+        self.play(TransformFromCopy(VGroup(formula_A[11], formula_B[11]), formula_C[21]))
+        self.wait()
+        self.play(
+            TransformFromCopy(formula_A[12:14], formula_C[23:25]),
+            TransformFromCopy(formula_B[12:14], formula_C[26:28]),
+        )
+        self.play(FadeIn(formula_C[22]), FadeIn(formula_C[25]), FadeIn(formula_C[28]))
+        self.play(
+            TransformFromCopy(VGroup(formula_A[14:16], formula_B[14:16]), formula_C[29:31])
+        )
+        self.play(TransformFromCopy(VGroup(formula_A[16], formula_B[16]), formula_C[32]))
+        self.wait()
+        self.play(TransformFromCopy(VGroup(formula_A[17], formula_B[17]), formula_C[33]))
+        self.play(TransformFromCopy(VGroup(formula_A[18], formula_B[18]), formula_C[34]))
+        self.wait()
+        self.play(
+            TransformFromCopy(formula_A[19:21], formula_C[36:38]),
+            TransformFromCopy(formula_B[19:21], formula_C[39:41])
+        )
+        self.play(FadeIn(formula_C[35]), FadeIn(formula_C[38]), FadeIn(formula_C[41]))
+        self.play(
+            TransformFromCopy(VGroup(formula_A[21:], formula_B[21:]), formula_C[42:])
+        )
+        self.wait(3)
+
+        t2c2 = {
+            "x" : RED,
+            "a" : GREEN,
+            "b" : GREEN,
+            "c" : GREEN,
+            "_i": BLUE_D,
+            "^i": BLUE_E,
+        }
+        A = TexMobject("\\sum\\nolimits", "_{i", "=", "0}", "^n", "a", "_i", "x", "^i").set_color_by_tex_to_color_map(t2c2)
+        B = TexMobject("\\sum\\nolimits", "_{i", "=", "0}", "^n", "b", "_i", "x", "^i").set_color_by_tex_to_color_map(t2c2)
+        C = TexMobject("\\sum\\nolimits", "_{i", "=", "0}", "^n", "c", "_i", "x", "^i").set_color_by_tex_to_color_map(t2c2)
+        A.move_to(formula_A[5], aligned_edge=LEFT)
+        B.move_to(formula_B[5], aligned_edge=LEFT)
+        C.move_to(formula_C[5], aligned_edge=LEFT)
+        A[1].set_color(GOLD)
+        B[1].set_color(GOLD)
+        C[1].set_color(GOLD)
+        A[2].set_color(BLUE)
+        B[2].set_color(BLUE)
+        C[2].set_color(BLUE)
+        self.play(Transform(formula_A[5:], A))
+        self.wait()
+        self.play(Transform(formula_B[5:], B))
+        self.wait()
+        self.play(Transform(formula_C[5:], C))
+        self.wait()
+        c = TexMobject("c", "_i", "=", "a", "_i", "+", "b", "_i").set_color_by_tex_to_color_map(t2c2)
+        c.next_to(C, RIGHT, buff=1)
+        self.play(FadeInFrom(c, RIGHT))
+        self.wait(3)
 
 
+class Polynomial_part3_1(Scene):
+    def construct(self):
+        title = Title2("多项式", font="Source Han Sans CN").set_color(BLUE)
+        self.add(title)
+        self.wait()
+        title_plus = SubTopic("多项式乘法").scale(0.8).move_to([-4, title.get_bottom()[1] - 0.5, 0])
+        self.play(Write(title_plus))
+        self.wait(4)
 
+
+class Polynomial_part3_2(Scene): # Thanks @有一种悲伤叫颓废
+    def construct(self):
+        pos = VGroup(*[TextMobject(str(0)) for t in range(27)])\
+        	.arrange(RIGHT).to_edge(UP).shift(DOWN)
+
+        num = lambda i:TexMobject(str(i)).set_color(GREEN)
+        dgt = lambda i:TexMobject("^"+str(i)).set_color(BLUE)
+        add = lambda: TexMobject("+")
+        sub = lambda: TexMobject("-")
+        eks = lambda: TexMobject("x").set_color(RED)
+
+        text1 = VGroup(
+        	num(6), VGroup(eks(), dgt(3)), add(), num(7), VGroup(eks(), dgt(2)), sub(), num(1), num(0), eks(), add(), num(9), 
+        ).arrange(RIGHT/2)
+
+        for i in [2,5]:
+        	text1[i-1][1].next_to(text1[i-1][0], (RIGHT+UP)/2).shift(DOWN*0.15)
+		
+        text1[0:2].move_to(pos[13:16].get_center()).align_to(pos, DOWN)
+        text1[2].move_to(pos[16].get_center()).shift(UP*0.1)
+        text1[3:5].move_to(pos[17:20].get_center()).align_to(pos, DOWN)
+        text1[5].move_to(pos[20].get_center()).shift(UP*0.1)
+        text1[6:9].move_to(pos[21:24].get_center()).align_to(pos, DOWN)
+        text1[9].move_to(pos[24].get_center()).shift(UP*0.1)
+        text1[10].move_to(pos[25:27].get_center()).align_to(pos, DOWN)
+
+        text2 = VGroup(
+        	sub(), num(2), VGroup(eks(), dgt(3)), add(), num(4), eks(), sub(), num(5)
+        ).arrange(RIGHT/2)
+
+        text2[2][1].next_to(text2[2][0], (RIGHT+UP)/2).shift(DOWN*0.15)
+		
+        pos.shift(DOWN)
+        text2[0].move_to(pos[12].get_center()).shift(UP*0.1)
+        text2[1:3].move_to(pos[13:16].get_center()).align_to(pos, DOWN)
+        text2[3].move_to(pos[20].get_center()).shift(UP*0.1)
+        text2[4:6].move_to(pos[21:24].get_center()).align_to(pos, DOWN)
+        text2[6].move_to(pos[24].get_center()).shift(UP*0.1)
+        text2[7].move_to(pos[25:27].get_center()).align_to(pos, DOWN)
+
+        line1 = Line(ORIGIN, RIGHT*8).next_to(text2, DOWN, buff=0.34)\
+        	.set_stroke(width=5, color=WHITE, opacity=0.5)\
+        	.align_to(pos, RIGHT)
+		
+        self.play(Write(text1), run_time=2)
+        self.wait()
+        self.play(Write(text2), run_time=2)
+        self.wait()
+        self.play(ShowCreation(line1))
+        self.wait()
+
+        multi = TexMobject("\\times").scale(1.5).next_to(text2, LEFT).align_to(text2, DOWN).shift(LEFT*0.5)
+        self.play(DrawBorderThenFill(multi))
+        self.play(ScaleInPlace(multi, 3, rate_func = wiggle))
+
+        text3 = VGroup(
+        	sub(), num(3), num(0), VGroup(eks(), dgt(3)), sub(), num(3), num(5), VGroup(eks(), dgt(2)), add(), num(5), num(0), eks(), sub(), num(4), num(5), 
+        ).arrange(RIGHT/2)
+
+        for i in [4,8]:
+        	text3[i-1][1].next_to(text3[i-1][0], (RIGHT+UP)/2).shift(DOWN*0.15)
+
+        pos.shift(DOWN)
+        text3[0].move_to(pos[12].get_center()).shift(UP*0.1)
+        text3[1:4].move_to(pos[13:16].get_center()).align_to(pos, DOWN)
+        text3[4].move_to(pos[16].get_center()).shift(UP*0.1)
+        text3[5:8].move_to(pos[17:20].get_center()).align_to(pos, DOWN)
+        text3[8].move_to(pos[20].get_center()).shift(UP*0.1)
+        text3[9:12].move_to(pos[21:24].get_center()).align_to(pos, DOWN)
+        text3[12].move_to(pos[24].get_center()).shift(UP*0.1)
+        text3[13:15].move_to(pos[25:27].get_center()).align_to(pos, DOWN)
+
+        self.play(
+        	ShowCreationThenDestructionAround(text1), 
+        	ShowCreationThenDestructionAround(text2[6:8])
+        )
+        self.play(Write(text3), run_time=2)
+        self.wait()
+		
+        text4 = VGroup(
+        	num(2), num(4), VGroup(eks(), dgt(4)), add(), num(2), num(8), VGroup(eks(), dgt(3)), sub(), num(4), num(0), VGroup(eks(), dgt(2)), add(), num(3), num(6), eks(), 
+        ).arrange(RIGHT/2)
+
+        for i in [3,7,11]:
+        	text4[i-1][1].next_to(text4[i-1][0], (RIGHT+UP)/2).shift(DOWN*0.15)
+
+        pos.shift(DOWN)
+        text4[0:3].move_to(pos[9:12].get_center()).align_to(pos, DOWN)
+        text4[3].move_to(pos[12].get_center()).shift(UP*0.1)
+        text4[4:7].move_to(pos[13:16].get_center()).align_to(pos, DOWN)
+        text4[7].move_to(pos[16].get_center()).shift(UP*0.1)
+        text4[8:11].move_to(pos[17:20].get_center()).align_to(pos, DOWN)
+        text4[11].move_to(pos[20].get_center()).shift(UP*0.1)
+        text4[12:15].move_to(pos[21:24].get_center()).align_to(pos, DOWN)
+
+        self.play(
+        	ShowCreationThenDestructionAround(text1), 
+        	ShowCreationThenDestructionAround(text2[3:6])
+        )
+        self.play(Write(text4), run_time=2)
+        self.wait()
+
+        text5 = VGroup(
+        	sub(), num(1), num(2), VGroup(eks(), dgt(6)), sub(), num(1), num(4), VGroup(eks(), dgt(5)), add(), num(2), num(0), VGroup(eks(), dgt(4)), sub(), num(1), num(8), VGroup(eks(), dgt(3)), 
+        ).arrange(RIGHT/2)
+
+        for i in [4,8,12,16]:
+        	text5[i-1][1].next_to(text5[i-1][0], (RIGHT+UP)/2).shift(DOWN*0.15)
+
+        pos.shift(DOWN)
+        for i in range(4):
+        	text5[4*i].move_to(pos[4*i].get_center()).shift(UP*0.1)
+        	text5[1+4*i:4+4*i].move_to(pos[1+4*i:4+4*i].get_center()).align_to(pos, DOWN)
+
+        self.play(
+        	ShowCreationThenDestructionAround(text1), 
+        	ShowCreationThenDestructionAround(text2[0:3])
+        )
+        self.play(Write(text5), run_time=2)
+        self.wait()
+
+        line2 = Line(ORIGIN, RIGHT*12.7).next_to(text5, DOWN, buff=0.34)\
+        	.set_stroke(width=5, color=WHITE, opacity=0.5)\
+        	.align_to(pos, RIGHT)
+
+        self.play(ShowCreation(line2))
+        self.wait()
+
+        text6 = VGroup(
+        	sub(), num(1), num(2), VGroup(eks(), dgt(6)), sub(), num(1), num(4), VGroup(eks(), dgt(5)), add(), num(4), num(4), VGroup(eks(), dgt(4)), 
+        	sub(), num(2), num(0), VGroup(eks(), dgt(3)), sub(), num(7), num(5), VGroup(eks(), dgt(2)), add(), num(8), num(6), eks(), sub(), num(4), num(5), 
+        ).arrange(RIGHT/2)
+
+        for i in [4,8,12,16,20]:
+        	text6[i-1][1].next_to(text6[i-1][0], (RIGHT+UP)/2).shift(DOWN*0.15)
+
+        pos.shift(DOWN)
+        for i in range(6):
+        	text6[4*i].move_to(pos[4*i].get_center()).shift(UP*0.1)
+        	text6[1+4*i:4+4*i].move_to(pos[1+4*i:4+4*i].get_center()).align_to(pos, DOWN)
+
+        text6[24].move_to(pos[24].get_center()).shift(UP*0.1)
+        text6[25:27].move_to(pos[25:27].get_center()).align_to(pos, DOWN)
+
+        text6_bg = VGroup(
+        	SurroundingRectangle(VGroup(text3[12:15]), color=YELLOW, fill_opacity=0), 
+        	SurroundingRectangle(VGroup(text3[8:12], text4[11:15]), color=YELLOW, fill_opacity=0), 
+        	SurroundingRectangle(VGroup(text3[4:8], text4[7:11]), color=YELLOW, fill_opacity=0), 
+        	SurroundingRectangle(VGroup(text3[0:4], text4[3:7], text5[12:16]), color=YELLOW, fill_opacity=0), 
+        	SurroundingRectangle(VGroup(text4[0:3], text5[8:12]), color=YELLOW, fill_opacity=0), 
+        	SurroundingRectangle(VGroup(text5[4:8]), color=YELLOW, fill_opacity=0), 
+        	SurroundingRectangle(VGroup(text5[0:4]), color=YELLOW, fill_opacity=0), 
+        )
+
+        self.play(ScaleInPlace(text6_bg[0], 3, rate_func = wiggle))
+        self.play(ReplacementTransform(text6_bg[0], text6[24:27]))
+        self.wait()
+
+        for i in range(6):
+        	self.play(ScaleInPlace(text6_bg[i+1], 3, rate_func = wiggle))
+        	self.play(ReplacementTransform(text6_bg[i+1], text6[20-4*i:24-4*i]))
+        	self.wait()
+
+        self.wait()
+
+
+class Polynomial_part3_3(Scene):
+    def construct(self):
+        title = Title2("多项式", font="Source Han Sans CN").set_color(BLUE)
+        title_mul = SubTopic("多项式乘法").scale(0.8).move_to([-4, title.get_bottom()[1] - 0.5, 0])
+        self.add(title, title_mul)
+        self.wait()
+        t2c2 = {
+            "A" : ORANGE,
+            "B" : ORANGE,
+            "C" : ORANGE,
+            "x" : RED,
+            "a" : GREEN,
+            "b" : GREEN,
+            "c" : GREEN,
+            "_i": BLUE_D,
+            "^i": BLUE_E,
+        }
+        A = TexMobject("A", "(", "x", ")", "=", "\\sum\\nolimits", "_{i", "=", "0}", "^n", "a", "_i", "x", "^i").set_color_by_tex_to_color_map(t2c2)
+        B = TexMobject("B", "(", "x", ")", "=", "\\sum\\nolimits", "_{i", "=", "0}", "^n", "b", "_i", "x", "^i").set_color_by_tex_to_color_map(t2c2)
+        formula_C = TexMobject("C", "(", "x", ")", "=", "A", "(", "x", ")", "B", "(", "x", ")").set_color_by_tex_to_color_map(t2c2)
+        C = TexMobject("C", "(", "x", ")", "=", "\\sum\\nolimits", "_{i", "=", "0}", "^{2n}", "c", "_i", "x", "^i").set_color_by_tex_to_color_map(t2c2)
+        A[6].set_color(GOLD)
+        B[6].set_color(GOLD)
+        C[6:8].set_color(GOLD)
+        A[7].set_color(BLUE)
+        B[7].set_color(BLUE)
+        C[8].set_color(BLUE)
+        A.next_to(title_mul, DOWN, aligned_edge=LEFT)
+        B.next_to(A, RIGHT, buff=2)
+        C.next_to(A[4].get_center(), DOWN, index_of_submobject_to_align=4, buff=1.3)
+        deg = TextMobject("degree(", "$C$", ")=degree(", "$A$", ")+degree(", "$B$", ")").scale(0.8)
+        deg.next_to(C, RIGHT, buff=1)
+        deg[1].set_color(ORANGE)
+        deg[3].set_color(ORANGE)
+        deg[5].set_color(ORANGE)
+        ci = TexMobject("c", "_i", "=", "\\sum\\nolimits", "_{j", "=", "0}", "^i", "a", "_j", "b", "_{i-j}")
+        ci.next_to(C, DOWN, aligned_edge=LEFT, buff=0.85)
+        ci[0].set_color(GREEN)
+        ci[8].set_color(GREEN)
+        ci[10].set_color(GREEN)
+        ci[1].set_color(BLUE_D)
+        ci[9].set_color(BLUE_D)
+        ci[11].set_color(BLUE_D)
+        ci[4].set_color(GOLD)
+        ci[5].set_color(BLUE)
+        c = TexMobject("c", "=", "a", "\\otimes", "b").next_to(ci, RIGHT, buff=1)
+        c[0].set_color(GREEN)
+        c[2].set_color(GREEN)
+        c[4].set_color(GREEN)
+
+        self.play(Write(A))
+        self.play(Write(B))
+        self.wait(2)
+        self.play(FadeInFromDown(deg))
+        self.wait(2)
+        self.play(Write(C))
+        self.wait(2)
+        self.play(Write(ci))
+        self.wait(2)
+        self.play(FadeInFrom(c, LEFT))
+        self.wait(3)
+
+
+class Polynomial_part4(Scene):
+    def construct(self):
+        mid_line = DashedLine([0, 5, 0], [0, -5, 0])
+        self.play(ShowCreation(mid_line))
+        self.wait()
+        self.left()
+        self.wait()
+        self.right()
+    
+    def left(self):
+        title1 = Text("系数表示", font="Source Han Sans CN").set_color(BLUE).scale(0.57).move_to([-5.2, 3.3, 0])
+        self.play(Write(title1))
+        coef = TexMobject("\\boldsymbol{a}", "=", "[", "a", "_0", ",", "a", "_1", ",", "a", "_2", ",", "\\cdots", ",", "a", "_n", "]^\\top")\
+            .set_color_by_tex_to_color_map({"a":GREEN, "\\boldsymbol{a}":RED, "_0":BLUE, "_1":BLUE, "_2":BLUE, "_n":BLUE})
+        coef.next_to(title1, DOWN, aligned_edge=LEFT).shift(RIGHT*0.5)
+        self.play(Write(coef))
+        self.wait()
+
+        t2c = {
+            "{c}" : GREEN,
+            "{_i}": BLUE,
+            "{a}" : GREEN,
+            "{b}" : GREEN,
+        }
+
+        sub1_1 = SubTopic("加法").scale(0.8).next_to(title1, DOWN, buff=1, aligned_edge=LEFT)
+        plus1 = TexMobject("{c}{_i}={a}{_i}+{b}{_i}", tex_to_color_map=t2c).move_to([-3.5, sub1_1.get_center()[1]-0.7, 0])
+        O1_1 = TexMobject("O(n)").scale(0.85).next_to(sub1_1, RIGHT)
+        self.play(Write(sub1_1))
+        self.wait()
+        self.play(Write(plus1))
+        self.wait(2)
+        self.play(FadeInFrom(O1_1, RIGHT))
+        self.wait(2)
+        sub1_2 = SubTopic("乘法").scale(0.8).next_to(sub1_1, DOWN, buff=1)
+        mul1 = TexMobject("\\boldsymbol{c}", "=", "\\boldsymbol{a}", "\\otimes", "\\boldsymbol{b}").move_to([-3.5, sub1_2.get_center()[1]-0.7, 0])
+        O1_2 = TexMobject("O(n^2)").scale(0.85).next_to(sub1_2, RIGHT)
+        mul1[0].set_color(GREEN)
+        mul1[2].set_color(GREEN)
+        mul1[4].set_color(GREEN)
+        self.play(Write(sub1_2))
+        self.wait()
+        self.play(Write(mul1))
+        self.wait(2)
+        self.play(FadeInFrom(O1_2, RIGHT))
+        self.wait(2)
+        sub1_3 = SubTopic("求值").scale(0.8).next_to(sub1_2, DOWN, buff=1)
+        t2c2 = {
+            "{A}": ORANGE,
+            "{a}": GREEN,
+            "{x}": RED,
+            "{_n}": BLUE,
+            "{_{n-1}}": BLUE,
+            "{_{n-2}}": BLUE,
+            "{_1}": BLUE,
+            "{_0}": BLUE,
+        }
+        eva = TexMobject("{A}({x})=&(\\cdots(({a}{_n}{x}+{a}{_{n-1}}){x}+\\\\&{a}{_{n-2}}){x}+\\cdots+{a}{_1}){x}+{a}{_0}", tex_to_color_map=t2c2)
+        eva.scale(0.8).move_to([-3.5, sub1_3.get_center()[1]-0.85, 0])
+        O1_3 = TexMobject("O(n)").scale(0.85).next_to(sub1_3, RIGHT)
+        self.play(Write(sub1_3))
+        self.wait()
+        self.play(Write(eva))
+        self.wait(2)
+        self.play(FadeInFrom(O1_3, RIGHT))
+        self.wait(2)
+
+    def right(self):
+        title2 = Text("点值表示", font="Source Han Sans CN").set_color(BLUE).scale(0.57).move_to([1.5, 3.3, 0])
+        self.play(Write(title2))
+        t2c = {
+            "{x}": RED,
+            "{A}": ORANGE,
+            "{B}": ORANGE,
+            "{C}": ORANGE,
+            "{_0}": BLUE,
+            "{_1}": BLUE,
+            "{_n}": BLUE,
+            "{_i}": BLUE,
+        }
+        point = TexMobject("\\{", "({x}{_0}, {A}({x}{_0})), ({x}{_1}, {A}({x}{_1})),\\cdots ,({x}{_n}, {A}({x}{_n}))", "\\}", \
+            tex_to_color_map=t2c).scale(0.7).next_to(title2, DOWN, aligned_edge=LEFT).shift(LEFT*0.2)
+        self.play(Write(point))
+        self.wait()
+
+        sub2_1 = SubTopic("加法").scale(0.8).next_to(title2, DOWN, buff=1, aligned_edge=LEFT)
+        plus2 = TexMobject("{C}({x}{_i})={A}({x}{_i})+{B}({x}{_i})", tex_to_color_map=t2c).move_to([3.5, sub2_1.get_center()[1]-0.7, 0])
+        O2_1 = TexMobject("O(n)").scale(0.85).next_to(sub2_1, RIGHT)
+        self.play(Write(sub2_1))
+        self.wait()
+        self.play(Write(plus2))
+        self.wait(2)
+        self.play(FadeInFrom(O2_1, RIGHT))
+        self.wait(2)
+        sub2_2 = SubTopic("乘法").scale(0.8).next_to(sub2_1, DOWN, buff=1)
+        mul2 = TexMobject("{C}({x}{_i})={A}({x}{_i}){B}({x}{_i})", tex_to_color_map=t2c).move_to([3.5, sub2_2.get_center()[1]-0.7, 0])
+        O2_2 = TexMobject("O(n)").scale(0.85).next_to(sub2_2, RIGHT)
+        self.play(Write(sub2_2))
+        self.wait()
+        self.play(Write(mul2))
+        self.wait(2)
+        self.play(FadeInFrom(O2_2, RIGHT))
+        self.wait(2)
+        sub2_3 = SubTopic("插值").scale(0.8).next_to(sub2_2, DOWN, buff=1)
+        t2c2 = {
+            "{A}" : ORANGE,
+            "{x}" : RED,
+            "{_i}": BLUE
+        }
+        inter = TexMobject("{A}({x})=\\sum_{i=0}^n{A}({x}{_i})\\frac{\\prod_{j\\neq i}(x_{}-x_j)}{\\prod_{j\\neq i}(x_i-x_j)}", \
+            tex_to_color_map=t2c2)
+        inter.scale(0.8).move_to([3.5, sub2_3.get_center()[1]-0.87, 0])
+        O2_3 = TexMobject("O(n^2)").scale(0.85).next_to(sub2_3, RIGHT)
+        self.play(Write(sub2_3))
+        self.wait()
+        self.play(Write(inter))
+        self.wait(2)
+        self.play(FadeInFrom(O2_3, RIGHT))
+        self.wait(2)
 
 
 
@@ -646,3 +1118,4 @@ class Polynomial_part2(Scene):
 # 20.01.17 Finish ComplexNumber Scene. Thanks @cigar666
 # 20.01.18 ~ 20.01.23 homework
 # 20.01.24 Finish Polynomial part1
+# 20.01.25 Finish Polynomial part2 3 4. Thanks @有一种悲伤叫颓废 for part3
