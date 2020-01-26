@@ -1104,6 +1104,546 @@ class Polynomial_part4(Scene):
         self.wait(2)
 
 
+class DFT(Scene):
+    def construct(self):
+        title = Text("离散傅里叶变换", font="Source Han Sans CN", t2c={"离散" : YELLOW,"傅里叶变换" : BLUE,})
+        title.scale(0.6).move_to([-4.5, 3.3, 0])
+        en_title = TextMobject("D", "iscrete ", "F", "ourier ", "T", "ransform").next_to(title, RIGHT)
+        en_title[0].set_color(YELLOW)
+        en_title[2].set_color(BLUE)
+        en_title[4].set_color(BLUE)
+        self.play(Write(title))
+        self.wait()
+        self.play(DrawBorderThenFill(en_title))
+        self.wait()
+        defi = VGroup(
+            TexMobject("A", "(", "x", ")", "=", "\\sum", "^{n-1}", "_{i", "=", "0}", "a", "_i", "x", "^i"),
+            TextMobject("在$\\omega_n^0, \\omega_n^1, \\cdots, \\omega_n^{n-1}$处的值$y_0, y_1, \\cdots, y_{n-1}$").scale(0.9)
+        ).arrange_submobjects(RIGHT)
+        defi[0][0].set_color(ORANGE)
+        defi[0][2].set_color(RED)
+        defi[0][7].set_color(BLUE)
+        defi[0][10].set_color(GREEN)
+        defi[0][11].set_color(BLUE)
+        defi[0][12].set_color(RED)
+        defi[0][13].set_color(BLUE)
+        defi.move_to([0, title.get_center()[1]-1.2, 0])
+        pos = defi[0].get_center()
+        defi[0].move_to(ORIGIN)
+        self.play(Write(defi[0]))
+        self.wait()
+        self.play(defi[0].move_to, pos, run_time=1.5)
+        self.wait(0.2)
+        self.play(Write(defi[1]))
+        self.wait(2)
+        dft = TexMobject("y_i=", "A", "(", "\\omega", "_n", "^i", ")", "=\\sum", "^{n-1}", "_{j", "=", "0}", "\\omega", "_n", "^{i", "j}", "a", "_j")
+        dft[1].set_color(ORANGE)
+        dft[3].set_color(RED)
+        dft[12].set_color(RED)
+        dft[4:6].set_color(GOLD)
+        dft[13].set_color(GOLD)
+        dft[15].set_color(GOLD)
+        dft[9].set_color(BLUE)
+        dft[14].set_color(BLUE)
+        dft[17].set_color(BLUE)
+        dft[16].set_color(GREEN)
+        dft.next_to(defi, DOWN)
+        pos2 = dft[:7].get_center()
+        dft[:7].move_to([0, pos2[1], 0])
+        self.play(Write(dft[:7]))
+        self.wait()
+        self.play(dft[:7].move_to, pos2, run_time=1.5)
+        self.wait()
+        self.play(Write(dft[7:]))
+        self.wait(2)
+        dft2 = VGroup(
+            TexMobject("\\boldsymbol{y}=\\text{DFT}", "_n", "(", "\\boldsymbol{a}", ")"),
+            TexMobject("\\boldsymbol{y}=", "\\mathcal{F}", "\\boldsymbol{a}")
+        ).arrange_submobjects(RIGHT, buff=1).next_to(dft, DOWN, buff=0.8)
+        dft2[0][1].set_color(GOLD)
+        dft2[0][3].set_color(GREEN)
+        dft2[1][1].set_color(YELLOW)
+        dft2[1][2].set_color(GREEN)
+        pos3 = dft2[0].get_center()
+        dft2[0].move_to([0, pos3[1], 0])
+        self.play(Write(dft2[0]))
+        self.wait()
+        self.play(dft2[0].move_to, pos3, run_time=1.5)
+        self.wait()
+        self.play(Write(dft2[1]))
+        self.wait(3)
+        self.play(
+            dft.move_to, [-3.5, pos2[1], 0],
+            dft2.move_to, [3.5, pos2[1], 0],
+            run_time=2    
+        )
+        O1 = TexMobject("O(n^2)").next_to(en_title, RIGHT).set_color(GOLD)
+        self.wait()
+        self.play(FadeInFrom(O1, RIGHT))
+        self.wait()
+        title2 = Text("快速傅里叶变换", font="Source Han Sans CN", t2c={"快速" : YELLOW,"傅里叶变换" : BLUE,})
+        title2.scale(0.6).move_to([-4.5, -1.5, 0])
+        en_title2 = TextMobject("F", "ast ", "{\\tiny discrete} ", "F", "ourier ", "T", "ransform").next_to(title2, RIGHT)
+        en_title2[0].set_color(YELLOW)
+        en_title2[2].set_color(YELLOW)
+        en_title2[3].set_color(BLUE)
+        en_title2[5].set_color(BLUE)
+        pos4 = en_title2[3:].get_center()
+        en_title2[3:].next_to(en_title2[1], RIGHT, aligned_edge=DOWN)
+        self.play(Write(title2))
+        self.wait()
+        self.play(DrawBorderThenFill(en_title2[:2]), DrawBorderThenFill(en_title2[3:]))
+        self.wait()
+        self.play(en_title2[3:].move_to, pos4)
+        self.wait()
+        self.play(TransformFromCopy(en_title[:2], en_title2[2]), run_time=1.5)
+        self.wait(3)
+        O2 = TexMobject("O(n\\log n)").next_to(en_title2, RIGHT).set_color(GOLD)
+        self.play(TransformFromCopy(O1, O2), run_time=1.5)
+        self.wait(3)
+
+
+class FFT_part1(Scene):
+    def construct(self):
+        title2 = Text("快速傅里叶变换", font="Source Han Sans CN", t2c={"快速" : YELLOW,"傅里叶变换" : BLUE,})
+        title2.scale(0.6).move_to([-4.5, -1.5, 0])
+        old_title = Text("离散傅里叶变换", font="Source Han Sans CN", t2c={"离散" : YELLOW,"傅里叶变换" : BLUE,})
+        old_title.scale(0.6).move_to([-4.5, 3.3, 0])
+        en_title2 = TextMobject("F", "ast ", "{\\tiny discrete} ", "F", "ourier ", "T", "ransform").next_to(title2, RIGHT)
+        en_title2[0].set_color(YELLOW)
+        en_title2[2].set_color(YELLOW)
+        en_title2[3].set_color(BLUE)
+        en_title2[5].set_color(BLUE)
+        O2 = TexMobject("O(n\\log n)").next_to(en_title2, RIGHT).set_color(GOLD)
+        self.add(title2, en_title2, O2)
+        self.play(FadeOut(VGroup(O2, en_title2[2])))
+        en_title = TextMobject("F", "ast ", "F", "ourier ", "T", "ransform").next_to(old_title, RIGHT)
+        en_title[0].set_color(YELLOW)
+        en_title[2].set_color(BLUE)
+        en_title[4].set_color(BLUE)
+        self.play(
+            title2.move_to, [-4.5, 3.3, 0],
+            Transform(en_title2[0:2], en_title[0:2]),
+            Transform(en_title2[3:], en_title[2:])
+        )
+        self.wait(2)
+        title = title2
+
+        t2c = {
+            "A": ORANGE,
+            "x": RED,
+            "\\boldsymbol{a}": GREEN,
+            "a": GREEN,
+            "_0": BLUE,
+            "_1": BLUE,
+            "_2": BLUE,
+            "_3": BLUE,
+            "_4": BLUE,
+            "_5": BLUE,
+            "_{n-1}": BLUE,
+            "_{n-2}": BLUE,
+            "\\rightarrow": WHITE,
+            "^{[0]}": GOLD,
+            "^{[1]}": GOLD,
+            "^2": BLUE_A,
+            "^{n-1}": BLUE_A,
+            "^{\\frac{n}{2}-1}": BLUE_A
+        }
+        A = TexMobject("A", "(", "x", ")", "\\rightarrow", "\\boldsymbol{a}", "=[", "a", "_0", ",", "a", "_1", ",",\
+            "a", "_2", ",", "\\cdots", ",", "a", "_{n-1}", "]^\\top")
+        A.set_color_by_tex_to_color_map(t2c)
+        A.move_to([0, title.get_center()[1]-0.8, 0])
+        comment = Text("FFT的n应保证为2的幂", font="Source Han Serif CN").scale(0.2).set_color(GRAY).next_to(A, RIGHT, aligned_edge=DOWN)
+        a0 = TexMobject("\\boldsymbol{a}", "^{[0]}", "=[", "a", "_0", ",", "a", "_2", ",", "\\cdots", ",", "a", "_{n-2}", "]^\\top")
+        a0.set_color_by_tex_to_color_map(t2c)
+        a0.next_to(A[5], DOWN, aligned_edge=LEFT)
+        a1 = TexMobject("\\boldsymbol{a}", "^{[1]}", "=[", "a", "_1", ",", "a", "_3", ",", "\\cdots", ",", "a", "_{n-1}", "]^\\top")
+        a1.set_color_by_tex_to_color_map(t2c)
+        a1.next_to(a0, DOWN, aligned_edge=LEFT)
+        eve = Text("偶", font="Source Han Serif CN").scale(0.5).set_color(GOLD).next_to(a0, LEFT)
+        odd = Text("奇", font="Source Han Serif CN").scale(0.5).set_color(GOLD).next_to(a1, LEFT)
+        arrow0 = ArcBetweenPoints(A[0:4].get_bottom()+DOWN*0.1, eve.get_left()+LEFT*0.1).add_tip(0.2)
+        arrow1 = ArcBetweenPoints(A[0:4].get_bottom()+DOWN*0.1, odd.get_left()+LEFT*0.1).add_tip(0.2)
+        A0 = TexMobject("\\rightarrow", "A", "^{[0]}", "(", "x", ")").set_color_by_tex_to_color_map(t2c).next_to(a0, RIGHT).set_opacity(0.8)
+        A1 = TexMobject("\\rightarrow", "A", "^{[1]}", "(", "x", ")").set_color_by_tex_to_color_map(t2c).next_to(a1, RIGHT).set_opacity(0.8)
+        self.play(Write(A[:5]))
+        self.wait()
+        self.play(Write(A[5:]))
+        self.play(FadeInFromDown(comment))
+        self.wait(2)
+        self.play(
+            ShowCreation(arrow0),
+            ShowCreation(arrow1),
+            Write(eve),
+            Write(odd)
+        )
+        self.play(
+            TransformFromCopy(A[5:], a0),
+            TransformFromCopy(A[5:], a1),
+            run_time=2.5
+        )
+        self.play(
+            FadeInFrom(A0, LEFT),
+            FadeInFrom(A1, LEFT),
+        )
+        self.wait(3)
+
+        resA = TexMobject("A", "(", "x", ")=", "a", "_0", "+", "a", "_1", "x", "+", "a", "_2", "x", "^2", "+", "\\cdots",\
+            "+", "a", "_{n-1}", "x", "^{n-1}").set_color_by_tex_to_color_map(t2c).move_to([0, -0.5, 0])
+        resA0 = TexMobject("A", "^{[0]}", "(", "x", ")=", "a", "_0", "+", "a", "_2", "x", "+", "a", "_4", "x", "^2", "+", "\\cdots",\
+            "+", "a", "_{n-2}", "x", "^{\\frac{n}{2}-1}").set_color_by_tex_to_color_map(t2c).scale(0.8).next_to(resA[2], DOWN, aligned_edge=LEFT)
+        resA1 = TexMobject("A", "^{[1]}", "(", "x", ")=", "a", "_1", "+", "a", "_3", "x", "+", "a", "_5", "x", "^2", "+", "\\cdots",\
+            "+", "a", "_{n-1}", "x", "^{\\frac{n}{2}-1}").set_color_by_tex_to_color_map(t2c).scale(0.8).next_to(resA0, DOWN)
+        self.play(Write(resA))
+        self.wait()
+        self.play(
+            ShowCreationThenDestructionAround(a0),
+            ShowCreationThenDestructionAround(resA),
+        )
+        self.play(
+            FadeIn(resA0)
+        )
+        self.wait()
+        self.play(
+            ShowCreationThenDestructionAround(a1),
+            ShowCreationThenDestructionAround(resA),
+        )
+        self.play(
+            FadeIn(resA1)
+        )
+        self.wait(2)
+
+
+class FFT_part2(Scene):
+    def get_old(self):
+        t2c = {
+            "A": ORANGE,
+            "x": RED,
+            "\\boldsymbol{a}": GREEN,
+            "a": GREEN,
+            "_0": BLUE,
+            "_1": BLUE,
+            "_2": BLUE,
+            "_3": BLUE,
+            "_4": BLUE,
+            "_5": BLUE,
+            "_{n-1}": BLUE,
+            "_{n-2}": BLUE,
+            "\\rightarrow": WHITE,
+            "^{[0]}": GOLD,
+            "^{[1]}": GOLD,
+            "^2": BLUE_A,
+            "^{n-1}": BLUE_A,
+            "^{\\frac{n}{2}-1}": BLUE_A
+        }
+        old_title = Text("离散傅里叶变换", font="Source Han Sans CN", t2c={"离散" : YELLOW,"傅里叶变换" : BLUE,})
+        old_title.scale(0.6).move_to([-4.5, 3.3, 0])
+        title2 = Text("快速傅里叶变换", font="Source Han Sans CN", t2c={"快速" : YELLOW,"傅里叶变换" : BLUE,})
+        title2.scale(0.6).move_to([-4.5, 3.3, 0])
+        title = title2
+        en_title = TextMobject("F", "ast ", "F", "ourier ", "T", "ransform").next_to(old_title, RIGHT)
+        en_title[0].set_color(YELLOW)
+        en_title[2].set_color(BLUE)
+        en_title[4].set_color(BLUE)
+        A = TexMobject("A", "(", "x", ")", "\\rightarrow", "\\boldsymbol{a}", "=[", "a", "_0", ",", "a", "_1", ",",\
+            "a", "_2", ",", "\\cdots", ",", "a", "_{n-1}", "]^\\top")
+        A.set_color_by_tex_to_color_map(t2c)
+        A.move_to([0, title.get_center()[1]-0.8, 0])
+        comment = Text("FFT的n应保证为2的幂", font="Source Han Serif CN").scale(0.2).set_color(GRAY).next_to(A, RIGHT, aligned_edge=DOWN)
+        a0 = TexMobject("\\boldsymbol{a}", "^{[0]}", "=[", "a", "_0", ",", "a", "_2", ",", "\\cdots", ",", "a", "_{n-2}", "]^\\top")
+        a0.set_color_by_tex_to_color_map(t2c)
+        a0.next_to(A[5], DOWN, aligned_edge=LEFT)
+        a1 = TexMobject("\\boldsymbol{a}", "^{[1]}", "=[", "a", "_1", ",", "a", "_3", ",", "\\cdots", ",", "a", "_{n-1}", "]^\\top")
+        a1.set_color_by_tex_to_color_map(t2c)
+        a1.next_to(a0, DOWN, aligned_edge=LEFT)
+        eve = Text("偶", font="Source Han Serif CN").scale(0.5).set_color(GOLD).next_to(a0, LEFT)
+        odd = Text("奇", font="Source Han Serif CN").scale(0.5).set_color(GOLD).next_to(a1, LEFT)
+        arrow0 = ArcBetweenPoints(A[0:4].get_bottom()+DOWN*0.1, eve.get_left()+LEFT*0.1).add_tip(0.2)
+        arrow1 = ArcBetweenPoints(A[0:4].get_bottom()+DOWN*0.1, odd.get_left()+LEFT*0.1).add_tip(0.2)
+        A0 = TexMobject("\\rightarrow", "A", "^{[0]}", "(", "x", ")").set_color_by_tex_to_color_map(t2c).next_to(a0, RIGHT).set_opacity(0.8)
+        A1 = TexMobject("\\rightarrow", "A", "^{[1]}", "(", "x", ")").set_color_by_tex_to_color_map(t2c).next_to(a1, RIGHT).set_opacity(0.8)
+        return VGroup(
+            title2, en_title, A, A0, A1, a0, a1, comment, arrow0, arrow1, eve, odd
+        )
+
+    def construct(self):
+        t2c = {
+            "A": ORANGE,
+            "x": RED,
+            "\\boldsymbol{a}": GREEN,
+            "a": GREEN,
+            "_0": BLUE,
+            "_1": BLUE,
+            "_2": BLUE,
+            "_3": BLUE,
+            "_4": BLUE,
+            "_5": BLUE,
+            "_{n-1}": BLUE,
+            "_{n-2}": BLUE,
+            "\\rightarrow": WHITE,
+            "^{[0]}": GOLD,
+            "^{[1]}": GOLD,
+            "^2": BLUE_A,
+            "^3": BLUE_A,
+            "^4": BLUE_A,
+            "^5": BLUE_A,
+            "^{n-1}": BLUE_A,
+            "^{\\frac{n}{2}-1}": BLUE_A,
+            "\\omega": RED,
+            "_n": GOLD,
+            "^k": BLUE_A,
+            "^{k+\\frac{n}{2}}": BLUE_A,
+            "_{\\frac{n}{2}}": GOLD,
+        }
+        old = self.get_old()
+        resA = TexMobject("A", "(", "x", ")=", "a", "_0", "+", "a", "_1", "x", "+", "a", "_2", "x", "^2", "+", "\\cdots",\
+            "+", "a", "_{n-1}", "x", "^{n-1}").set_color_by_tex_to_color_map(t2c).move_to([0, -0.5, 0])
+        resA0 = TexMobject("A", "^{[0]}", "(", "x", ")=", "a", "_0", "+", "a", "_2", "x", "+", "a", "_4", "x", "^2", "+", "\\cdots",\
+            "+", "a", "_{n-2}", "x", "^{\\frac{n}{2}-1}").set_color_by_tex_to_color_map(t2c).scale(0.8).next_to(resA[2], DOWN, aligned_edge=LEFT)
+        resA1 = TexMobject("A", "^{[1]}", "(", "x", ")=", "a", "_1", "+", "a", "_3", "x", "+", "a", "_5", "x", "^2", "+", "\\cdots",\
+            "+", "a", "_{n-1}", "x", "^{\\frac{n}{2}-1}").set_color_by_tex_to_color_map(t2c).scale(0.8).next_to(resA0, DOWN)
+        self.add(resA, resA0, resA1, old)
+        self.play(
+            old.shift, UP * 3.7,
+            resA.shift, UP * 3.7,
+            resA0.shift, UP * 3.2,
+            resA1.shift, UP * 3.1,
+            run_time=2.5
+        )  
+        self.wait(3)
+        resA0_ = TexMobject("A", "^{[0]}", "(", "x", "^2", ")=", "a", "_0", "+", "a", "_2", "x", "^2", "+", "a", "_4", "x", "^4", "+", "\\cdots",\
+            "+", "a", "_{n-2}", "x", "^{n-2}").set_color_by_tex_to_color_map(t2c).scale(0.8).move_to(resA0)
+        resA1_ = TexMobject("A", "^{[1]}", "(", "x", "^2", ")=", "a", "_1", "+", "a", "_3", "x", "^2", "+", "a", "_5", "x", "^4", "+", "\\cdots",\
+            "+", "a", "_{n-1}", "x", "^{n-2}").set_color_by_tex_to_color_map(t2c).scale(0.8).move_to(resA1)
+        self.play(
+            ReplacementTransform(resA0[:3],    resA0_[:3]),
+            ReplacementTransform(resA0[3],     resA0_[3:5]),
+            ReplacementTransform(resA0[4:10],  resA0_[5:11]),
+            ReplacementTransform(resA0[10],    resA0_[11:13]),
+            ReplacementTransform(resA0[11:14], resA0_[13:16]),
+            ReplacementTransform(resA0[14:16], resA0_[16:18]),
+            ReplacementTransform(resA0[16:21], resA0_[18:23]),
+            ReplacementTransform(resA0[21:],   resA0_[23:]),
+            run_time=2
+        )
+        self.wait(2)
+        self.play(
+            ReplacementTransform(resA1[:3],    resA1_[:3]),
+            ReplacementTransform(resA1[3],     resA1_[3:5]),
+            ReplacementTransform(resA1[4:10],  resA1_[5:11]),
+            ReplacementTransform(resA1[10],    resA1_[11:13]),
+            ReplacementTransform(resA1[11:14], resA1_[13:16]),
+            ReplacementTransform(resA1[14:16], resA1_[16:18]),
+            ReplacementTransform(resA1[16:21], resA1_[18:23]),
+            ReplacementTransform(resA1[21:],   resA1_[23:]),
+            run_time=2
+        )
+        self.wait(3)
+        resA1__ = TexMobject("x", "A", "^{[1]}", "(", "x", "^2", ")=", "a", "_1", "x", "+", "a", "_3", "x", "^3", "+", "a", "_5", "x", "^5", "+", "\\cdots",\
+            "+", "a", "_{n-1}", "x", "^{n-1}").set_color_by_tex_to_color_map(t2c).scale(0.8).move_to(resA1_)
+        self.play(Write(resA1__[0]))
+        self.play(ScaleInPlace(resA1__[0], 2.5, rate_func=wiggle))
+        self.wait()
+        self.play(
+            Transform(resA1_[:8], resA1__[1:9]),
+            FadeIn(resA1__[9]),
+            Transform(resA1_[8:11], resA1__[10:13]),
+            Transform(resA1_[11:13], resA1__[13:15]),
+            Transform(resA1_[13:16], resA1__[15:18]),
+            Transform(resA1_[16:18], resA1__[18:20]),
+            Transform(resA1_[18:23], resA1__[20:25]),
+            Transform(resA1_[23:], resA1__[25:]),
+            run_time=2
+        )
+        self.wait(3)
+        self.play(
+            ShowCreationThenDestructionAround(resA[4:6]),
+            ShowCreationThenDestructionAround(resA0_[6:8])
+        )
+        self.wait()
+        self.play(
+            ShowCreationThenDestructionAround(resA[7:10]),
+            ShowCreationThenDestructionAround(resA1__[7:10])
+        )
+        self.wait()
+        self.play(
+            ShowCreationThenDestructionAround(resA[11:15]),
+            ShowCreationThenDestructionAround(resA0_[9:13])
+        )
+        self.wait()
+        self.play(
+            ShowCreationThenDestructionAround(resA[18:]),
+            ShowCreationThenDestructionAround(resA1__[23:])
+        )
+        self.wait(2)
+        res = TexMobject("A", "(", "x", ")", "=", "A", "^{[0]}", "(", "x", "^2", ")", "+",\
+            "x", "A", "^{[1]}", "(", "x", "^2", ")").set_color_by_tex_to_color_map(t2c)
+        res.next_to(resA1__, DOWN, buff=0.8)
+        self.play(
+            TransformFromCopy(resA[:4], res[:4]),
+            TransformFromCopy(resA0_[:6], res[5:11]),
+            TransformFromCopy(resA1__[:7], res[12:]),
+            run_time=2
+        )
+        self.play(ShowCreationThenDestructionAround(res))
+        self.wait()
+        self.play(
+            FadeIn(res[4]),
+            FadeIn(res[11]),
+        )
+        self.wait(2)
+        A1 = TexMobject("A", "(", "\\omega", "^k", "_n", ")", "=", "A", "^{[0]}", "(", "(", "\\omega", "^k", "_n", ")", "^2", ")", "+",\
+            "\\omega", "^k", "_n", "A", "^{[1]}", "(", "(", "\\omega", "^k", "_n", ")", "^2", ")").set_color_by_tex_to_color_map(t2c)
+        A1.next_to(res, DOWN)
+        A2 = TexMobject("A", "(", "\\omega", "^{k+\\frac{n}{2}}", "_n", ")", "=", "A", "^{[0]}", "(", "(", "\\omega", "^{k+\\frac{n}{2}}", "_n", ")", "^2", ")", "+",\
+            "\\omega", "^{k+\\frac{n}{2}}", "_n", "A", "^{[1]}", "(", "(", "\\omega", "^{k+\\frac{n}{2}}", "_n", ")", "^2", ")").set_color_by_tex_to_color_map(t2c)
+        A2.next_to(A1, DOWN)
+        A1.next_to(A2, UP, aligned_edge=LEFT)
+        brace = Brace(VGroup(A1, A2), LEFT)
+        self.play(ShowCreation(brace))
+        self.play(Write(A1))
+        self.wait()
+        self.play(Write(A2))
+        self.wait(3)
+
+    
+class FFT_part3(Scene):
+    def construct(self):
+        t2c = {
+            "A": ORANGE,
+            "x": RED,
+            "\\boldsymbol{a}": GREEN,
+            "a": GREEN,
+            "_0": BLUE,
+            "_1": BLUE,
+            "_2": BLUE,
+            "_3": BLUE,
+            "_4": BLUE,
+            "_5": BLUE,
+            "_{n-1}": BLUE,
+            "_{n-2}": BLUE,
+            "\\rightarrow": WHITE,
+            "^{[0]}": GOLD,
+            "^{[1]}": GOLD,
+            "^2": BLUE_A,
+            "^3": BLUE_A,
+            "^4": BLUE_A,
+            "^5": BLUE_A,
+            "^{n-1}": BLUE_A,
+            "^{\\frac{n}{2}-1}": BLUE_A,
+            "\\omega": RED,
+            "_n": GOLD,
+            "^k": BLUE_A,
+            "^{k+\\frac{n}{2}}": BLUE_A,
+            "_{\\frac{n}{2}}": GOLD,
+            "\\text{DFT}": WHITE
+        }
+        resA = TexMobject("A", "(", "x", ")=", "a", "_0", "+", "a", "_1", "x", "+", "a", "_2", "x", "^2", "+", "\\cdots",\
+            "+", "a", "_{n-1}", "x", "^{n-1}").set_color_by_tex_to_color_map(t2c).move_to([0, -0.5, 0])
+        resA0 = TexMobject("A", "^{[0]}", "(", "x", "^2", ")=", "a", "_0", "+", "a", "_2", "x", "^2", "+", "a", "_4", "x", "^4", "+", "\\cdots",\
+            "+", "a", "_{n-2}", "x", "^{n-2}").set_color_by_tex_to_color_map(t2c).scale(0.8).next_to(resA[2], DOWN, aligned_edge=LEFT)
+        resA1 = TexMobject("x", "A", "^{[1]}", "(", "x", "^2", ")=", "a", "_1", "x", "+", "a", "_3", "x", "^3", "+", "a", "_5", "x", "^5", "+", "\\cdots",\
+            "+", "a", "_{n-1}", "x", "^{n-1}").set_color_by_tex_to_color_map(t2c).scale(0.8).next_to(resA0, DOWN)
+        resA.shift(UP * 3.7)
+        resA0.shift(UP * 3.2)
+        resA1.shift(UP * 3.1)
+        old = VGroup(resA, resA0, resA1)
+        res = TexMobject("A", "(", "x", ")", "=", "A", "^{[0]}", "(", "x", "^2", ")", "+",\
+            "x", "A", "^{[1]}", "(", "x", "^2", ")").set_color_by_tex_to_color_map(t2c)
+        res.next_to(resA1, DOWN, buff=0.8)
+        A1 = TexMobject("A", "(", "\\omega", "^k", "_n", ")", "=", "A", "^{[0]}", "(", "(", "\\omega", "^k", "_n", ")", "^2", ")", "+",\
+            "\\omega", "^k", "_n", "A", "^{[1]}", "(", "(", "\\omega", "^k", "_n", ")", "^2", ")").set_color_by_tex_to_color_map(t2c)
+        A1.next_to(res, DOWN)
+        A2 = TexMobject("A", "(", "\\omega", "^{k+\\frac{n}{2}}", "_n", ")", "=", "A", "^{[0]}", "(", "(", "\\omega", "^{k+\\frac{n}{2}}", "_n", ")", "^2", ")", "+",\
+            "\\omega", "^{k+\\frac{n}{2}}", "_n", "A", "^{[1]}", "(", "(", "\\omega", "^{k+\\frac{n}{2}}", "_n", ")", "^2", ")").set_color_by_tex_to_color_map(t2c)
+        A2.next_to(A1, DOWN)
+        A1.next_to(A2, UP, aligned_edge=LEFT)
+        brace = Brace(VGroup(A1, A2), LEFT)
+
+        self.add(old, res, A1, A2, brace)
+        self.play(
+            old.shift, UP * 3.7,
+            res.shift, UP * 3.5,
+            A1.shift, UP * 3.5,
+            A2.shift, UP * 3.5,
+            brace.shift, UP * 3.5
+        )
+        self.wait(2)
+        lemma = TexMobject("(", "\\omega", "^{k+\\frac{n}{2}}", "_n", ")", "^2", "=", "(", "\\omega", "^k", "_n", ")", "^2", "=", \
+            "\\omega", "^k", "_{\\frac{n}{2}}").set_color_by_tex_to_color_map(t2c)
+        A1_ = TexMobject("A", "(", "\\omega", "^k", "_n", ")", "=", "A", "^{[0]}", "(", "\\omega", "^k", "_{\\frac{n}{2}}", ")", "+",\
+            "\\omega", "^k", "_n", "A", "^{[1]}", "(", "\\omega", "^k", "_{\\frac{n}{2}}", ")").set_color_by_tex_to_color_map(t2c)
+        A2_ = TexMobject("A", "(", "\\omega", "^{k+\\frac{n}{2}}", "_n", ")", "=", "A", "^{[0]}", "(", "\\omega", "^k", "_{\\frac{n}{2}}", ")", "+",\
+            "\\omega", "^{k+\\frac{n}{2}}", "_n", "A", "^{[1]}", "(", "\\omega", "^k", "_{\\frac{n}{2}}", ")").set_color_by_tex_to_color_map(t2c)
+        A1_.move_to(A1, aligned_edge=LEFT)
+        A2_.move_to(A2, aligned_edge=LEFT)
+        
+        self.play(FadeIn(lemma))
+        self.play(ShowCreationThenDestructionAround(lemma))
+        self.wait()
+        self.play(
+            ReplacementTransform(A1[:10], A1_[:10]),
+            ReplacementTransform(A1[10:16], A1_[10:13]),
+            ReplacementTransform(A1[16:24], A1_[13:21]),
+            ReplacementTransform(A1[24:30], A1_[21:24]),
+            ReplacementTransform(A1[-1:], A1_[-1:]),
+            run_time=2
+        )
+        self.wait()
+        self.play(
+            ReplacementTransform(A2[:10], A2_[:10]),
+            ReplacementTransform(A2[10:16], A2_[10:13]),
+            ReplacementTransform(A2[16:24], A2_[13:21]),
+            ReplacementTransform(A2[24:30], A2_[21:24]),
+            ReplacementTransform(A2[-1:], A2_[-1:]),
+            run_time=2
+        )
+        lemma2 = TexMobject("\\omega", "^{k+\\frac{n}{2}}", "_n", "=", "-", "\\omega", "^k", "_n")
+        lemma2.set_color_by_tex_to_color_map(t2c)
+        self.play(ReplacementTransform(lemma, lemma2))
+        self.play(ShowCreationThenDestructionAround(lemma2))
+        self.wait()
+        A2__ = TexMobject("A", "(", "\\omega", "^{k+\\frac{n}{2}}", "_n", ")", "=", "A", "^{[0]}", "(", "\\omega", "^k", "_{\\frac{n}{2}}", ")", "-",\
+            "\\omega", "^k", "_n", "A", "^{[1]}", "(", "\\omega", "^k", "_{\\frac{n}{2}}", ")").set_color_by_tex_to_color_map(t2c)
+        A2__.move_to(A2_, aligned_edge=LEFT)
+        
+        self.play(
+            ReplacementTransform(A2_[:14], A2__[:14]),
+            ReplacementTransform(A2_[14:18], A2__[14:18]),
+            ReplacementTransform(A2_[18:], A2__[18:]),
+            run_time=2
+        )
+        self.play(
+            A1_.shift, [A2__[6].get_center()[0], A1_[6].get_center()[1], 0] - A1_[6].get_center()
+        )
+        self.wait()
+        self.play(
+            ShowCreationThenDestructionAround(VGroup(A1_[7:14], A2__[7:14])),
+            ShowCreationThenDestructionAround(VGroup(A1_[18:], A2__[18:]))
+        )
+        self.wait()
+        self.play(FadeOut(lemma2))
+        self.wait(2)
+        pre = VGroup(
+            TexMobject("\\text{DFT}", "_{\\frac{n}{2}}", "(", "\\boldsymbol{a}", "^{[0]}", ")").set_color_by_tex_to_color_map(t2c),
+            TexMobject("\\text{DFT}", "_{\\frac{n}{2}}", "(", "\\boldsymbol{a}", "^{[1]}", ")").set_color_by_tex_to_color_map(t2c),
+        ).arrange_submobjects(RIGHT, buff=2)
+        self.play(FadeInFrom(pre, DOWN))
+        self.wait(3)
+        O = TexMobject("T(n)=2T(\\frac{n}{2})+O(n)", "=O(n\\log n)").next_to(pre, DOWN)
+        self.play(Write(O[0]))
+        self.wait()
+        self.play(FadeInFrom(O[1], RIGHT))
+        self.play(
+            ShowCreationThenDestructionAround(O[1]),
+            O[1].set_color, YELLOW
+        )
+        self.wait(3)
+        
+
+
+        
+
 
 ##------Time Line------##
 # 19.12.05 have an idea
@@ -1119,3 +1659,4 @@ class Polynomial_part4(Scene):
 # 20.01.18 ~ 20.01.23 homework
 # 20.01.24 Finish Polynomial part1
 # 20.01.25 Finish Polynomial part2 3 4. Thanks @有一种悲伤叫颓废 for part3
+# 20.01.26 Finish DFT and FFT part1 2 3
