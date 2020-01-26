@@ -1630,13 +1630,13 @@ class FFT_part3(Scene):
         ).arrange_submobjects(RIGHT, buff=2)
         self.play(FadeInFrom(pre, DOWN))
         self.wait(3)
-        O = TexMobject("T(n)=2T(\\frac{n}{2})+O(n)", "=O(n\\log n)").next_to(pre, DOWN)
+        O = TexMobject("T(n)=2T(\\frac{n}{2})+O(n)", "=", "O(n\\log n)").next_to(pre, DOWN)
         self.play(Write(O[0]))
         self.wait()
-        self.play(FadeInFrom(O[1], RIGHT))
+        self.play(FadeInFrom(O[1:], RIGHT))
         self.play(
-            ShowCreationThenDestructionAround(O[1]),
-            O[1].set_color, YELLOW
+            ShowCreationThenDestructionAround(O[2]),
+            O[2].set_color, YELLOW
         )
         self.wait(3)
         
