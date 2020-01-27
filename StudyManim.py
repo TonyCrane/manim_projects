@@ -329,6 +329,29 @@ class TryLinedCode(Scene):
             "    printf(\"Hello World\\n\");",
             "    return 1;",
             "}",
+            t2c={
+            '#include <' : BLUE,
+            '>' : BLUE,
+            'std' : YELLOW,
+            'bits/stdc++.h' : GREEN,
+            'using' : ORANGE,
+            'namespace' : PURPLE,
+            ';' : BLUE,
+            'for' : BLUE,
+            'if' : BLUE,
+            'int' : PURPLE,
+            '(' : BLUE,
+            ')' : BLUE,
+            '{' : BLUE,
+            '}' : BLUE,
+            'return' : BLUE,
+            '0' : ORANGE,
+            'main' : '#214FB7',
+            'printf' : '#214FB7',
+            '\"' : BLUE,
+            'Hello World' : GREEN,
+            '\\n' : BLUE,
+        }
         )
         self.play(Write(code))
     

@@ -451,7 +451,6 @@ class ComplexNumber(Scene):
         self.wait(5)
 
 
-#TODO, improve this scene
 class ComplexNumberex(Scene):
     def construct(self):
         plane = ComplexPlane()
@@ -479,7 +478,7 @@ class ComplexNumberex(Scene):
         label_a = TexMobject("a").set_color_by_tex_to_color_map(t2c)
         label_a.add_updater(lambda m: m.next_to(dl_a, DOWN))
         label_bi= TexMobject("b","i").set_color_by_tex_to_color_map(t2c)
-        label_bi.add_updater(lambda m: m.next_to(dl_bi, LEFT))
+        label_bi.add_updater(lambda m: m.next_to(dl_bi,(LEFT, RIGHT)[point.get_center()[0] < 0]))
         self.play(ShowCreation(dl_a), ShowCreation(dl_bi))
         self.play(Write(label_a), Write(label_bi))
         self.play(point.shift, LEFT * 4.5 + DOWN * 2, run_time=3)
@@ -1624,25 +1623,340 @@ class FFT_part3(Scene):
         self.wait()
         self.play(FadeOut(lemma2))
         self.wait(2)
+        old = TexMobject("\\text{DFT}", "_n", "(", "\\boldsymbol{a}", ")").set_color_by_tex_to_color_map(t2c)
         pre = VGroup(
             TexMobject("\\text{DFT}", "_{\\frac{n}{2}}", "(", "\\boldsymbol{a}", "^{[0]}", ")").set_color_by_tex_to_color_map(t2c),
             TexMobject("\\text{DFT}", "_{\\frac{n}{2}}", "(", "\\boldsymbol{a}", "^{[1]}", ")").set_color_by_tex_to_color_map(t2c),
-        ).arrange_submobjects(RIGHT, buff=2)
-        self.play(FadeInFrom(pre, DOWN))
+        ).arrange_submobjects(RIGHT, buff=2).next_to(old, DOWN)
+        br = Brace(pre, UP)
+        old.shift(UP*0.5)
+        self.play(Write(old))
+        self.wait()
+        self.play(ShowCreation(br), FadeInFrom(pre, UP))
         self.wait(3)
-        O = TexMobject("T(n)=2T(\\frac{n}{2})+O(n)", "=", "O(n\\log n)").next_to(pre, DOWN)
+        O = TexMobject("T(n)=2T(\\frac{n}{2})+O(n)", "=", "O(n\\log n)", "<O(n^2)").next_to(pre, DOWN)
         self.play(Write(O[0]))
         self.wait()
-        self.play(FadeInFrom(O[1:], RIGHT))
+        self.play(FadeInFrom(O[1:3], RIGHT))
         self.play(
             ShowCreationThenDestructionAround(O[2]),
             O[2].set_color, YELLOW
         )
+        self.wait()
+        self.play(FadeInFrom(O[3], RIGHT))
         self.wait(3)
         
 
-
+class FFT_Code(Scene):
+    def construct(self):
+        t2c = {
+            "\\boldsymbol{a}": GREEN,
+            "lim": GOLD,
+            "_0": BLUE,
+            "_1": BLUE,
+            "_2": BLUE,
+            "_3": BLUE,
+            "_{n-1}": BLUE,
+            "_{n-2}": BLUE,
+            "a": GREEN,
+            "_{k}": BLUE,
+            "k": BLUE,
+            "_{k+\\frac{n}{2}}": BLUE,
+            "^{[0]}": GOLD,
+            "^{[1]}": GOLD,
+            "\\omega": RED,
+            "_n": GOLD,
+            "^{\\frac{2\\pi}{n}}": BLUE_A,
+            "2\\pi/n": BLUE_A,
+            "{i}": BLUE_E,
+            "n/2-1": GOLD,
+        }
+        nums = VGroup(
+            *[
+                Text(str(i), font="Consolas").scale(0.45).set_color(GRAY)
+                for i in range(1, 12)
+            ]
+        ).arrange_submobjects(DOWN, aligned_edge=RIGHT, buff=0.3).shift(LEFT*5)
+        title = TexMobject("\\text{FFT}", "(", "\\boldsymbol{a}", ",\\ ", "lim", ")")
+        title.set_color_by_tex_to_color_map(t2c).scale(0.8)
+        title.next_to(nums, UP, aligned_edge=LEFT)
+        code = VGroup()
+        line1 = TexMobject("\\textbf{if}\\ \\ ", "lim", "==", "1", "\\ \\ \\ ", "\\textbf{return}")
+        line1.scale(0.75).next_to(nums[0], RIGHT).set_color_by_tex_to_color_map(t2c)
+        code.add(line1)
+        line2 = TexMobject("\\boldsymbol{a}", "^{[0]}", "=", "(", "a", "_0", ", ", "a", "_2", ", ", "\\cdots", ", ", "a", "_{n-2}", ")")
+        line2.scale(0.75).next_to(nums[1], RIGHT).set_color_by_tex_to_color_map(t2c)
+        code.add(line2)
+        line3 = TexMobject("\\boldsymbol{a}", "^{[1]}", "=", "(", "a", "_1", ", ", "a", "_3", ", ", "\\cdots", ", ", "a", "_{n-1}", ")")
+        line3.scale(0.75).next_to(nums[2], RIGHT).set_color_by_tex_to_color_map(t2c)
+        code.add(line3)
+        line4 = TexMobject("\\text{FFT}", "(", "\\boldsymbol{a}", "^{[0]}", ",\\ ", "lim", ">>", "1", ")")
+        line4.scale(0.75).next_to(nums[3], RIGHT).set_color_by_tex_to_color_map(t2c)
+        code.add(line4)
+        line5 = TexMobject("\\text{FFT}", "(", "\\boldsymbol{a}", "^{[1]}", ",\\ ", "lim", ">>", "1", ")")
+        line5.scale(0.75).next_to(nums[4], RIGHT).set_color_by_tex_to_color_map(t2c)
+        code.add(line5)
+        line6 = TexMobject("\\omega", "_n", "=", "e", "^{\\frac{2\\pi}{n}", "i}", "=", "\\cos", "(", "2\\pi/n", ")", "+",\
+            "{i}", "\\sin", "(", "2\\pi/n", ")")
+        line6.scale(0.75).next_to(nums[5], RIGHT).set_color_by_tex_to_color_map(t2c)
+        line6[4].set_color(BLUE_A); line6[5].set_color(BLUE_E)
+        code.add(line6)
+        line7 = TexMobject("\\omega", "=", "1")
+        line7.scale(0.75).next_to(nums[6], RIGHT).set_color_by_tex_to_color_map(t2c)
+        code.add(line7)
+        line8 = TexMobject("\\textbf{for}\\ \\ ", "k", "=", "0", "\\ .\\ .\\ ", "n/2-1")
+        line8.scale(0.75).next_to(nums[7], RIGHT).set_color_by_tex_to_color_map(t2c)
+        code.add(line8)
+        line9 = TexMobject("a", "_k", "=", "a", "^{[0]}", "_k", "+", "\\omega", "a", "^{[1]}", "_k")
+        line9.scale(0.75).next_to(nums[8], RIGHT, buff=1).set_color_by_tex_to_color_map(t2c)
+        code.add(line9)
+        line10 = TexMobject("a", "_{k+\\frac{n}{2}}", "=", "a", "^{[0]}", "_k", "-", "\\omega", "a", "^{[1]}", "_k")
+        line10.scale(0.75).next_to(nums[9], RIGHT, buff=1).set_color_by_tex_to_color_map(t2c)
+        code.add(line10)
+        line11 = TexMobject("\\omega", "=", "\\omega", "\\omega", "_n")
+        line11.scale(0.75).next_to(nums[10], RIGHT, buff=1).set_color_by_tex_to_color_map(t2c)
+        code.add(line11)
         
+        self.play(FadeIn(title))
+        self.wait(2)
+        self.play(FadeInFrom(nums[0], LEFT),)
+        self.play(Write(code[0]))
+        self.wait(2)
+        self.play(FadeInFrom(nums[1:3], LEFT))
+        self.play(Write(code[1:3]))
+        self.wait(2)
+        self.play(FadeInFrom(nums[3:5], LEFT))
+        self.play(Write(code[3:5]))
+        self.wait(2)
+        self.play(FadeInFrom(nums[5], LEFT))
+        self.play(Write(code[5]))
+        self.wait(2)
+        self.play(FadeInFrom(nums[6], LEFT))
+        self.play(Write(code[6]))
+        self.wait(2)
+        self.play(FadeInFrom(nums[7:], LEFT))
+        self.play(Write(code[7]))
+        self.wait()
+        self.play(Write(code[10]))
+        self.wait(2)
+        self.play(Write(code[8:10]))
+        self.wait(3)
+        sq = Rectangle(height=10, width=20).set_fill(BLACK, 1)
+        self.add(sq)
+        self.wait(3)
+        self.remove(sq)
+        self.wait(2)
+        q = VGroup()
+        q.add(SurroundingRectangle(VGroup(nums[0], code[0])))
+        q.add(SurroundingRectangle(VGroup(nums[1:3], code[1:3])))
+        q.add(SurroundingRectangle(VGroup(nums[3:5], code[3:5])))
+        q.add(SurroundingRectangle(VGroup(nums[5:7], code[5:7])))
+        q.add(SurroundingRectangle(VGroup(nums[7:], code[7:])))
+        for m in q:
+            self.play(ShowCreation(m))
+            self.play(ScaleInPlace(m, 1.2, rate_func=wiggle))
+            self.wait(2)
+            self.play(FadeOut(m))
+            self.wait(2)
+        self.wait()
+
+
+class FFT_improve_part1(Scene):
+    def construct(self):
+        t2c = {
+            "\\boldsymbol{a}": GREEN,
+            "lim": GOLD,
+            "_0": BLUE,
+            "_1": BLUE,
+            "_2": BLUE,
+            "_3": BLUE,
+            "_{n-1}": BLUE,
+            "_{n-2}": BLUE,
+            "a": GREEN,
+            "_{k}": BLUE,
+            "k": BLUE,
+            "_{k+\\frac{n}{2}}": BLUE,
+            "^{[0]}": GOLD,
+            "^{[1]}": GOLD,
+            "\\omega": RED,
+            "_n": GOLD,
+            "^{\\frac{2\\pi}{n}}": BLUE_A,
+            "2\\pi/n": BLUE_A,
+            "{i}": BLUE_E,
+            "n/2-1": GOLD,
+        }
+        title = Text("高效实现FFT", font="Source Han Sans CN", t2c={"高效": YELLOW, "实现FFT": BLUE})
+        title.scale(0.6).move_to([-4.5, 3.3, 0])
+        sub = SubTopic("蝴蝶操作").scale(0.8).next_to(title, DOWN, aligned_edge=LEFT)
+        text = VGroup(
+            Text("公用子表达式", font="Source Han Serif CN").set_color(ORANGE).scale(0.5),
+            TexMobject("\\omega", "a", "^{[1]}", "_k").set_color_by_tex_to_color_map(t2c)
+        ).arrange_submobjects(RIGHT, aligned_edge=DOWN).move_to([3.5, 1, 0])
+        change = TexMobject("t", "=", "\\omega", "a", "^{[1]}", "_k").set_color_by_tex_to_color_map(t2c)
+        change[0].set_color(BLUE)
+        change.next_to(text, DOWN)
+        change1 = TexMobject("a", "_k", "=", "a", "^{[0]}", "_k", "+", "t")
+        change1.set_color_by_tex_to_color_map(t2c).next_to(change, DOWN)
+        change1[-1].set_color(BLUE)
+        change2 = TexMobject("a", "_{k+\\frac{n}{2}}", "=", "a", "^{[0]}", "_k", "-", "t")
+        change2.set_color_by_tex_to_color_map(t2c).next_to(change1, DOWN)
+        change2[-1].set_color(BLUE)
+        
+        self.play(Write(title))
+        self.wait()
+        self.play(Write(sub))
+        self.wait(3)
+        self.play(FadeInFrom(text, DOWN))
+        self.wait()
+        self.play(Write(change))
+        self.wait()
+        self.play(FadeIn(change1), FadeIn(change2))
+        self.wait(2)  
+
+
+class FFT_improve_part2(Scene):
+    def construct(self):
+        t2c = {
+            "_0": BLUE,
+            "_1": BLUE,
+            "_2": BLUE,
+            "_3": BLUE,
+            "_4": BLUE,
+            "_5": BLUE,
+            "_6": BLUE,
+            "_7": BLUE,
+            "a": GREEN,
+            "\\omega": RED,
+        }
+        title = Text("高效实现FFT", font="Source Han Sans CN", t2c={"高效": YELLOW, "实现FFT": BLUE})
+        title.scale(0.6).move_to([-4.5, 3.3, 0])
+        self.add(title)
+        sub = SubTopic("迭代实现").scale(0.8).next_to(title, DOWN, aligned_edge=LEFT)
+        a = lambda i: TexMobject("a", "_"+str(i)).set_color_by_tex_to_color_map(t2c)
+        com = lambda: TexMobject(",")
+        tree0 = VGroup(
+            *[VGroup(a(i), com()).arrange_submobjects(RIGHT, aligned_edge=DOWN) for i in range(7)],
+            a(7)
+        ).arrange_submobjects(RIGHT, aligned_edge=DOWN).shift(UP*2)
+        tree1 = VGroup(
+            *[VGroup(a(i), com()).arrange_submobjects(RIGHT, aligned_edge=DOWN) for i in [0, 2, 4]],
+            a(6)
+        ).arrange_submobjects(RIGHT, aligned_edge=DOWN).move_to([-3.5, tree0.get_center()[1]-1.2, 0])
+        tree2 = VGroup(
+            *[VGroup(a(i), com()).arrange_submobjects(RIGHT, aligned_edge=DOWN) for i in [1, 3, 5]],
+            a(7)
+        ).arrange_submobjects(RIGHT, aligned_edge=DOWN).move_to([3.5, tree0.get_center()[1]-1.2, 0])
+        tree3 = VGroup(
+            a(0), com(), a(4)
+        ).arrange_submobjects(RIGHT, aligned_edge=DOWN).move_to([-5.25, tree1.get_center()[1]-1.2, 0])
+        tree4 = VGroup(
+            a(2), com(), a(6)
+        ).arrange_submobjects(RIGHT, aligned_edge=DOWN).move_to([-1.75, tree1.get_center()[1]-1.2, 0])
+        tree5 = VGroup(
+            a(1), com(), a(5)
+        ).arrange_submobjects(RIGHT, aligned_edge=DOWN).move_to([1.75, tree1.get_center()[1]-1.2, 0])
+        tree6 = VGroup(
+            a(3), com(), a(7)
+        ).arrange_submobjects(RIGHT, aligned_edge=DOWN).move_to([5.25, tree1.get_center()[1]-1.2, 0])
+        leaf = VGroup(
+            *[
+                a(i).move_to([j, tree3.get_center()[1]-1.2, 0])
+                for i, j in zip([0, 4, 2, 6, 1, 5, 3, 7], [-6.125, -4.375, -2.625, -0.875, 0.875, 2.625, 4.375, 6.125])
+            ]
+        )
+        
+        self.wait()
+        self.play(Write(sub))
+        self.wait(2)
+        self.play(Write(tree0))
+        self.wait()
+        self.play(
+            TransformFromCopy(tree0[0][0], tree1[0][0]),
+            TransformFromCopy(tree0[2][0], tree1[1][0]),
+            TransformFromCopy(tree0[4][0], tree1[2][0]),
+            TransformFromCopy(tree0[6][0], tree1[3]),
+            run_time=3
+        )
+        self.play(FadeIn(VGroup(*[tree1[i][1] for i in range(3)])))
+        self.wait()
+        self.play(
+            TransformFromCopy(tree0[1][0], tree2[0][0]),
+            TransformFromCopy(tree0[3][0], tree2[1][0]),
+            TransformFromCopy(tree0[5][0], tree2[2][0]),
+            TransformFromCopy(tree0[7], tree2[3]),
+            run_time=3
+        )
+        self.play(FadeIn(VGroup(*[tree2[i][1] for i in range(3)])))
+        self.wait(2)
+        self.play(
+            TransformFromCopy(tree1[0][0], tree3[0]),
+            TransformFromCopy(tree1[2][0], tree3[2]),
+            run_time=2
+        )
+        self.play(FadeIn(tree3[1]))
+        self.wait()
+        self.play(
+            TransformFromCopy(tree1[1][0], tree4[0]),
+            TransformFromCopy(tree1[3], tree4[2]),
+            run_time=2
+        )
+        self.play(FadeIn(tree4[1]))
+        self.wait()
+        self.play(
+            TransformFromCopy(tree2[0][0], tree5[0]),
+            TransformFromCopy(tree2[2][0], tree5[2]),
+            TransformFromCopy(tree2[1][0], tree6[0]),
+            TransformFromCopy(tree2[3], tree6[2]),
+            run_time=2
+        )
+        self.play(FadeIn(tree5[1]), FadeIn(tree6[1]))
+        self.wait(2)
+        self.play(
+            TransformFromCopy(tree3[0], leaf[0]),
+            TransformFromCopy(tree3[2], leaf[1]),
+            TransformFromCopy(tree4[0], leaf[2]),
+            TransformFromCopy(tree4[2], leaf[3]),
+            TransformFromCopy(tree5[0], leaf[4]),
+            TransformFromCopy(tree5[2], leaf[5]),
+            TransformFromCopy(tree6[0], leaf[6]),
+            TransformFromCopy(tree6[2], leaf[7]),
+            run_time=3
+        )
+        self.wait(3)
+
+
+class FFT_improve_part3(Scene):
+    def construct(self):
+        t2c = {
+            "_0": BLUE,
+            "_1": BLUE,
+            "_2": BLUE,
+            "_3": BLUE,
+            "_4": BLUE,
+            "_5": BLUE,
+            "_6": BLUE,
+            "_7": BLUE,
+            "a": GREEN,
+            "\\omega": RED,
+        }
+        title = Text("高效实现FFT", font="Source Han Sans CN", t2c={"高效": YELLOW, "实现FFT": BLUE})
+        title.scale(0.6).move_to([-4.5, 3.3, 0])
+        sub = SubTopic("迭代实现").scale(0.8).next_to(title, DOWN, aligned_edge=LEFT)
+        self.add(title, sub)
+        a = lambda i: TexMobject("a", "_"+str(i)).set_color_by_tex_to_color_map(t2c)
+        com = lambda: TexMobject(",")
+        leaf = VGroup(
+            *[
+                a(i).move_to([j, -1.59999, 0])
+                for i, j in zip([0, 4, 2, 6, 1, 5, 3, 7], [-6.125, -4.375, -2.625, -0.875, 0.875, 2.625, 4.375, 6.125])
+            ]
+        )
+        self.add(leaf)
+
+
+
+
+
 
 
 ##------Time Line------##
@@ -1660,3 +1974,4 @@ class FFT_part3(Scene):
 # 20.01.24 Finish Polynomial part1
 # 20.01.25 Finish Polynomial part2 3 4. Thanks @有一种悲伤叫颓废 for part3
 # 20.01.26 Finish DFT and FFT part1 2 3
+# 20.01.27 Finish FFT code and FFT_improve part1 2
