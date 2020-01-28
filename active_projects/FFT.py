@@ -1936,6 +1936,9 @@ class FFT_improve_part3(Scene):
             "_5": BLUE,
             "_6": BLUE,
             "_7": BLUE,
+            "_{2}": GOLD,
+            "_{4}": GOLD,
+            "_{8}": GOLD,
             "a": GREEN,
             "\\omega": RED,
         }
@@ -1945,6 +1948,7 @@ class FFT_improve_part3(Scene):
         self.add(title, sub)
         a = lambda i: TexMobject("a", "_"+str(i)).set_color_by_tex_to_color_map(t2c)
         com = lambda: TexMobject(",")
+        w = lambda i: TexMobject("\\omega", "_{"+str(i)+"}").set_color_by_tex_to_color_map(t2c).scale(0.8)
         leaf = VGroup(
             *[
                 a(i).move_to([j, -1.59999, 0])
@@ -1952,6 +1956,577 @@ class FFT_improve_part3(Scene):
             ]
         )
         self.add(leaf)
+        self.play(leaf.shift, UP*3.6)
+        tree3 = VGroup(
+            a(0), com(), a(4)
+        ).arrange_submobjects(RIGHT, aligned_edge=DOWN).move_to([-5.25, leaf.get_center()[1]-1.2, 0])
+        tree4 = VGroup(
+            a(2), com(), a(6)
+        ).arrange_submobjects(RIGHT, aligned_edge=DOWN).move_to([-1.75, leaf.get_center()[1]-1.2, 0])
+        tree5 = VGroup(
+            a(1), com(), a(5)
+        ).arrange_submobjects(RIGHT, aligned_edge=DOWN).move_to([1.75, leaf.get_center()[1]-1.2, 0])
+        tree6 = VGroup(
+            a(3), com(), a(7)
+        ).arrange_submobjects(RIGHT, aligned_edge=DOWN).move_to([5.25, leaf.get_center()[1]-1.2, 0])
+        tree1 = VGroup(
+            *[VGroup(a(i), com()).arrange_submobjects(RIGHT, aligned_edge=DOWN) for i in [0, 2, 4]],
+            a(6)
+        ).arrange_submobjects(RIGHT, aligned_edge=DOWN).move_to([-3.5, tree3.get_center()[1]-1.2, 0])
+        tree2 = VGroup(
+            *[VGroup(a(i), com()).arrange_submobjects(RIGHT, aligned_edge=DOWN) for i in [1, 3, 5]],
+            a(7)
+        ).arrange_submobjects(RIGHT, aligned_edge=DOWN).move_to([3.5, tree3.get_center()[1]-1.2, 0])
+        tree0 = VGroup(
+            *[VGroup(a(i), com()).arrange_submobjects(RIGHT, aligned_edge=DOWN) for i in range(7)],
+            a(7)
+        ).arrange_submobjects(RIGHT, aligned_edge=DOWN).move_to([0, tree1.get_center()[1]-1.2, 0])
+        w2_0 = w(2).move_to([-5.25, (leaf.get_center()[1]+tree3.get_center()[1]) / 2, 0])
+        w2_1 = w(2).move_to([-1.75, (leaf.get_center()[1]+tree3.get_center()[1]) / 2, 0])
+        w2_2 = w(2).move_to([ 1.75, (leaf.get_center()[1]+tree3.get_center()[1]) / 2, 0])
+        w2_3 = w(2).move_to([ 5.25, (leaf.get_center()[1]+tree3.get_center()[1]) / 2, 0])
+        w4_0 = w(4).move_to([-3.5, (tree1.get_center()[1]+tree3.get_center()[1]) / 2, 0])
+        w4_1 = w(4).move_to([ 3.5, (tree1.get_center()[1]+tree3.get_center()[1]) / 2, 0])
+        w8_0 = w(8).move_to([  0 , (tree1.get_center()[1]+tree0.get_center()[1]) / 2, 0])
+        self.play(
+            TransformFromCopy(leaf[0], tree3[0]),
+            TransformFromCopy(leaf[1], tree3[2]),
+            TransformFromCopy(leaf[2], tree4[0]),
+            TransformFromCopy(leaf[3], tree4[2]),
+            TransformFromCopy(leaf[4], tree5[0]),
+            TransformFromCopy(leaf[5], tree5[2]),
+            TransformFromCopy(leaf[6], tree6[0]),
+            TransformFromCopy(leaf[7], tree6[2]),
+            FadeInFrom(VGroup(w2_0, w2_1, w2_2, w2_3), UP),
+            run_time=3
+        )
+        self.play(
+            FadeIn(VGroup(tree3[1], tree4[1], tree5[1], tree6[1]))
+        )
+        self.wait(2)
+        self.play(
+            TransformFromCopy(tree3[0], tree1[0][0]),
+            TransformFromCopy(tree3[2], tree1[2][0]),
+            TransformFromCopy(tree4[0], tree1[1][0]),
+            TransformFromCopy(tree4[2], tree1[3]),
+            TransformFromCopy(tree5[0], tree2[0][0]),
+            TransformFromCopy(tree5[2], tree2[2][0]),
+            TransformFromCopy(tree6[0], tree2[1][0]),
+            TransformFromCopy(tree6[2], tree2[3]),
+            FadeInFrom(VGroup(w4_0, w4_1), UP),
+            run_time=3
+        )
+        self.play(
+            FadeIn(VGroup(tree1[0][1], tree1[1][1], tree1[2][1], tree2[0][1], tree2[1][1], tree2[2][1]))
+        )
+        self.wait(2)
+        self.play(
+            TransformFromCopy(tree1[0][0], tree0[0][0]),
+            TransformFromCopy(tree1[2][0], tree0[4][0]),
+            TransformFromCopy(tree1[1][0], tree0[2][0]),
+            TransformFromCopy(tree1[3], tree0[6][0]),
+            TransformFromCopy(tree2[0][0], tree0[1][0]),
+            TransformFromCopy(tree2[2][0], tree0[5][0]),
+            TransformFromCopy(tree2[1][0], tree0[3][0]),
+            TransformFromCopy(tree2[3], tree0[7]),
+            FadeInFrom(w8_0, UP),
+            run_time=3
+        )
+        self.play(
+            FadeIn(VGroup(*[tree0[i][1] for i in range(7)]))
+        )
+        self.wait(3)
+        nums = VGroup(
+            *[Text(str(i), font="Consolas").scale(0.5).set_color(GRAY) for i in range(4)]
+        ).arrange_submobjects(DOWN, buff=0.9).next_to(leaf, LEFT, aligned_edge=UP)
+        self.play(Write(nums))
+        rec1 = SurroundingRectangle(w2_1[1])
+        rec2 = SurroundingRectangle(tree4)
+        rec3 = SurroundingRectangle(w4_0[1])
+        rec4 = SurroundingRectangle(tree1)
+        text1 = TexMobject("2", "^1").next_to(tree4, RIGHT, buff=0.8)
+        text1[1].set_color(BLUE_A)
+        text2 = TexMobject("2", "^2").next_to(tree1, RIGHT, buff=0.8)
+        text2[1].set_color(BLUE_A)
+        self.wait(2)
+        self.play(
+            ShowCreation(rec1)
+        )
+        self.play(
+            ShowCreation(rec2),
+            TransformFromCopy(tree4, w2_1[1].copy())
+        )
+        self.wait(2)
+        self.play(FadeInFrom(text1[0], RIGHT))
+        self.play(TransformFromCopy(nums[1], text1[1]))
+        self.wait()
+        self.play(FadeOut(VGroup(rec1, rec2)))
+        self.wait(2)
+        self.play(
+            ShowCreation(rec3)
+        )
+        self.play(
+            ShowCreation(rec4),
+            TransformFromCopy(tree1, w4_0[1].copy())
+        )
+        self.wait(2)
+        self.play(FadeInFrom(text2[0], RIGHT))
+        self.play(TransformFromCopy(nums[2], text2[1]))
+        self.wait()
+        self.play(FadeOut(VGroup(rec3, rec4)))
+        self.wait(3)
+
+
+class FFT_improve_Code(Scene):
+    def construct(self):
+        t2c = {
+            "a": GREEN,
+            "n/2-1": GOLD,
+            "dep": BLUE_A,
+            "^{dep}": BLUE_A,
+            "n": GOLD,
+            "m": GOLD,
+            "_m": GOLD,
+            "2\\pi/m": BLUE_A,
+            "^{\\frac{2\\pi}{m}}": BLUE_A,
+            "{i}": BLUE_E,
+            "\\omega": RED,
+            "\\boldsymbol{a}": GREEN,
+            "k": BLUE,
+            "m/2-1": GOLD,
+            "j": BLUE,
+            "t": WHITE,
+            "u": WHITE,
+            "_{k+j+m/2}": BLUE,
+            "_{k+j}": BLUE,
+        }
+        nums = VGroup(
+            *[
+                Text(str(i), font="Consolas").scale(0.4).set_color(GRAY)
+                for i in range(1, 13)
+            ]
+        ).arrange_submobjects(DOWN, aligned_edge=RIGHT, buff=0.25).shift(LEFT*4)
+        title = TexMobject("\\text{FFT}", "(", "\\boldsymbol{a}", ")")
+        title.set_color_by_tex_to_color_map(t2c).scale(0.8)
+        title.next_to(nums, UP, aligned_edge=LEFT)
+        code = VGroup()
+        line1 = TexMobject("\\textbf{BitReverse}\\ \\ ", "\\boldsymbol{a}")
+        line1.scale(0.75).next_to(nums[0], RIGHT).set_color_by_tex_to_color_map(t2c)
+        line1[0].set_color(WHITE)
+        code.add(line1)
+        line2 = TexMobject("\\textbf{for}\\ \\ ", "dep", "=", "1", "\\ .\\ .\\ ", "\\log_2", "n")
+        line2.scale(0.75).next_to(nums[1], RIGHT).set_color_by_tex_to_color_map(t2c)
+        code.add(line2)
+        line3 = TexMobject("m", "=", "2", "^{dep}")
+        line3.scale(0.75).next_to(nums[2], RIGHT, buff=1, aligned_edge=DOWN).set_color_by_tex_to_color_map(t2c)
+        code.add(line3)
+        line4 = TexMobject("\\omega", "_m", "=", "e", "^{\\frac{2\\pi}{m}", "i}", "=", "\\cos", "(", "2\\pi/m", ")", "+",\
+            "{i}", "\\sin", "(", "2\\pi/m", ")")
+        line4.scale(0.75).next_to(nums[3], RIGHT, buff=1, aligned_edge=DOWN).set_color_by_tex_to_color_map(t2c)
+        line4[4].set_color(BLUE_A); line4[5].set_color(BLUE_E)
+        code.add(line4)
+        line5 = TexMobject("\\textbf{for}\\ \\ ", "k", "=", "0", "\\ .\\ .\\ ", "n-1", "\\ \\ \\textbf{by}\\ \\ ", "m")
+        line5.scale(0.75).next_to(nums[4], RIGHT, buff=1, aligned_edge=DOWN).set_color_by_tex_to_color_map(t2c)
+        code.add(line5)
+        line6 = TexMobject("\\omega", "=", "1")
+        line6.scale(0.75).next_to(nums[5], RIGHT, buff=1.8, aligned_edge=DOWN).set_color_by_tex_to_color_map(t2c)
+        code.add(line6)
+        line7 = TexMobject("\\textbf{for}\\ \\ ", "j", "=", "0", "\\ .\\ .\\ ", "m/2-1")
+        line7.scale(0.75).next_to(nums[6], RIGHT, buff=1.8, aligned_edge=DOWN).set_color_by_tex_to_color_map(t2c)
+        code.add(line7)
+        line8 = TexMobject("t", "=", "\\omega", "a", "_{k+j+m/2}")
+        line8.scale(0.75).next_to(nums[7], RIGHT, buff=2.6, aligned_edge=DOWN).set_color_by_tex_to_color_map(t2c)
+        code.add(line8)
+        line9 = TexMobject("u", "=", "a", "_{k+j}")
+        line9.scale(0.75).next_to(nums[8], RIGHT, buff=2.6, aligned_edge=DOWN).set_color_by_tex_to_color_map(t2c)
+        code.add(line9)
+        line10 = TexMobject("a", "_{k+j}", "=", "u", "+", "t")
+        line10.scale(0.75).next_to(nums[9], RIGHT, buff=2.6, aligned_edge=DOWN).set_color_by_tex_to_color_map(t2c)
+        code.add(line10)
+        line11 = TexMobject("a", "_{k+j+m/2}", "=", "u", "-", "t")
+        line11.scale(0.75).next_to(nums[10], RIGHT, buff=2.6, aligned_edge=DOWN).set_color_by_tex_to_color_map(t2c)
+        code.add(line11)
+        line12 = TexMobject("\\omega", "=", "\\omega", "\\omega", "_m")
+        line12.scale(0.75).next_to(nums[11], RIGHT, buff=2.6, aligned_edge=DOWN).set_color_by_tex_to_color_map(t2c)
+        code.add(line12)
+
+        self.play(FadeIn(title))
+        self.wait(2)
+        self.play(FadeInFrom(nums[0], LEFT))
+        self.play(Write(code[0]))
+        self.wait(2)
+        self.play(FadeInFrom(nums[1], LEFT))
+        self.play(Write(code[1]))
+        self.wait(2)
+        self.play(FadeInFrom(nums[2:4], LEFT))
+        self.play(Write(code[2:4]))
+        self.wait(2)
+        self.play(FadeInFrom(nums[4], LEFT))
+        self.play(Write(code[4]))
+        self.wait(2)
+        self.play(FadeInFrom(nums[5], LEFT))
+        self.play(Write(code[5]))
+        self.wait(2)
+        self.play(FadeInFrom(nums[6:], LEFT))
+        self.play(Write(code[6]))
+        self.wait(2)
+        self.play(Write(code[11]))
+        self.wait(2)
+        self.play(Write(code[7:9]))
+        self.wait(2)
+        self.play(Write(code[9:11]))
+        self.wait(3)
+        sq = Rectangle(height=10, width=20).set_fill(BLACK, 1)
+        self.add(sq)
+        self.wait(3)
+        self.remove(sq)
+        self.wait(2)
+        q = VGroup()
+        q.add(SurroundingRectangle(VGroup(nums[0], code[0])))
+        q.add(SurroundingRectangle(VGroup(nums[1:4], code[1:4])))
+        q.add(SurroundingRectangle(VGroup(nums[4], code[4])))
+        q.add(SurroundingRectangle(VGroup(nums[5], code[5])))
+        q.add(SurroundingRectangle(VGroup(nums[6:], code[6:])))
+        for m in q:
+            self.play(ShowCreation(m))
+            self.play(ScaleInPlace(m, 1.1, rate_func=wiggle))
+            self.wait(2)
+            self.play(FadeOut(m))
+            self.wait(2)
+        self.wait()
+
+
+class FFT_improve_part4_1(Scene):
+    def construct(self):
+        t2c = {
+            "_0": BLUE,
+            "_1": BLUE,
+            "_2": BLUE,
+            "_3": BLUE,
+            "_4": BLUE,
+            "_5": BLUE,
+            "_6": BLUE,
+            "_7": BLUE,
+            "_{2}": GOLD,
+            "_{4}": GOLD,
+            "_{8}": GOLD,
+            "a": GREEN,
+            "\\omega": RED,
+        }
+        title = Text("位逆序置换", font="Source Han Sans CN", t2c={"位逆序": YELLOW, "置换": BLUE})
+        title.scale(0.6).move_to([-4.5, 3.3, 0])
+        entitle = TexMobject("\\textbf{BitReverse}").next_to(title, RIGHT, aligned_edge=DOWN)
+        self.play(Write(title))
+        self.play(DrawBorderThenFill(entitle))
+        self.wait()
+        a = lambda i: TexMobject("a", "_"+str(i)).set_color_by_tex_to_color_map(t2c)
+        leaf = VGroup(
+            *[
+                a(i).move_to([j, 1.8, 0])
+                for i, j in zip([0, 4, 2, 6, 1, 5, 3, 7], [-6.125, -4.375, -2.625, -0.875, 0.875, 2.625, 4.375, 6.125])
+            ]
+        )
+        old_id = VGroup(
+            *[
+                Text(str(i), font="Consolas").scale(0.5).move_to([j, 2.4, 0])
+                for i, j in zip([0, 1, 2, 3, 4, 5, 6, 7], [-6.125, -4.375, -2.625, -0.875, 0.875, 2.625, 4.375, 6.125])
+            ]
+        )
+        nold_id = VGroup(
+            *[
+                Text(str(i), font="Consolas").scale(0.5).move_to([j, 2.4, 0])
+                for i, j in zip([0, 1, 2, 3, 4, 5, 6, 7], [-6.125, -4.375, -2.625, -0.875, 0.875, 2.625, 4.375, 6.125])
+            ]
+        )
+        new_id = VGroup(
+            *[
+                Text(str(i), font="Consolas").scale(0.5).move_to([j, 1.8, 0]).set_color(BLUE_A)
+                for i, j in zip([0, 4, 2, 6, 1, 5, 3, 7], [-6.125, -4.375, -2.625, -0.875, 0.875, 2.625, 4.375, 6.125])
+            ]
+        )
+        self.play(FadeInFrom(old_id, UP), FadeInFrom(leaf, DOWN))
+        self.wait(2)
+        self.play(
+            *[FadeOut(leaf[i][0]) for i in range(8)],
+            *[ReplacementTransform(leaf[i][1], new_id[i]) for i in range(8)],
+            run_time=3
+        )
+        self.wait(2)
+        binary = lambda n: bin(n).replace('0b','').rjust(3,'0')
+        bin_old_id = VGroup(
+            *[
+                Text(binary(i), font="Consolas").scale(0.5).move_to([j, 2.4, 0])
+                for i, j in zip([0, 1, 2, 3, 4, 5, 6, 7], [-6.125, -4.375, -2.625, -0.875, 0.875, 2.625, 4.375, 6.125])
+            ]
+        )
+        bin_new_id = VGroup(
+            *[
+                Text(binary(i), font="Consolas").scale(0.5).move_to([j, 1.8, 0]).set_color(BLUE_A)
+                for i, j in zip([0, 4, 2, 6, 1, 5, 3, 7], [-6.125, -4.375, -2.625, -0.875, 0.875, 2.625, 4.375, 6.125])
+            ]
+        )
+        for i in range(8):
+            self.play(Transform(old_id[i], bin_old_id[i]), run_time=0.4)
+            self.wait(0.1)
+        self.wait()
+        for i in range(8):
+            self.play(Transform(new_id[i], bin_new_id[i]), run_time=0.4)
+            self.wait(0.1)
+        self.wait(2)
+        for i in range(8):
+            self.play(old_id[i].flip, UP, run_time=0.4)
+            self.wait(0.1)
+        self.wait(2)
+        for i in range(8):
+            self.play(old_id[i].flip, UP, run_time=0.4)
+            self.wait(0.1)
+        self.wait(2)
+        self.play(*[Transform(old_id[i], nold_id[i]) for i in range(8)])
+        self.wait(3)
+
+
+class FFT_improve_part4_2(Scene):
+    def construct(self):
+        title = Text("位逆序置换", font="Source Han Sans CN", t2c={"位逆序": YELLOW, "置换": BLUE})
+        title.scale(0.6).move_to([-4.5, 3.3, 0])
+        entitle = TexMobject("\\textbf{BitReverse}").next_to(title, RIGHT, aligned_edge=DOWN)
+        binary = lambda n: bin(n).replace('0b','').rjust(3,'0')
+        old_id = VGroup(
+            *[
+                Text(str(i), font="Consolas").scale(0.5).move_to([j, 2.4, 0])
+                for i, j in zip([0, 1, 2, 3, 4, 5, 6, 7], [-6.125, -4.375, -2.625, -0.875, 0.875, 2.625, 4.375, 6.125])
+            ]
+        )
+        new_id = VGroup(
+            *[
+                Text(binary(i), font="Consolas").scale(0.5).move_to([j, 1.8, 0]).set_color(BLUE_A)
+                for i, j in zip([0, 4, 2, 6, 1, 5, 3, 7], [-6.125, -4.375, -2.625, -0.875, 0.875, 2.625, 4.375, 6.125])
+            ]
+        )
+        self.add(old_id, new_id)
+        self.add(title, entitle)
+        self.wait(2)
+        planA = TexMobject("O(n\\log n)", "\\text{模拟}").set_color(GOLD).next_to(new_id[2], DOWN)
+        planB = TexMobject("O(n)", "\\text{预处理}").set_color(GOLD).next_to(planA, RIGHT, buff=2)
+        cross = Cross(planA)
+        self.play(Write(planA))
+        self.wait()
+        self.play(
+            ShowCreation(cross),
+            FadeInFrom(planB, LEFT)
+        )
+        self.wait(3)
+        self.play(
+            FadeOut(planA), FadeOut(planB), FadeOut(cross)
+        )
+        self.wait(2)
+        sub1_title = SubTopic("规律Ⅰ: ").scale(0.8).next_to(new_id[1], DOWN, buff=0.8)
+        sub1 = Text("偶数位上首位为0，奇数位上首位为1", font="Source Han Serif CN").scale(0.4).next_to(sub1_title, RIGHT)
+        sub2_title = SubTopic("规律Ⅱ: ").scale(0.8).next_to(sub1_title, DOWN, aligned_edge=LEFT)
+        sub2 = Text("每两个数除首位外均相同", font="Source Han Serif CN").scale(0.4).next_to(sub2_title, RIGHT)
+        sub3_title = SubTopic("规律Ⅲ: ").scale(0.8).next_to(sub2_title, DOWN, aligned_edge=LEFT)
+        sub3 = Text("每两个数除首位外是上一级子问题的解", font="Source Han Serif CN").scale(0.4).next_to(sub3_title, RIGHT)
+        sub4_title = SubTopic("规律Ⅳ: ").scale(0.8).next_to(sub3_title, DOWN, aligned_edge=LEFT)
+        sub4 = Text("前一半数除末位外是上一级子问题的解", font="Source Han Serif CN").scale(0.4).next_to(sub4_title, RIGHT)
+        sol = Text("rev[i] = (rev[i>>1]>>1) | ((i&1)<<(len-1))", font="Monaco for Powerline").scale(0.4).shift(DOWN*2.3)
+
+        self.play(
+            *[
+                ShowCreationThenDestructionAround(new_id[i][0])
+                for i in [0, 2, 4, 6]
+            ],
+            run_time=1.5
+        )
+        self.play(
+            *[
+                ShowCreationThenDestructionAround(new_id[i][0])
+                for i in [1, 3, 5, 7]
+            ],
+            run_time=1.5
+        )
+        self.wait(2)
+        self.play(Write(sub1_title))
+        self.wait()
+        self.play(Write(sub1))
+        self.wait(3)
+        for i in [0, 2, 4, 6]:
+            self.play(
+                ShowCreationThenDestructionAround(new_id[i][1:]),
+                ShowCreationThenDestructionAround(new_id[i + 1][1:])
+            )
+        self.wait(2)
+        self.play(Write(sub2_title))
+        self.wait()
+        self.play(Write(sub2))
+        self.wait(3)
+        recs = []
+        recs.append(SurroundingRectangle(new_id[0][1:]))
+        recs.append(SurroundingRectangle(new_id[2][1:]))
+        recs.append(SurroundingRectangle(new_id[4][1:]))
+        recs.append(SurroundingRectangle(new_id[6][1:]))
+        self.play(*[ShowCreation(m) for m in recs])
+        self.wait(2)
+        self.play(Write(sub3_title))
+        self.wait()
+        self.play(Write(sub3))
+        self.play(*[FadeOut(m) for m in recs])
+        self.wait(3)
+        recs = []
+        recs.append(SurroundingRectangle(new_id[0][:2]))        
+        recs.append(SurroundingRectangle(new_id[1][:2]))        
+        recs.append(SurroundingRectangle(new_id[2][:2]))
+        recs.append(SurroundingRectangle(new_id[3][:2]))   
+        self.play(*[ShowCreation(m) for m in recs])
+        self.wait(2)
+        self.play(Write(sub4_title))
+        self.wait()
+        self.play(Write(sub4))
+        self.play(*[FadeOut(m) for m in recs])
+        self.wait(3)
+
+        self.play(Write(sol[:8]))
+        self.wait(2)
+        self.play(Write(sol[10:19]))
+        self.wait()
+        self.play(Write(sol[19:22]))
+        self.wait()
+        self.play(FadeIn(sol[9]), FadeIn(sol[22]))
+        self.wait(2)
+        self.wait()
+        self.play(Write(sol[28:31]))
+        self.play(FadeIn(sol[27]), FadeIn(sol[31]))
+        self.wait()
+        self.play(Write(sol[32:41]))
+        self.wait()
+        self.play(FadeIn(sol[26]), FadeIn(sol[41]))
+        self.wait()
+        self.play(Write(sol[24]))
+        self.wait(3)
+
+
+class FFT_improve_part5(FFTScene):
+    def construct(self):
+        graph = self.set_up()
+        self.play(FadeInFrom(graph[0], LEFT))
+        self.play(ShowCreation(graph[1]))
+        self.wait(2)
+        self.play(ShowCreation(graph[2]), run_time=1.5)
+        self.wait(2)
+        self.play(ShowCreation(graph[3]), run_time=2)
+        self.wait(2)
+        self.play(FadeInFromLarge(graph[4]), run_time=1.5)
+        self.wait(2)
+        self.play(FadeInFromLarge(VGroup(graph[5], graph[6])), run_time=1.5)
+        self.wait(2)
+        self.play(FadeInFromLarge(graph[7]), run_time=1.5)
+        self.wait(2)
+        self.play(Write(graph[8]))
+        self.play(ScaleInPlace(graph[8], 2, rate_func=wiggle))
+        self.wait(3)
+
+
+class IFFT_part1(Scene):
+    def construct(self):
+        title = Text("快速傅里叶逆变换", font="Source Han Sans CN", t2c={"逆" : YELLOW, "快速傅里叶" : BLUE, "变换" : BLUE})
+        title.scale(0.6).move_to([-4.3, 3.3, 0])
+        entitle = TextMobject("I", "nverse ", "F", "ast ", "F", "ourier ", "T", "ransform").next_to(title, RIGHT)
+        entitle[0].set_color(YELLOW)
+        entitle[2].set_color(BLUE)
+        entitle[4].set_color(BLUE)
+        entitle[6].set_color(BLUE)
+        self.play(Write(title))
+        self.play(DrawBorderThenFill(entitle))
+        self.wait(2)
+        t2c = {
+            "_{j}": BLUE,
+            "a": GREEN,
+            "\\omega": RED,
+            "^{i}": GOLD,
+            "^{j}": GOLD,
+            "_n": GOLD,
+            "\\boldsymbol{V}": ORANGE,
+            "\\boldsymbol{a}": GREEN,
+            "_{ij}": BLUE,
+            "^{ij}": BLUE,
+            "n": GOLD,
+            "^{-ij}": BLUE,
+            "\\boldsymbol{I}": YELLOW
+        }
+        formula = VGroup(
+            TextMobject("DFT"),
+            TexMobject("\\rightarrow"),
+            TexMobject("y_i=", "\\sum", "^{n-1}", "_{j", "=", "0}", "\\omega", "_n", "^{i", "j}", "a", "_{j}").set_color_by_tex_to_color_map(t2c),
+            TexMobject("\\rightarrow"),
+            TexMobject("\\boldsymbol{y}", "=", "\\boldsymbol{V}", "_n", "\\boldsymbol{a}").set_color_by_tex_to_color_map(t2c)
+        ).arrange_submobjects(RIGHT, aligned_edge=ORIGIN).shift(UP*2.2)
+        formula[2][3].set_color(BLUE)
+        formula[2][8].set_color(BLUE)
+        formula[2][9].set_color(GOLD)
+        formula[2][2].set_color(WHITE)
+        vander = TexMobject("\\boldsymbol{V}", "_n", "=", """
+            \\begin{bmatrix}
+            1 & 1 & 1 & \\cdots & 1\\\\
+            1 & \\omega_n & \\omega_n^2 & \\cdots & \\omega_n^{n-1}\\\\
+            1 & \\omega_n^2 & \\omega_n^4 & \\cdots & \\omega_n^{2(n-1)}\\\\
+            \\vdots & \\vdots & \\vdots & \\ddots & \\vdots\\\\
+            1 & \\omega_n^{n-1} & \\omega_n^{2(n-1)} & \\cdots & \\omega_n^{(n-1)(n-1)}
+            \\end{bmatrix}
+        """).scale(0.8).shift(DOWN*0.5)
+        vander[0].set_color(ORANGE)
+        vander[1].set_color(GOLD)
+        vander[:3].scale(1.25, about_edge=RIGHT)
+        transvander = TexMobject("(", "\\boldsymbol{V}", "_n", ")", "_{ij}", "=", "\\omega", "^{ij}", "_n").set_color_by_tex_to_color_map(t2c)
+        transvander.next_to(formula[0], DOWN, buff=1)
+        need = TexMobject("\\boldsymbol{a}", "=", "\\boldsymbol{V}", "^{-1}", "_n", "\\boldsymbol{y}")
+        need.move_to([formula[4].get_center()[0], transvander.get_center()[1], 0]).set_color_by_tex_to_color_map(t2c)
+        ivander = TexMobject("(", "\\boldsymbol{V}", "^{-1}", "_n", ")", "_{ij}", "=", "{\\omega", "^{-ij}", "_n", "\\over", "n}")
+        ivander.next_to(transvander, DOWN).set_color_by_tex_to_color_map(t2c)
+        proof = TexMobject("(\\boldsymbol{V}^{-1}_n\\boldsymbol{V}_n)_{ij}", "&=", \
+            "\\sum^{n-1}_{k=0}\\frac{\\omega^{-ki}_n}{n}\\times\\omega^{kj}_n\\\\", "&=", \
+            "\\sum^{n-1}_{k=0}\\frac{\\omega^{k(j-i)}_n}{n}").scale(0.8).move_to([3.5, 0, 0])
+        qed = TexMobject("\\boldsymbol{V}", "^{-1}", "_n", "\\boldsymbol{V}", "_n", "=", "\\boldsymbol{I}", "_n").next_to(proof, DOWN)
+        qed.set_color_by_tex_to_color_map(t2c)
+        
+        self.play(Write(formula[0]))
+        self.wait()
+        for i in [1, 2, 3, 4]:
+            self.play(FadeInFrom(formula[i], LEFT))
+            self.wait()
+        self.wait()
+        self.play(FadeIn(vander))
+        self.wait(2)
+        self.play(ReplacementTransform(vander, transvander))
+        self.wait(2)
+        self.play(FadeInFrom(need, UP))
+        self.wait(2)
+        self.play(TransformFromCopy(need[2:5], ivander[1:4]))
+        self.wait()
+        self.play(FadeIn(VGroup(ivander[0], ivander[4], ivander[5])))
+        self.wait()
+        self.play(Write(ivander[6:]))
+        self.wait(3)
+        pos = need.get_center()
+        need.next_to(ivander, DOWN)
+        pos2 = need.get_center()
+        need.move_to(pos)
+        self.play(need.move_to, pos2)
+        self.wait(2)
+        self.play(Write(proof[0]))
+        self.play(FadeIn(proof[1]))
+        self.wait()
+        self.play(Write(proof[2]))
+        self.play(FadeIn(proof[3]))
+        self.wait()
+        self.play(Write(proof[4]))
+        self.wait(2)
+        self.play(FadeInFrom(qed, UP))
+        self.play(ShowCreationThenDestructionAround(qed))
+        self.wait(3)
+
+
+        
+
+
 
 
 
@@ -1975,3 +2550,4 @@ class FFT_improve_part3(Scene):
 # 20.01.25 Finish Polynomial part2 3 4. Thanks @有一种悲伤叫颓废 for part3
 # 20.01.26 Finish DFT and FFT part1 2 3
 # 20.01.27 Finish FFT code and FFT_improve part1 2
+# 20.01.28 Finish FFT_improve part3 4 5 code and IFFT part1 

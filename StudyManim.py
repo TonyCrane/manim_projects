@@ -359,3 +359,9 @@ class TryNumberPlane(Scene):
     def construct(self):
         grid = ComplexPlane().add_coordinates()
         self.add(grid)
+
+class TryText(Scene):
+    def construct(self):
+        text = Text("0100101101", font="Consolas").scale(0.8)
+        self.add(text)
+        debugTeX(self, text)
