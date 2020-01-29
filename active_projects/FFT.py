@@ -2524,9 +2524,240 @@ class IFFT_part1(Scene):
         self.wait(3)
 
 
+class IFFT_part2(Scene):
+    def construct(self):
+        t2c = {
+            "_{j}": BLUE,
+            "a": GREEN,
+            "\\omega": RED,
+            "^{i}": GOLD,
+            "^{j}": GOLD,
+            "_n": GOLD,
+            "_i": BLUE,
+            "\\boldsymbol{V}": ORANGE,
+            "\\boldsymbol{a}": GREEN,
+            "_{ij}": BLUE,
+            "^{ij}": BLUE,
+            "n": GOLD,
+            "^{-ij}": BLUE,
+            "\\boldsymbol{I}": YELLOW
+        }
+        title = Text("快速傅里叶逆变换", font="Source Han Sans CN", t2c={"逆" : YELLOW, "快速傅里叶" : BLUE, "变换" : BLUE})
+        title.scale(0.6).move_to([-4.3, 3.3, 0])
+        entitle = TextMobject("I", "nverse ", "F", "ast ", "F", "ourier ", "T", "ransform").next_to(title, RIGHT)
+        entitle[0].set_color(YELLOW)
+        entitle[2].set_color(BLUE)
+        entitle[4].set_color(BLUE)
+        entitle[6].set_color(BLUE)
+        formula = VGroup(
+            TextMobject("DFT"),
+            TexMobject("\\rightarrow"),
+            TexMobject("y_i=", "\\sum", "^{n-1}", "_{j", "=", "0}", "\\omega", "_n", "^{i", "j}", "a", "_{j}").set_color_by_tex_to_color_map(t2c),
+            TexMobject("\\rightarrow"),
+            TexMobject("\\boldsymbol{y}", "=", "\\boldsymbol{V}", "_n", "\\boldsymbol{a}").set_color_by_tex_to_color_map(t2c)
+        ).arrange_submobjects(RIGHT, aligned_edge=ORIGIN).shift(UP*2.2)
+        formula[2][0].set_color(WHITE)
+        formula[2][3].set_color(BLUE)
+        formula[2][8].set_color(BLUE)
+        formula[2][9].set_color(GOLD)
+        formula[2][2].set_color(WHITE)
+        vander = TexMobject("(", "\\boldsymbol{V}", "_n", ")", "_{ij}", "=", "\\omega", "^{ij}", "_n").set_color_by_tex_to_color_map(t2c)
+        vander.next_to(formula[0], DOWN, buff=1)
+        need = TexMobject("\\boldsymbol{a}", "=", "\\boldsymbol{V}", "^{-1}", "_n", "\\boldsymbol{y}")
+        need.set_color_by_tex_to_color_map(t2c)
+        ivander = TexMobject("(", "\\boldsymbol{V}", "^{-1}", "_n", ")", "_{ij}", "=", "{\\omega", "^{-ij}", "_n", "\\over", "n}")
+        ivander.next_to(vander, DOWN).set_color_by_tex_to_color_map(t2c)
+        need.next_to(ivander, DOWN)
+        proof = TexMobject("(\\boldsymbol{V}^{-1}_n\\boldsymbol{V}_n)_{ij}", "&=", \
+            "\\sum^{n-1}_{k=0}\\frac{\\omega^{-ki}_n}{n}\\times\\omega^{kj}_n\\\\", "&=", \
+            "\\sum^{n-1}_{k=0}\\frac{\\omega^{k(j-i)}_n}{n}").scale(0.8).move_to([3.5, 0, 0])
+        qed = TexMobject("\\boldsymbol{V}", "^{-1}", "_n", "\\boldsymbol{V}", "_n", "=", "\\boldsymbol{I}", "_n").next_to(proof, DOWN)
+        qed.set_color_by_tex_to_color_map(t2c)
+        self.add(title, entitle, formula, vander, need, ivander, proof, qed)
+        self.wait()
+        self.play(
+            FadeOut(VGroup(formula[3:], vander, proof, qed))
+        )
+        self.play(formula[:3].set_opacity, 0.4)
+        self.wait()
+        self.play(
+            ivander.shift, UP,
+            need.shift, UP
+        )
+        self.wait()
+        ifft = TexMobject("a", "_i", "=", "\\sum", "^{n-1}", "_{j", "=", "0}", "{\\omega", "^{-i", "j}", "_n", "\\over", "n}", "y_j")
+        ifft.set_color_by_tex_to_color_map(t2c).move_to([3.5, ivander.get_center()[1], 0])
+        ifft[4].set_color(WHITE); ifft[5].set_color(BLUE)
+        ifft[9].set_color(GOLD); ifft[10].set_color(BLUE)
+        idft = TexMobject("a", "_i", "=", "{1", "\\over", "n}", "\\sum", "^{n-1}", "_{j", "=", "0}", "\\omega", "^{-i", "j}", "_n", "y_j")
+        idft.set_color_by_tex_to_color_map(t2c).next_to(ifft, DOWN, aligned_edge=LEFT)
+        idft[7].set_color(WHITE); idft[8].set_color(BLUE)
+        idft[12].set_color(GOLD); idft[13].set_color(BLUE)
+
+        self.wait()
+        self.play(TransformFromCopy(need, ifft), run_time=2)
+        self.wait()
+        self.play(TransformFromCopy(ifft, idft), run_time=2)
+        self.wait(2)
+        self.play(FadeOut(ivander), FadeOut(need), FadeOut(ifft))
+        self.wait(2)
+        self.play(formula[:3].set_opacity, 1)
+        self.play(formula[:3].move_to, [0, 1.5, 0])
+        self.wait()
+        formula_idft = VGroup(
+            TextMobject("IDFT"),
+            TexMobject("\\rightarrow"),
+            idft.copy()
+        ).arrange_submobjects(RIGHT, aligned_edge=ORIGIN)
+        formula_idft.next_to(formula[1].get_center(), DOWN, index_of_submobject_to_align=1, buff=1.6)
+        self.play(idft.move_to, formula_idft[2].get_center())
+        self.wait()
+        self.play(FadeInFrom(formula_idft[:2], LEFT))
+        self.wait(2)
+        self.play(
+            ShowCreationThenDestructionAround(formula[2][7]),
+            ShowCreationThenDestructionAround(idft[12])
+        )
+        
+        self.wait()
+        t2c2 = {
+            "\\omega": RED,
+            "_n": GOLD,
+            "^{\\frac{2\\pi}{n}}": BLUE_A,
+            "^{-\\frac{2\\pi}{n}}": BLUE_A,
+            "{i}": BLUE_E,
+            "2\\pi/n": BLUE_A,
+        }
+        sol = VGroup(
+            Text("将", font="Source Han Serif CN").scale(0.6).set_color(GOLD),
+            TexMobject("\\omega", "_n", "=", "e", "^{\\frac{2\\pi}{n}", "i}", "=", "\\cos", "(", "2\\pi/n", ")", "+",\
+                "{i}", "\\sin", "(", "2\\pi/n", ")").set_color_by_tex_to_color_map(t2c2),
+            Text("改成", font="Source Han Serif CN").scale(0.6).set_color(GOLD),
+            TexMobject("\\omega", "_n", "=", "e", "^{-\\frac{2\\pi}{n}", "i}", "=", "\\cos", "(", "2\\pi/n", ")", "-",\
+                "{i}", "\\sin", "(", "2\\pi/n", ")").set_color_by_tex_to_color_map(t2c2),
+        ).scale(0.8)
+        sol[1].next_to(sol[0], RIGHT)
+        sol[3].next_to(sol[2], RIGHT)
+        sol[2:].next_to(sol[:2], DOWN)
+        sol.next_to(formula_idft, DOWN)
+        sol[1][4].set_color(BLUE_A); sol[1][5].set_color(BLUE_E)
+        sol[3][4].set_color(BLUE_A); sol[3][5].set_color(BLUE_E)
+        self.wait()
+        self.play(Write(sol))
+        self.play(ShowCreationThenDestructionAround(sol))
+        self.wait(3)
+
+
+class PolynomialConvolutionSolve(Scene):
+    def construct(self):
+        t2c = {
+            "\\boldsymbol{a}": GREEN,
+            "\\boldsymbol{b}": GREEN,
+            "\\text{IDFT}": ORANGE,
+            "\\text{DFT}": ORANGE,
+            "_{2n}": GOLD
+        }
+        formula = TexMobject("\\boldsymbol{a}", "\\otimes", "\\boldsymbol{b}", "=", "\\text{IDFT}", \
+            "_{2n}", "\\big(", "\\text{DFT}", "_{2n}", "(", "\\boldsymbol{a}", ")", "\\circ", "\\text{DFT}", \
+            "_{2n}", "(", "\\boldsymbol{b}", ")", "\\big)")
+        formula.set_color_by_tex_to_color_map(t2c)
+        
+        self.wait()
+        self.play(Write(formula[:4]))
+        self.wait(2)
+        self.play(Write(formula[7:12]))
+        self.wait()
+        self.play(Write(formula[13:18]))
+        self.wait()
+        self.play(FadeInFrom(formula[12]))
+        self.wait()
+        self.play(FadeIn(VGroup(formula[4:7], formula[18])))
+        self.wait()
+        self.play(ShowCreationThenDestructionAround(formula))
+        self.wait(3)
+        self.play(formula.shift, UP*3.2)
+        self.wait(4)
+
+
+class EndScene(TripleScene):
+    def construct(self):
+        thanks = VGroup(
+            Text("特别鸣谢", font="Source Han Sans CN").set_color(RED),
+            Text("@cigar666", font="Source Han Serif CN").scale(0.5).set_color(BLUE),
+            Text("@有一种悲伤叫颓废", font="Source Han Serif CN").scale(0.5).set_color(BLUE)
+        )
+        cigar = ImageMobject("cigar.jpg").scale(0.5)
+        tf = ImageMobject("颓废.png").scale(0.5)
+        thanks[0].shift(UP * 2)
+        thanks[1].shift(LEFT*3)
+        cigar.next_to(thanks[1], LEFT)
+        thanks[2].shift(RIGHT*4)
+        tf.next_to(thanks[2], LEFT)
+        screen_rect = ScreenRectangle(height=6).shift(UP * 0.4)
+        title = Title("参考").set_color(RED)
+        refer = VGroup(
+            Text("[1] T. H. Cormen. Introduction to Algorithms, Third Edition[M]. Massachusettes:The MIT Press, 2009 : 898-919", font="Source Han Serif CN").scale(0.2),
+            Text("[2] attack. 题解P3803【模板】多项式乘法(FFT)[EB/OL]. https://www.luogu.com.cn/blog/attack/solution-p3803, 2018-02-12", font="Source Han Serif CN").scale(0.2),
+            Text("[3] Wikipedia contributors. Fast Fourier transform[G/OL]. Wikipedia,2020-01-21. https://en.wikipedia.org/wiki/Fast_Fourier\n    _transform", font="Source Han Serif CN").scale(0.2),
+            Text("[4] Wikipedia contributors. Discrete Fourier transform[G/OL]. Wikipedia,2020-01-10. https://en.wikipedia.org/wiki/Discrete\n    _Fourier_transform", font="Source Han Serif CN").scale(0.2),
+            Text("[5] Wikipedia contributors. Butterfly diagram[G/OL]. Wikipedia,2019-08-09. https://en.wikipedia.org/wiki/Butterfly_diagram", font="Source Han Serif CN").scale(0.2),
+            Text("[6] Wikipedia contributors. Complex number[G/OL]. Wikipedia,2020-01-22. https://en.wikipedia.org/wiki/Complex_number", font="Source Han Serif CN").scale(0.2),
+            Text("[7] 3Blue1Brown. 欧拉公式与初等群论[OL]. https://www.bilibili.com/video/av11339177, 2017-06-15", font="Source Han Serif CN").scale(0.2),
+            Text("[8] 3Blue1Brown. 微分方程概论-第五章：在3.14分钟内理解e^iπ[OL]. https://www.bilibili.com/video/av63666593, 2019-08-14", font="Source Han Serif CN").scale(0.2),
+        ).arrange_submobjects(DOWN, aligned_edge=LEFT, buff=0.15).next_to(title, DOWN, buff=1, aligned_edge=LEFT)
+        
+        self.wait()
+        self.play(ShowCreation(screen_rect))
+        self.wait(5)
+        self.play(FadeOut(screen_rect))
+        self.wait()
+        self.play(Write(thanks[0]))
+        self.wait()
+        self.play(FadeIn(thanks[1:]), FadeIn(cigar), FadeIn(tf), run_time=1.5)
+        self.wait(5)
+        self.play(
+            thanks.shift, UP*4.5,
+            cigar.shift, UP*4.5,
+            tf.shift, UP*4.5,
+        )
+        self.wait()
+        self.play(FadeInFrom(title, UP))
+        self.wait()
+        for i in refer:
+            self.play(FadeInFromDown(i), run_time=0.4)
+            self.wait(0.1)
+        self.wait(2)
         
 
-
+        self.get_svg()
+        good = self.good
+        coin = self.coin
+        favo = self.favo
+        self.play(
+            FadeInFromPoint(good, good.get_center()),
+            FadeInFromPoint(coin, coin.get_center()),
+            FadeInFromPoint(favo, favo.get_center())
+        )
+        self.wait(0.4)
+        circle_coin = Circle().scale(0.7).move_to(coin).set_stroke(PINK, 6)
+        circle_favo = Circle().scale(0.7).move_to(favo).set_stroke(PINK, 6)
+        self.play(
+            good.set_color, LIGHT_PINK,
+            ShowCreation(circle_coin),
+            ShowCreation(circle_favo),
+            run_time=1.5
+        )
+        self.play(
+            FadeOut(circle_coin),
+            FadeOut(circle_favo),
+            Flash(coin.get_center(), color=PINK, line_length=0.7, flash_radius=1.5),
+            Flash(favo.get_center(), color=PINK, line_length=0.7, flash_radius=1.5),
+            Flash(good.get_center(), color=PINK, line_length=0.7, flash_radius=1.5),
+            coin.set_color, LIGHT_PINK,
+            favo.set_color, LIGHT_PINK,
+            run_time=0.3
+        )
+        self.wait(3)
 
 
 
@@ -2551,3 +2782,4 @@ class IFFT_part1(Scene):
 # 20.01.26 Finish DFT and FFT part1 2 3
 # 20.01.27 Finish FFT code and FFT_improve part1 2
 # 20.01.28 Finish FFT_improve part3 4 5 code and IFFT part1 
+# 20.01.29 Finish all main Scenes !!!!!!
