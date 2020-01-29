@@ -2696,15 +2696,15 @@ class EndScene(TripleScene):
         screen_rect = ScreenRectangle(height=6).shift(UP * 0.4)
         title = Title("参考").set_color(RED)
         refer = VGroup(
-            Text("[1] T. H. Cormen. Introduction to Algorithms, Third Edition[M]. Massachusettes:The MIT Press, 2009 : 898-919", font="Source Han Serif CN").scale(0.2),
-            Text("[2] attack. 题解P3803【模板】多项式乘法(FFT)[EB/OL]. https://www.luogu.com.cn/blog/attack/solution-p3803, 2018-02-12", font="Source Han Serif CN").scale(0.2),
+            Text("[1] T. H. Cormen,et al. Introduction to Algorithms, Third Edition[M]. Massachusettes:The MIT Press, 2009 : 898-919", font="Source Han Serif CN").scale(0.2),
+            Text("[2] attack. 题解P3803【【模板】多项式乘法(FFT)】[EB/OL]. https://www.luogu.com.cn/blog/attack/solution-p3803, 2018-02-12", font="Source Han Serif CN").scale(0.2),
             Text("[3] Wikipedia contributors. Fast Fourier transform[G/OL]. Wikipedia,2020-01-21. https://en.wikipedia.org/wiki/Fast_Fourier\n    _transform", font="Source Han Serif CN").scale(0.2),
             Text("[4] Wikipedia contributors. Discrete Fourier transform[G/OL]. Wikipedia,2020-01-10. https://en.wikipedia.org/wiki/Discrete\n    _Fourier_transform", font="Source Han Serif CN").scale(0.2),
             Text("[5] Wikipedia contributors. Butterfly diagram[G/OL]. Wikipedia,2019-08-09. https://en.wikipedia.org/wiki/Butterfly_diagram", font="Source Han Serif CN").scale(0.2),
             Text("[6] Wikipedia contributors. Complex number[G/OL]. Wikipedia,2020-01-22. https://en.wikipedia.org/wiki/Complex_number", font="Source Han Serif CN").scale(0.2),
             Text("[7] 3Blue1Brown. 欧拉公式与初等群论[OL]. https://www.bilibili.com/video/av11339177, 2017-06-15", font="Source Han Serif CN").scale(0.2),
             Text("[8] 3Blue1Brown. 微分方程概论-第五章：在3.14分钟内理解e^iπ[OL]. https://www.bilibili.com/video/av63666593, 2019-08-14", font="Source Han Serif CN").scale(0.2),
-        ).arrange_submobjects(DOWN, aligned_edge=LEFT, buff=0.15).next_to(title, DOWN, buff=1, aligned_edge=LEFT)
+        ).arrange_submobjects(DOWN, aligned_edge=LEFT, buff=0.15).next_to(title, DOWN, buff=0.8, aligned_edge=LEFT)
         
         self.wait()
         self.play(ShowCreation(screen_rect))
