@@ -2760,11 +2760,6 @@ class EndScene(TripleScene):
         self.wait(3)
 
 
-
-
-
-
-
 ##------Time Line------##
 # 19.12.05 have an idea
 # 19.12.07 ~ 19.12.12 study FFT
@@ -2783,3 +2778,4 @@ class EndScene(TripleScene):
 # 20.01.27 Finish FFT code and FFT_improve part1 2
 # 20.01.28 Finish FFT_improve part3 4 5 code and IFFT part1 
 # 20.01.29 Finish all main Scenes !!!!!!
+# 20.01.30 Finish Sound Recording
