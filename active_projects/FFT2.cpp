@@ -22,18 +22,18 @@ Complex operator * (Complex a, Complex b) { return Complex(a.r * b.r - a.i * b.i
 
 int len, rev[maxn], lim = 1;
 
-void FFT(Complex* A) {
-    for (int i = 0; i < lim; ++i) if (i < rev[i]) swap(A[i], A[rev[i]]);
+void FFT(Complex* a) {
+    for (int i = 0; i < lim; ++i) if (i < rev[i]) swap(a[i], a[rev[i]]);
     for (int dep = 1; dep <= log2(lim); ++dep) {
         int m = 1 << dep;
         Complex wn = Complex(cos(2 * PI / m), sin(2 * PI / m));
         for (int k = 0; k < lim; k += m) {
             Complex w = Complex(1, 0);
             for (int j = 0; j < m / 2; ++j) {
-                Complex t = w * A[k + j + m / 2];
-                Complex u = A[k + j];
-                A[k + j] = u + t;
-                A[k + j + m / 2] = u - t;
+                Complex t = w * a[k + j + m / 2];
+                Complex u = a[k + j];
+                a[k + j] = u + t;
+                a[k + j + m / 2] = u - t;
                 w = w * wn;
             }
         }

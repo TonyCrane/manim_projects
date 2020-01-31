@@ -1,15 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-inline int read() {
-    int x = 0; int f = 1; char ch = getchar();
-    while (!isdigit(ch)) {if (ch == '-') f = -1; ch = getchar();}
-    while (isdigit(ch))  {x = x * 10 + ch - 48; ch = getchar();}
-    return x * f;
-}
-
-const int maxn = 2100010;
-const double PI = acos(-1.0);
+const int maxn = 2000010;
+const double PI = acos(-1);
 
 struct Complex {
     double r, i;
@@ -20,13 +13,13 @@ Complex operator + (Complex a, Complex b) { return Complex(a.r + b.r, a.i + b.i)
 Complex operator - (Complex a, Complex b) { return Complex(a.r - b.r, a.i - b.i); }
 Complex operator * (Complex a, Complex b) { return Complex(a.r * b.r - a.i * b.i, a.r * b.i + a.i * b.r); }
 
-int len, rev[maxn], lim = 1;
+int rev[maxn], len, lim = 1;
 
 void FFT(Complex* a, int opt) {
     for (int i = 0; i < lim; ++i) if (i < rev[i]) swap(a[i], a[rev[i]]);
     for (int dep = 1; dep <= log2(lim); ++dep) {
         int m = 1 << dep;
-        Complex wn = Complex(cos(2 * PI / m), opt * sin(2 * PI / m));
+        Complex wn = Complex(cos(2.0 * PI / m), opt * sin(2.0 * PI / m));
         for (int k = 0; k < lim; k += m) {
             Complex w = Complex(1, 0);
             for (int j = 0; j < m / 2; ++j) {
@@ -38,12 +31,20 @@ void FFT(Complex* a, int opt) {
             }
         }
     }
-    if (opt == -1) for (int i = 0; i < lim; ++i) F[i].r /= lim;
+    if (opt == -1) for (int i = 0; i < lim; ++i) a[i].r /= lim;
 }
 
 int main() {
-    int n = read();
-    while (lim <= n) lim <<= 1, len++;
+    int n, m; scanf("%d %d", &n, &m);
+    for (int i = 0; i <= n; ++i) scanf("%d", &F[i].r);
+    for (int i = 0; i <= m; ++i) scanf("%d", &G[i].r);
+    while (lim <= n + m) lim <<= 1, len++;
     for (int i = 0; i < lim; ++i) rev[i] = (rev[i >> 1] >> 1) | ((i & 1) << (len - 1));
+    FFT(F, 1); FFT(G, 1);
+    for (int i = 0; i <= m; ++i) F[i] = F[i] * G[i];
+    FFT(F, -1);
+    for (int i = 0; i <= n + m; ++i) {
+        printf("%d ", (int)(F[i].r + 0.5));
+    }
     return 0;
 }
