@@ -537,7 +537,7 @@ class VideoFrom3B1B(Scene):
         self.wait(3)
 
 
-class UnitRoot_part1(Scene):
+class UnitRoot_part1(Scene): # Thanks @cigar666
     def construct(self):
         ## Create ComplexPlane ##
         cp_scale = 1.75
@@ -722,9 +722,247 @@ class UnitRoot_part1(Scene):
         self.wait(5)
 
 
-# class UnitRoot_part2(Scene):
-#     def construct(self):
+class UnitRoot_part2(Scene):
+    def construct(self):
+        t2c = {
+            "\\omega": RED,
+            "_{dn}": GOLD,
+            "^{dk}": YELLOW,
+            "^{2k}": YELLOW,
+            "^k": YELLOW,
+            "^i": BLUE_A,
+            "_n": GOLD,
+            "^n": BLUE_A,
+            "^{\\frac{2\\pi}{dn}i}": BLUE_A,
+            "^{\\frac{2\\pi}{n}i}": BLUE_A,
+            "proof.": ORANGE,
+            "^{\\frac{n}{2}}": YELLOW,
+            "_2": GOLD,
+            "^{k+\\frac{n}{2}}": YELLOW,
+            "^2": BLUE_A,
+            "_{\\frac{n}{2}}": GOLD,
+        }
+        title = Text("单位根 - 三个引理", font="Source Han Sans CN", t2c={"三个引理" : YELLOW, "单位根 - " : BLUE})
+        title.scale(0.6).move_to([-4, 3.3, 0])
+        self.play(Write(title))
+        self.wait(2)
+        sub1t = SubTopic("lemma.1 消去引理: ").scale(0.8).next_to(title, DOWN, aligned_edge=LEFT)
+        sub1 = TexMobject("\\omega", "^{dk}", "_{dn}", "=", "\\omega", "^k", "_n")
+        sub1.set_color_by_tex_to_color_map(t2c).next_to(sub1t, RIGHT)
+        self.play(Write(sub1t))
+        self.wait()
+        self.play(Write(sub1))
+        proof1 = TexMobject("proof.", "\\omega", "^{dk}", "_{dn}", "=", "(", "e", "^{\\frac{2\\pi}{dn}i}", ")", "^{dk}", "=", \
+            "(", "e", "^{\\frac{2\\pi}{n}i}", ")", "^k", "=", "\\omega", "^k", "_n")
+        proof1.set_color_by_tex_to_color_map(t2c).move_to(UP * (sub1.get_center()[1]-1))
+        lemma11 = TexMobject("\\omega", "^{\\frac{n}{2}}", "_n", "=", "\\omega", "_2", "=", "-1")
+        lemma11.set_color_by_tex_to_color_map(t2c).next_to(sub1, RIGHT, buff=2)
+        self.wait()
+        self.play(Write(proof1))
+        self.wait()
+        self.play(TransformFromCopy(proof1[2:], lemma11))
+        self.wait(3)
+        sub2t = SubTopic("lemma.2 折半引理: ").scale(0.8).next_to(sub1t, DOWN, buff=1.5, aligned_edge=LEFT)
+        sub2 = TexMobject("(", "\\omega", "^{k+\\frac{n}{2}}", "_n", ")", "^2", "=", "(", "\\omega", "^k", "_n", ")", "^2", "=", \
+            "\\omega", "^k", "_{\\frac{n}{2}}")
+        sub2.set_color_by_tex_to_color_map(t2c).next_to(sub2t, RIGHT)
+        self.play(Write(sub2t))
+        self.wait()
+        self.play(Write(sub2))
+        proof2 = TexMobject("proof.", "\\omega", "^{k+\\frac{n}{2}}", "_n", "=", "\\omega", "^k", "_n", "\\omega", "^{\\frac{n}{2}}", \
+            "_n", "=", "-", "\\omega", "^k", "_n", "\\ ,\\ ", "(", "\\omega", "^k", "_n", ")", "^2", "=", "\\omega", "^{2k}", "_n", "=", \
+            "\\omega", "^k", "_{\\frac{n}{2}}")
+        proof2.set_color_by_tex_to_color_map(t2c).move_to(UP * (sub2.get_center()[1]-1))
+        self.wait()
+        self.play(Write(proof2[:12]))
+        self.wait()
+        self.play(ShowCreationThenDestructionAround(lemma11))
+        self.wait()
+        self.play(Write(proof2[12:17]))
+        self.wait()
+        self.play(Write(proof2[17:]))
+        self.wait(3)
+        sub3t = SubTopic("lemma.3 求和引理: ").scale(0.8).next_to(sub2t, DOWN, buff=1.5, aligned_edge=LEFT)
+        sub3 = TexMobject("\\sum\\nolimits", "^{n-1}", "_{i=0}", "(", "\\omega", "^k", "_n", ")", "^i", "=", "0")
+        sub3.set_color_by_tex_to_color_map(t2c).next_to(sub3t, RIGHT)
+        self.play(Write(sub3t))
+        self.wait()
+        self.play(Write(sub3))
+        proof3 = TexMobject("proof.", "\\sum\\nolimits", "^{n-1}", "_{i=0}", "(", "\\omega", "^k", "_n", ")", "^i", "=", \
+            "{(", "\\omega", "^k", "_n", ")", "^n", "-1", "\\over", "\\omega", "^k", "_n", "-1}", "=", "{(", "\\omega", "^n", "_n", ")", "^k", \
+            "-1", "\\over", "\\omega", "^k", "_n", "-1}", "=", "{1", "^k", "-1", "\\over", "\\omega", "^k", "_n", "-1}", "=", "0")
+        proof3.set_color_by_tex_to_color_map(t2c).move_to(UP * (sub3.get_center()[1]-1.2))
+        self.wait()
+        self.play(Write(proof3[:11]))
+        self.wait()
+        self.play(Write(proof3[11:23]))
+        self.wait()
+        self.play(Write(proof3[23:36]))
+        self.wait()
+        self.play(Write(proof3[36:45]))
+        self.wait()
+        self.play(FadeInFrom(proof3[45:], RIGHT))
+        self.wait(5)
 
+
+class UnitRoot_part3(Scene):
+    def construct(self):
+        cp1 = ComplexPlane().scale(2)
+        cp1.add_coordinates(0, 1, -1, 1j, -1j).shift(LEFT * 3.5)
+        cp2 = ComplexPlane().scale(2)
+        cp2.add_coordinates(0, 1, -1, 1j, -1j).shift(RIGHT * 3.5)
+        group1 = VGroup(cp1)
+        group2 = VGroup(cp2)
+        self.play(ShowCreation(cp1, run_time=2.5))
+        self.play(ShowCreation(cp2, run_time=2.5))
+        self.wait(2)
+        c1 = Circle(radius=2).move_to(cp1.n2p(0)).set_stroke(YELLOW, opacity=0.5)
+        group1.add(c1)
+        c2 = Circle(radius=2).move_to(cp2.n2p(0)).set_stroke(YELLOW, opacity=0.5)
+        group2.add(c2)
+        self.play(ShowCreation(c1), ShowCreation(c2))
+        self.wait()
+        w_10 = VGroup(
+            *[
+                VGroup(
+                    Line(cp1.n2p(0), cp1.n2p(np.cos(i * 36 * PI / 180) + 1j * np.sin(i * 36 * PI / 180))).set_stroke(GREEN, opacity=0.5),
+                    Dot(cp1.n2p(np.cos(i * 36 * PI / 180) + 1j * np.sin(i * 36 * PI / 180)), color=GREEN).set_fill(GREEN, 0.5),
+                    TexMobject("\\omega", "^{%d}" % i, "_{10}").set_opacity(0.9).scale(0.7).next_to(cp1.n2p(np.cos(i * 36 * PI / 180) + 1j * np.sin(i * 36 * PI / 180)), LEFT)
+                )
+                for i in range(10)
+            ]
+        )
+        for i in w_10:
+            i[2][0].set_color(RED)
+            i[2][1].set_color(YELLOW)
+            i[2][2].set_color(GOLD)
+        group1.add(w_10)
+        w_5 = VGroup(
+            *[
+                VGroup(
+                    Line(cp2.n2p(0), cp2.n2p(np.cos(i * 72 * PI / 180) + 1j * np.sin(i * 72 * PI / 180))).set_stroke(GREEN, opacity=0.5),
+                    Dot(cp2.n2p(np.cos(i * 72 * PI / 180) + 1j * np.sin(i * 72 * PI / 180)), color=GREEN).set_fill(GREEN, 0.5),
+                    TexMobject("\\omega", "^{%d}" % i, "_5").set_opacity(0.9).scale(0.7).next_to(cp2.n2p(np.cos(i * 72 * PI / 180) + 1j * np.sin(i * 72 * PI / 180)), RIGHT)
+                )
+                for i in range(5)
+            ]
+        )
+        for i in w_5:
+            i[2][0].set_color(RED)
+            i[2][1].set_color(YELLOW)
+            i[2][2].set_color(GOLD)
+        group2.add(w_5)
+        for i in w_10:
+            self.play(ShowCreation(i[:2]), run_time=0.45)
+            self.play(Write(i[2]), run_time=0.45)
+            self.wait(0.1)
+        self.wait()
+        for i in w_5:
+            self.play(ShowCreation(i[:2]), run_time=0.45)
+            self.play(Write(i[2]), run_time=0.45)
+            self.wait(0.1)
+        self.wait()
+        self.play(
+            w_10[4][0].set_color, RED,
+            w_10[4][1].set_color, RED,
+            w_10[4][2].set_opacity, 1,
+            w_5[2][0].set_color, RED,
+            w_5[2][1].set_color, RED,
+            w_5[2][2].set_opacity, 1,
+            run_time=2
+        )
+        self.play(
+            w_10[4][2].scale, 1.5,
+            w_5[2][2].scale, 1.5
+        )
+        self.wait(2)
+        self.play(
+            group1.shift, RIGHT * 3.5,
+            group2.shift, LEFT * 3.5,
+            run_time=2.5
+        )
+        self.play(
+            w_10[4][0:2].set_opacity, 1
+        )
+        self.wait()
+        self.play(
+            ShowCreationThenDestructionAround(VGroup(w_10[4][2], w_5[2][2]))
+        )
+        self.wait(5)
+
+
+class UnitRoot_part4(Scene):
+    def construct(self):
+        cp = ComplexPlane().scale(2)
+        cp.add_coordinates(0, -1, -2, 1, 2, 1j, -1j, 2j, -2j)
+        c = Circle(radius=2).set_color(YELLOW)
+        self.play(ShowCreation(cp, run_time=3))
+        self.wait()
+        self.play(ShowCreation(c))
+        self.wait()
+        w_8 = VGroup(
+            *[
+                VGroup(
+                    Line(cp.n2p(0), cp.n2p(np.cos(i * 45 * PI / 180) + 1j * np.sin(i * 45 * PI / 180))).set_stroke(GREEN, opacity=0.5),
+                    Dot(cp.n2p(np.cos(i * 45 * PI / 180) + 1j * np.sin(i * 45 * PI / 180)), color=GREEN).set_fill(GREEN, 0.5),
+                    TexMobject("\\omega", "^{%d}" % i, "_8").set_opacity(0.9).scale(0.7).next_to(cp.n2p(np.cos(i * 45 * PI / 180) + 1j * np.sin(i * 45 * PI / 180)), LEFT)
+                )
+                for i in range(8)
+            ]
+        )
+        for i in w_8:
+            i[2][0].set_color(RED)
+            i[2][1].set_color(YELLOW)
+            i[2][2].set_color(GOLD)
+        for i in w_8:
+            self.play(ShowCreation(i[:2]), run_time=0.45)
+            self.play(Write(i[2]), run_time=0.45)
+            self.wait(0.1)
+        self.wait()
+        self.play(
+            w_8[1][0].set_opacity, 1,
+            w_8[1][0].set_color, RED,
+            w_8[1][1].set_opacity, 1,
+            w_8[1][1].set_color, RED,
+            w_8[1][2].set_opacity, 1,
+            w_8[1][2].scale, 1.5,
+            w_8[5][0].set_opacity, 1,
+            w_8[5][0].set_color, RED,
+            w_8[5][1].set_opacity, 1,
+            w_8[5][1].set_color, RED,
+            w_8[5][2].set_opacity, 1,
+            w_8[5][2].scale, 1.5,
+            run_time=1.5
+        )
+        self.play(FadeOut(w_8[2][2]))
+        self.wait()
+        t2c = {"\\omega": RED, "^1": YELLOW, "_8": GOLD, "^2": BLUE_A, "^5": YELLOW}
+        w_8_1_2 = TexMobject("(", "\\omega", "^1", "_8", ")", "^2").set_color_by_tex_to_color_map(t2c).next_to(w_8[2][1], LEFT)
+        w_8_5_2 = TexMobject("(", "\\omega", "^5", "_8", ")", "^2").set_color_by_tex_to_color_map(t2c).next_to(w_8[2][1], RIGHT)
+        self.play(
+            Rotating(w_8[1], radians=45 * PI / 180, about_point=ORIGIN),
+            Rotating(w_8[5], radians=5 * 45 * PI / 180, about_point=ORIGIN),
+            Transform(w_8[1][2], w_8_1_2),
+            Transform(w_8[5][2], w_8_5_2),
+            run_time=2
+        )
+        self.wait()
+        w_4 = VGroup(
+            TexMobject("\\omega", "^0", "_4").next_to(w_8[0][1], RIGHT),
+            TexMobject("\\omega", "^1", "_4").next_to(w_8[2][1], UP),
+            TexMobject("\\omega", "^2", "_4").next_to(w_8[4][1], RIGHT),
+            TexMobject("\\omega", "^3", "_4").next_to(w_8[6][1], DOWN)
+        )
+        for i in w_4:
+            i[0].set_color(PINK)
+            i[1].set_color(BLUE)
+            i[2].set_color(PINK)
+        for i in w_4:
+            self.play(Write(i), run_time=0.9)
+            self.wait(0.1)
+        self.wait()
+        self.play(ShowCreationThenDestructionAround(VGroup(w_4[1], w_8[1][2], w_8[5][2])))
+        self.wait(5)
         
 
 class Polynomial_part1(Scene):
@@ -2965,3 +3203,4 @@ class EndScene(TripleScene):
 # 20.01.28 Finish FFT_improve part3 4 5 code and IFFT part1 
 # 20.01.29 Finish all main Scenes !!!!!!
 # 20.01.30 Finish Sound Recording
+# 20.01.31 Finish three extra scenes and change sounds
