@@ -178,7 +178,7 @@ class VideoCover(FFTScene):
     def add_subscripts(self):
         square = Square().rotate(PI / 4).scale(1.5).set_fill(BLUE, 1).set_color(BLUE)
         square.move_to(LEFT * 7.3 + UP * 4.6)
-        text = Text("???", font='Source Han Serif CN', stroke_width=1.5).scale(0.7).rotate(PI / 4).next_to(square.get_edge_center(DOWN), buff=0)
+        text = Text("互动", font='Source Han Serif CN', stroke_width=1.5).scale(0.7).rotate(PI / 4).next_to(square.get_edge_center(DOWN), buff=0)
         text.shift(UP * 1.3 + RIGHT * 0.24)
 
         self.add(square, text)
@@ -537,6 +537,45 @@ class VideoFrom3B1B(Scene):
         self.wait(3)
 
 
+class VideoFromMATH(Scene):
+    def construct(self):
+        icon1 = SVGMobject("video_icon").set_color(PINK).scale(0.5)
+        av1   = TextMobject("av81286856")
+        screen1 = ScreenRectangle(height=3)
+        title1 = Text("复数能有多优美Ⅰ", font="Source Han Sans CN").scale(0.5)
+        av1.next_to(icon1, RIGHT)
+        screen1.next_to(VGroup(icon1, av1), DOWN)
+        title1.next_to(screen1, DOWN)
+        av81286856 = VGroup(icon1, av1, screen1, title1)
+        av81286856.move_to([-3, 1, 0])
+
+        icon2 = SVGMobject("video_icon").set_color(PINK).scale(0.5)
+        av2   = TextMobject("av86056773")
+        screen2 = ScreenRectangle(height=3)
+        title2 = Text("复数能有多优美Ⅱ", font="Source Han Sans CN").scale(0.5)
+        av2.next_to(icon2, RIGHT)
+        screen2.next_to(VGroup(icon2, av2), DOWN)
+        title2.next_to(screen2, DOWN)
+        av86056773 = VGroup(icon2, av2, screen2, title2)
+        av86056773.move_to([3, 1, 0])
+        
+        self.play(
+            ShowCreation(av81286856[2]),
+            ShowCreation(av86056773[2])
+        )
+        self.play(
+            Write(av81286856[3]),
+            Write(av86056773[3])
+        )
+        self.play(
+            FadeIn(av81286856[0]),
+            FadeIn(av86056773[0]),
+            FadeIn(av81286856[1]),
+            FadeIn(av86056773[1]),
+        )
+        self.wait(3)
+
+
 class UnitRoot_part1(Scene): # Thanks @cigar666
     def construct(self):
         ## Create ComplexPlane ##
@@ -803,6 +842,40 @@ class UnitRoot_part2(Scene):
         self.wait()
         self.play(FadeInFrom(proof3[45:], RIGHT))
         self.wait(5)
+        self.play(FadeOut(VGroup(proof1, proof2, proof3, lemma11)), run_time=2)
+        self.wait(3)
+
+
+class TimeClock(Scene):
+    def construct(self):
+        num = TextMobject("5").scale(3).set_color(GRAY)
+        self.add(num)
+        self.wait(0.5)
+        self.play(
+            Transform(num, TextMobject("4").scale(3).set_color(GRAY)),
+            run_time=0.5
+        )
+        self.wait(0.5)
+        self.play(
+            Transform(num, TextMobject("3").scale(3).set_color(GRAY)),
+            run_time=0.5
+        )
+        self.wait(0.5)
+        self.play(
+            Transform(num, TextMobject("2").scale(3).set_color(GRAY)),
+            run_time=0.5
+        )
+        self.wait(0.5)
+        self.play(
+            Transform(num, TextMobject("1").scale(3).set_color(GRAY)),
+            run_time=0.5
+        )
+        self.wait(0.5)
+        self.play(
+            Transform(num, TextMobject("0").scale(3).set_color(GRAY)),
+            run_time=0.5
+        )
+        self.wait(0.5)
 
 
 class UnitRoot_part3(Scene):
@@ -3128,7 +3201,9 @@ class EndScene(TripleScene):
             Text("[6] Wikipedia contributors. Complex number[G/OL]. Wikipedia,2020-01-22. https://en.wikipedia.org/wiki/Complex_number", font="Source Han Serif CN").scale(0.2),
             Text("[7] 3Blue1Brown. 欧拉公式与初等群论[OL]. https://www.bilibili.com/video/av11339177, 2017-06-15", font="Source Han Serif CN").scale(0.2),
             Text("[8] 3Blue1Brown. 微分方程概论-第五章：在3.14分钟内理解e^iπ[OL]. https://www.bilibili.com/video/av63666593, 2019-08-14", font="Source Han Serif CN").scale(0.2),
-        ).arrange_submobjects(DOWN, aligned_edge=LEFT, buff=0.15).next_to(title, DOWN, buff=0.8, aligned_edge=LEFT)
+            Text("[7] MATHEART_EVER. 复数能有多优美 I[OL]. https://www.bilibili.com/video/av81286856, 2019-12-30", font="Source Han Serif CN").scale(0.2),
+            Text("[8] MATHEART_EVER. 复数能有多优美 II -- 从单位根看几何性质[OL]. https://www.bilibili.com/video/avav86056773, 2020-02-01", font="Source Han Serif CN").scale(0.2),
+        ).arrange_submobjects(DOWN, aligned_edge=LEFT, buff=0.15).next_to(title, DOWN, buff=0.4, aligned_edge=LEFT)
         
         self.wait()
         self.play(ShowCreation(screen_rect))
@@ -3204,3 +3279,4 @@ class EndScene(TripleScene):
 # 20.01.29 Finish all main Scenes !!!!!!
 # 20.01.30 Finish Sound Recording
 # 20.01.31 Finish three extra scenes and change sounds
+# 20.02.01 add some extra scenes
