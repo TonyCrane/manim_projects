@@ -1,7 +1,8 @@
 - [x] 调试`Code`,`LinedCode`类
-- [ ] 调试`BiliVideo`类
-- [ ] 试运行单位根相关场景
-- [ ] 快速傅里叶变换
+- [x] 试运行单位根相关场景
+- [x] 快速傅里叶变换
+- [ ] 尝试三维
+- [ ] 调试`Graph`类
 
 - [ ] 制作`OmegaCreature_speaking.svg`
 - [ ] 制作`OmegaCreature_thinking.svg`
