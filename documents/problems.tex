@@ -11,7 +11,7 @@
 	basicstyle=\fontspec{Consolas}
 }
 
-\title{manim常见问题 v1.0}
+\title{manim常见问题 v1.1}
 \author{鹤翔万里}
 
 \begin{document}
@@ -43,6 +43,13 @@
 下载pycairo的whl包\texttt{pycairo-1.18.2-cp37-cp37m-win\_amd64.whl}（群文件中有），并手动安装\texttt{pip install pycairo.....whl}
 
 \section{运行时问题}
+
+\subsection{某一版manim的bug}
+\subsubsection*{Q1: 运行OpeningManimExample报错\texttt{TypeError: descriptor '\_\_init\_\_' of 'super' object needs an argument}}
+这是Grant对manimlib进行升级时不小心搞出的bug，但是最新版已经改过来了
+
+如果\texttt{manimlib/mobject/coordinate\_systems.py}第287行为\texttt{super.\_\_init\_\_(**kwargs)}，请改为
+\texttt{super().\_\_init\_\_(**kwargs)}或\texttt{Axes.\_\_init\_\_(self, **kwargs)}
 
 \subsection{\texttt{import}问题}
 \subsubsection*{Q1: 没有模块\texttt{big\_ol\_pile\_of\_manim\_imports}}
@@ -99,7 +106,7 @@ $$
 
 使用\texttt{TextMobject}与\texttt{TexMobject}书写公式时
 $$
-\texttt{TextMobject("}\text{文字}\texttt{\$}\text{公式}\texttt{\$")} \iff \texttt{TexMobject("}\mathtt{\backslash}
+\texttt{TextMobject("}\text{文字}\texttt{\$}\text{公式}\texttt{\$")} \iff \texttt{TexMobject("}\mathtt{\backslash\backslash}
 \texttt{text\{}\text{文字}\texttt{\}}\text{公式}\texttt{")}
 $$
 
