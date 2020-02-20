@@ -15,8 +15,7 @@ class Tree(VGroup):
         digest_config(self, kwargs)
         self.edges = []
         self.G = [[] for _ in range(n + 1)]
-        self.all_mobjects = self.graph_to_mobject()
-        VGroup.__init__(*self.all_mobjects)
+        self.node_id = set()
     
     def add_edge(self, f, t, v=0):
         self.edges.append([f, t, v])
@@ -24,9 +23,18 @@ class Tree(VGroup):
         m = len(self.edges)
         self.G[t].append(m - 1)
         self.G[f].append(m - 2)
+        self.node_id.add(f)
+        self.node_id.add(t)
+        self.all_mobjects = self.graph_to_mobject()
+        VGroup.__init__(self, *self.all_mobjects)
+        return self
     
     def graph_to_mobject(self):
-        pass
+        mobject_nodes = VGroup()
+        mobject_edges = VGroup()
+        for i in range(len(self.node_id)):
+            mobject_nodes.add(Circle(**self.node_config))
+        return mobject_nodes
 
 
 
@@ -39,3 +47,4 @@ class Test_tree(Scene):
         test.add_edge(1, 3)
         print(test.edges)
         print(test.G)
+        self.add(test)
