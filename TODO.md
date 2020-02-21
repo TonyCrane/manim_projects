@@ -1,11 +1,13 @@
+- [ ] __学习、高考__
+<br/>
+<br/>
+<br/>
+
 - [x] 调试`Code`,`LinedCode`类
 - [x] 试运行单位根相关场景
 - [x] 快速傅里叶变换
-- [ ] 尝试三维
+- [x] 尝试三维
 - [ ] 调试`Graph`类
+<br/>
 
-- [ ] 制作`OmegaCreature_speaking.svg`
-- [ ] 制作`OmegaCreature_thinking.svg`
-- [ ] 制作`OmegaCreature_raise_right_hand.svg`
-- [ ] 制作`OmegaCreature_raise_left_hand.svg`
 - [ ] 数据结构系列
