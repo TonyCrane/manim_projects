@@ -1,3 +1,4 @@
+# from @cigar666
 from manimlib.imports import *
 
 class MyText_old(TexMobject):
