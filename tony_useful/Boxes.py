@@ -205,7 +205,8 @@ class ChemicalBoxes(VGroup):
             self.label_to_id[label] = i
         labels = VGroup()
         for i in range(0, 119):
-            label = TextMobject(self.id_to_label[i], color=BLACK, background_stroke_width=0).scale(0.5).move_to(self[0][i][1])
+            label = TextMobject(self.id_to_label[i], color=BLACK, background_stroke_width=0)
+            label.scale(0.5).move_to(self[0][i][1].get_center()).set_shade_in_3d(z_index_as_group=True).shift(OUT * 1e-3)
             labels.add(label)
         labels[0].set_fill(opacity=0)
         for i in [43, 61, *list(range(84, 119))]:
