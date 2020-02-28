@@ -222,18 +222,20 @@ class PeriodicTable_by_electronegativity(ThreeDScene):
 
         old_boxes = ChemicalBoxes().set_block_color()
         old_boxes.add_label()
+        old_boxes_3 = old_boxes.copy()
         boxes = ChemicalBoxes().set_block_color()
         boxes.set_height_by_array(height)
         boxes.add_label()
-        boxes.scale(0.9)
+        boxes.scale(0.9).shift(DL * 0.5)
         self.add(old_boxes)
         self.wait()
-        self.play(old_boxes.scale, 0.9)
+        self.play(
+            old_boxes.scale, 0.9,
+            old_boxes.shift, DL * 0.5
+        )
         old_boxes_2 = old_boxes.copy()
         self.wait(2)
-        self.move_camera(frame_center=DR * 0.8)
-        self.wait()
-        self.add(boxes)
+        # self.add(boxes)
 
         text = Text("高度由 电负性(鲍林标度) 决定", font="Source Han Serif CN", t2c={"高度由": BLUE, "电负性(鲍林标度)": ORANGE, "决定": BLUE}).scale(0.5)
         data = Text("数据来自于 Wikipedia", font="Source Han Serif CN", t2c={"数据来自于": BLACK, "Wikipedia": RED}).scale(0.25)
@@ -251,15 +253,191 @@ class PeriodicTable_by_electronegativity(ThreeDScene):
                 self.set_camera_orientation(theta=240 * DEGREES + i * DEGREES)
                 self.wait(1 / fps)
             self.wait(3)
-            self.play(
-                FadeOut(text), 
-                FadeOut(data), 
-                ReplacementTransform(boxes, old_boxes_2)
-            )
-            self.wait()
-        
-        self.wait()
-        self.move_camera(frame_center=ORIGIN)
-        self.play(old_boxes_2.scale, 1.1111111)
+
+        self.play(
+            FadeOut(text), 
+            FadeOut(data), 
+            ReplacementTransform(boxes, old_boxes_2)
+        )
         self.wait()
         
+        self.wait()
+        self.play(Transform(old_boxes_2, old_boxes_3))
+        self.wait()
+
+
+energy1 = [
+    0, 1312, 2372.3, 
+    520.2, 899.5, 800.6, 1086.5, 1402.3, 1313.9, 1681, 2080.7, 
+    495.8, 737.7, 577.5, 786.5, 1011.8, 999.6, 1251.2, 1520.6, 
+    418.8, 589.8, 633.1, 658.8, 650.9, 652.9, 717.3, 762.5, 760.4, 737.1, 745.5, 906.4, 578.8, 762, 947, 941, 1139.9, 1350.8, 
+    403, 549.5, 600, 640.1, 652.1, 684.3, 702, 710.2, 719.7, 804.4, 731, 867.8, 558.3, 708.6, 834, 869.3, 1008.4, 1170.4, 
+    375.7, 502.9, 
+    538.1, 534.4, 527, 533.1, 540, 544.5, 547.1, 593.4, 565.8, 573, 581, 589.3, 596.7, 603.4, 523.5, 
+    658.5, 761, 770, 760, 840, 880, 870, 890.1, 1007.1, 589.4, 715.6, 703, 812.1, 899.003, 1037, 
+    380, 509.3, 
+    499, 587, 568, 597.6, 604.5, 584.7, 578, 581, 601, 608, 619, 627, 635, 642, 470, 
+    580, 665, 757, 740, 730, 800, 960, 1020, 1155, 707.2, 832.2, 538.3, 663.9, 736.9, 860.1
+]
+
+energy2 = [
+    0, 0, 5250.5, 
+    7298.1, 1757.1, 2427.1, 2352.6, 2856, 3388.3, 3374.2, 3952.3, 
+    4562, 1450.7, 1816.7, 1577.1, 1907, 2252, 2298, 2665.8, 
+    3052, 1145.4, 1235, 1309.8, 1414, 1590.6, 1509, 1561.9, 1648, 1753, 1957.9, 1733.3, 1979.3, 1537.5, 1798, 2045, 2103, 2350.4, 
+    2633, 1064.2, 1180, 1270, 1380, 1560, 1470, 1620, 1740, 1870, 2070, 1631.4, 1820.7, 1411.8, 1594.9, 1790, 1845.9, 2046.4, 
+    2234.3, 965.2, 
+    1067, 1050, 1020, 1040, 1050, 1070, 1085, 1170, 1110, 1130, 1140, 1150, 1160, 1174.8, 1340, 
+    1440, 1500, 1700, 1260, 1600, 1600, 1791, 1980, 1810, 1971, 1450.5, 1610, 0, 0, 0, 
+    0, 979, 
+    1170, 1110, 1128, 1420, 1128, 1128, 1158, 1196, 1186, 1206, 1216, 1225, 1235, 1254, 1428, 
+    1390, 1547, 1733, 1690, 1760, 1820, 1890, 2070, 2170, 2309, 1600, 1760, 1330, 1435.4, 1560
+]
+
+energy3 = [
+    0, 0, 0, 
+    11815, 14848.70, 3659.7, 4620.5, 4578.1, 5300.5, 6050.4, 6122, 
+    6910.3, 7732.7, 2744.8, 3231.6, 2914.1, 3357, 3822, 3931, 
+    4420, 4912.4, 2388.6, 2652.5, 2830, 2987, 3248, 2957, 3232, 3395, 3555, 3833, 2963, 3302.1, 2735, 2973.7, 3470, 3565, 
+    3860, 4138, 1980, 2218, 2416, 2618, 2850, 2747, 2997, 3177, 3361, 3616, 2704, 2943, 2440, 2698, 3180, 3099.4, 
+    3400, 3600, 
+    1850.3, 1949, 2086, 2130, 2150, 2260, 2404, 1990, 2114, 2200, 2204, 2194, 2285, 2417, 2022.3, 
+    2250, 0, 0, 2510, 0, 0, 0, 0, 3300, 2878, 3081.5, 2466, 0, 0, 0, 
+    0, 0, 
+    1900, 1978, 1814, 1900, 1997, 2084, 2132, 2026, 2152, 2267, 2334, 2363, 2470, 2643, 2228, 
+    2300, 2378, 2484, 2570, 2830, 2900, 3030, 3080, 3160, 3226, 3370, 2650, 2850, 2161.9, 0
+]
+
+class PeriodicTable_by_ionization_energy(ThreeDScene):
+    CONFIG = {
+        "camera_config": {
+            "background_color": WHITE,
+            "should_apply_shading": False,
+        },
+        "move": True,
+    }
+    def construct(self):
+        self.set_camera_orientation(phi=45 * DEGREES, theta=240 * DEGREES, distance=50)
+
+        height1 = value_fit(energy1, 375.7, 2372.3, v_max=2)
+        height2 = value_fit(energy2, 965.2, 7298.1, v_max=2.5)
+        height3 = value_fit(energy3, 1814, 14848.7, v_max=4)
+
+        old_boxes = ChemicalBoxes().set_block_color()
+        old_boxes.add_label()
+        old_boxes_3 = old_boxes.copy()
+
+        boxes1 = ChemicalBoxes().set_block_color()
+        boxes1.set_height_by_array(height1)
+        boxes1.add_label()
+        boxes1.scale(0.85).shift(DL * 0.8)
+        boxes2 = ChemicalBoxes().set_block_color()
+        boxes2.set_height_by_array(height2)
+        boxes2.add_label()
+        boxes2.scale(0.85).shift(DL * 0.8)
+        boxes3 = ChemicalBoxes().set_block_color()
+        boxes3.set_height_by_array(height3)
+        boxes3.add_label()
+        boxes3.scale(0.85).shift(DL * 0.8)
+        self.add(old_boxes)
+        self.wait()
+        self.play(
+            old_boxes.scale, 0.85,
+            old_boxes.shift, DL * 0.8
+        )
+        old_boxes_2 = old_boxes.copy()
+        self.wait(2)
+        # self.add(boxes2)
+
+        text1 = Text("高度由 第一电离能 决定", font="Source Han Serif CN", t2c={"高度由": BLUE, "第一电离能": ORANGE, "决定": BLUE}).scale(0.5)
+        data = Text("数据来自于 Wikipedia", font="Source Han Serif CN", t2c={"数据来自于": BLACK, "Wikipedia": RED}).scale(0.25)
+        text2 = Text("高度由 第二电离能 决定", font="Source Han Serif CN", t2c={"高度由": BLUE, "第二电离能": ORANGE, "决定": BLUE}).scale(0.5)
+        text3 = Text("高度由 第三电离能 决定", font="Source Han Serif CN", t2c={"高度由": BLUE, "第三电离能": ORANGE, "决定": BLUE}).scale(0.5)
+        self.camera.add_fixed_in_frame_mobjects(text1, data, text2, text3)
+        text1.to_corner(UL, buff=0.25)
+        text2.to_corner(UL, buff=0.25)
+        text3.to_corner(UL, buff=0.25)
+        data.to_corner(DR, buff=0.25)
+
+        self.play(FadeIn(text1), FadeIn(data))
+        self.play(ReplacementTransform(old_boxes, boxes1), run_time=3)
+
+        if self.move:
+            self.wait(3)
+            fps = 60
+            for i in range(361):
+                self.set_camera_orientation(theta=240 * DEGREES + i * DEGREES)
+                self.wait(1 / fps)
+            self.wait(3)
+
+        self.play(
+            ReplacementTransform(boxes1, boxes2),
+            ReplacementTransform(text1, text2),
+            run_time=2
+        )
+        self.wait(3)
+        self.play(
+            ReplacementTransform(boxes2, boxes3),
+            ReplacementTransform(text2, text3),
+            run_time=2
+        )
+        self.wait(3)
+
+        self.play(
+            FadeOut(text3), 
+            FadeOut(data), 
+            ReplacementTransform(boxes3, old_boxes_2)
+        )
+        self.wait()
+        
+        self.wait()
+        self.play(Transform(old_boxes_2, old_boxes_3))
+        self.wait()
+
+
+class EndScene(ThreeDScene):
+    CONFIG = {
+        "camera_config": {
+            "background_color": WHITE,
+            "should_apply_shading": False,
+        }
+    }
+    def construct(self):
+        self.set_camera_orientation(phi=45 * DEGREES, theta=240 * DEGREES, distance=50)
+        boxes = ChemicalBoxes().add_label().set_block_color()
+        self.add(boxes)
+        self.wait(3)
+
+        bg = Rectangle(width=16, height=10).set_fill(color=BLACK, opacity=0.8)
+        self.camera.add_fixed_in_frame_mobjects(bg)
+        self.play(FadeIn(bg))
+
+        thanks = Group(
+            Text("特别鸣谢", font="Source Han Sans CN").scale(0.5).set_color(RED),
+            ImageMobject("cigar.png").scale(0.35),
+            Text("@cigar666", font="Source Han Serif CN").scale(0.35).set_color(BLUE)
+        )
+        self.camera.add_fixed_in_frame_mobjects(thanks)
+        thanks[0].to_corner(UR)
+        thanks[2].next_to(thanks[0], DOWN, aligned_edge=RIGHT)
+        thanks[1].next_to(thanks[2], LEFT)
+
+        refer = VGroup(
+            Text("参考", font="Source Han Sans CN").scale(0.5).set_color(RED),
+            Text("[1] IUPAC原子量表(2019) https://iupac.org/what-we-do/periodic-table-of-elements/", font="Source Han Serif CN").scale(0.2),
+            Text("[2] CIAAW放射性元素质量数 https://ciaaw.org/radioactive-elements.htm", font="Source Han Serif CN").scale(0.2),
+            Text("[3] Wikipedia原子共价半径 https://en.wikipedia.org/wiki/Covalent_radius", font="Source Han Serif CN").scale(0.2),
+            Text("[4] Wikipedia原子半径(数据页) https://en.wikipedia.org/wiki/Atomic_radii_of_the_elements_(data_page)", font="Source Han Serif CN").scale(0.2),
+            Text("[5] Wikipedia电负性 https://en.wikipedia.org/wiki/Electronegativity", font="Source Han Serif CN").scale(0.2),
+            Text("[6] Wikipedia电负性(数据页) https://en.wikipedia.org/wiki/Electronegativities_of_the_elements_(data_page)", font="Source Han Serif CN").scale(0.2),
+            Text("[7] Wikipedia电离能 https://en.wikipedia.org/wiki/Ionization_energy", font="Source Han Serif CN").scale(0.2),
+            Text("[8] Wikipedia电离能表 https://en.wikipedia.org/wiki/Molar_ionization_energies_of_the_elements", font="Source Han Serif CN").scale(0.2),
+        )
+        self.camera.add_fixed_in_frame_mobjects(refer)
+        refer.arrange(DOWN, aligned_edge=LEFT)
+        refer.to_corner(DL)
+
+        self.wait()
+        self.play(FadeInFromDown(thanks))
+        self.play(FadeIn(refer))
+        self.wait(5)
