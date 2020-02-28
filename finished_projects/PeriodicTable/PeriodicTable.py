@@ -441,3 +441,42 @@ class EndScene(ThreeDScene):
         self.play(FadeInFromDown(thanks))
         self.play(FadeIn(refer))
         self.wait(5)
+
+
+class VideoCover(Scene):
+    def construct(self):
+        background = Rectangle(width=18, height=3.5, fill_opacity=0.7, fill_color=BLACK, stroke_width=0)
+        title = VGroup(
+            Text("可视化", font="Source Han Serif CN", color=BLUE).scale(1.2),
+            Text("元素周期表", font="Source Han Serif CN", color=RED).scale(1.4)
+        ).arrange(DOWN, aligned_edge=RIGHT, buff=0.4)
+        title_bg = VGroup(
+            Text("可视化", font="Source Han Serif CN", color=BLUE_B).scale(1.2).set_stroke(width=12, opacity=0.4),
+            Text("元素周期表", font="Source Han Serif CN", color=RED_B).scale(1.4).set_stroke(width=12, opacity=0.4)
+        ).arrange(DOWN, aligned_edge=RIGHT, buff=0.4)
+        title.to_edge(RIGHT, buff=1.5)
+        title_bg.to_edge(RIGHT, buff=1.5)
+        author = TextMobject("@鹤翔万里", background_stroke_width=0).scale(1.2).set_color([BLUE, YELLOW, ORANGE, RED])
+        author.shift(LEFT * 3.2)
+        self.add(background, title_bg, title, author)
+
+
+class VideoCoverBackground(ThreeDScene):
+    CONFIG = {
+        "camera_config": {
+            "background_color": WHITE,
+            "should_apply_shading": False,
+        }
+    }
+    def construct(self):
+        self.set_camera_orientation(phi=45 * DEGREES, theta=240 * DEGREES, distance=50)
+
+        height1 = value_fit(energy1, 375.7, 2372.3, v_max=2)
+
+        boxes1 = ChemicalBoxes().set_block_color()
+        boxes1.set_height_by_array(height1)
+        boxes1.add_label()
+        boxes1.scale(0.85).shift(DL * 0.8)
+        self.wait(2)
+        self.add(boxes1)
+
