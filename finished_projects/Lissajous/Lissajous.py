@@ -376,7 +376,6 @@ class ReadyTo3DLissajous(ThreeDScene):
             "background_color": WHITE
         },
         "dot_class": Dot3D,
-        "plane_use_ploygon": False,
         "line_class": Line,
     }
     def construct(self):
@@ -384,7 +383,7 @@ class ReadyTo3DLissajous(ThreeDScene):
         # self.add(axes)
         self.set_camera_orientation(phi=70*DEGREES, theta=45*DEGREES)
         # self.set_camera_orientation(distance=1000000)
-        self.begin_ambient_camera_rotation(rate=0.5)
+        self.begin_ambient_camera_rotation(rate=0.25)
 
         circle_x = Circle(color=RED).rotate(PI / 2, RIGHT).shift(DOWN * 2.5).set_shade_in_3d()
         circle_y = Circle(color=RED).rotate(PI / 2, DOWN).shift(LEFT * 2.5).set_shade_in_3d()
@@ -404,14 +403,10 @@ class ReadyTo3DLissajous(ThreeDScene):
         def updater_of_point_z(m):
             m.move_to(circle_z.point_at_angle(3 * theta.get_value()))
 
-        def updater_of_plane_x(m):
-            lambda m: m.move_to(point_x.get_center()[2] * OUT)
-        def updater_of_plane_y(m):
-            lambda m: m.move_to(point_y.get_center()[1] * UP)
-        def updater_of_plane_z(m):
-            lambda m: m.move_to(point_z.get_center()[0] * RIGHT)
 
         point_x = self.dot_class().add_updater(updater_of_point_x).set_color(GREEN)
+        def updater_of_plane_x(m):
+            m.move_to(point_x.get_center()[2] * OUT)
         plane_x = ParametricSurface(
             lambda u, v: np.array([u, v, 0]),
             u_min=-2.5, u_max=2.5, v_min=-2.5, v_max=2.5,
@@ -427,9 +422,12 @@ class ReadyTo3DLissajous(ThreeDScene):
         self.play(theta.increment_value, PI*2, run_time=5, rate_func=linear)
         self.wait()
         point_x.remove_updater(updater_of_point_x)
-        plane_x.add_updater(updater_of_plane_x)
+        plane_x.remove_updater(updater_of_plane_x)
+        theta.set_value(0)
 
         point_y = self.dot_class().add_updater(updater_of_point_y).set_color(ORANGE)
+        def updater_of_plane_y(m):
+            m.move_to(point_y.get_center()[1] * UP)
         plane_y = ParametricSurface(
             lambda u, v: np.array([u, 0, v]),
             u_min=-2.5, u_max=2.5, v_min=-2.5, v_max=2.5,
@@ -438,17 +436,27 @@ class ReadyTo3DLissajous(ThreeDScene):
             stroke_width=0
         ).add_updater(updater_of_plane_y)
 
+        line_x = self.line_class(
+            np.array([-2.5, 0, 0]),
+            np.array([ 2.5, 0, 0]),
+            fill_color=GOLD_E,
+            stroke_width=2
+        ).add_updater(lambda m: m.move_to(point_y.get_center()[1] * UP + point_x.get_center()[2] * OUT))
+
         self.wait()
         self.play(ShowCreation(point_y))
         self.play(ShowCreation(plane_y))
+        self.play(ShowCreation(line_x))
         self.wait()
         self.play(theta.increment_value, PI*2, run_time=5, rate_func=linear)
         self.wait()
         point_y.remove_updater(updater_of_point_y)
-        plane_y.add_updater(updater_of_plane_y)
+        plane_y.remove_updater(updater_of_plane_y)
         theta.set_value(0)
 
-        point_z = self.dot_class().set_color(PURPLE)
+        point_z = self.dot_class().add_updater(updater_of_point_z).set_color(PURPLE)
+        def updater_of_plane_z(m):
+            m.move_to(point_z.get_center()[0] * RIGHT)
         plane_z = ParametricSurface(
             lambda u, v: np.array([0, u, v]),
             u_min=-2.5, u_max=2.5, v_min=-2.5, v_max=2.5,
@@ -457,20 +465,6 @@ class ReadyTo3DLissajous(ThreeDScene):
             stroke_width=0
         ).add_updater(updater_of_plane_z)
 
-        self.wait()
-        self.play(ShowCreation(point_z))
-        self.play(ShowCreation(plane_z))
-        self.wait()
-        self.play(theta.increment_value, PI*2, run_time=5, rate_func=linear)
-        self.wait()
-        theta.set_value(0)
-
-        line_x = self.line_class(
-            np.array([-2.5, 0, 0]),
-            np.array([ 2.5, 0, 0]),
-            fill_color=GOLD_E,
-            stroke_width=2
-        ).add_updater(lambda m: m.move_to(point_y.get_center()[1] * UP + point_x.get_center()[2] * OUT))
         line_y = self.line_class(
             np.array([0, -2.5, 0]),
             np.array([0,  2.5, 0]),
@@ -484,10 +478,115 @@ class ReadyTo3DLissajous(ThreeDScene):
             stroke_width=2
         ).add_updater(lambda m: m.move_to(point_z.get_center()[0] * RIGHT + point_y.get_center()[1] * UP))
 
+        self.wait()
+        self.play(ShowCreation(point_z))
+        self.play(ShowCreation(plane_z))
+        self.play(ShowCreation(line_y), ShowCreation(line_z))
+        self.wait()
+        self.play(theta.increment_value, PI*2, run_time=5, rate_func=linear)
+        self.wait()
+        theta.set_value(0)
+
         P = self.dot_class().set_shade_in_3d(False)
         P.add_updater(lambda m: m.move_to(np.array([point_z.get_center()[0], point_y.get_center()[1], point_x.get_center()[2]])))
 
         self.wait()
-        self.add(line_x, line_y, line_z, P)
+        self.play(ShowCreation(P))
+        self.stop_ambient_camera_rotation()
         self.wait()
-        self.move_camera(phi=70*DEGREES, theta=45*DEGREES)
+        self.move_camera(phi=70*DEGREES, theta=405*DEGREES)
+
+
+class DualAxisIllusion(ThreeDScene):
+    CONFIG = {
+        "camera_config": {
+            "background_color": WHITE
+        }
+    }
+    def construct(self):
+        self.set_camera_orientation(phi=90*DEGREES, theta=45*DEGREES, distance=10000, gamma=90*DEGREES)
+        line = ParametricFunction(
+            lambda t: np.array([np.cos(2 * t), np.sin(2 * t), 0.6 * np.sin(3 * t)]),
+            t_min=0, t_max=4 * TAU, color=BLUE, stroke_width=20
+        ).scale(2)
+        self.add(line)
+        self.wait()
+        self.begin_ambient_camera_rotation(rate=0.8)
+        self.wait(10)
+
+
+class EndScene(ThreeDScene):
+    CONFIG = {
+        "camera_config": {
+            "background_color": WHITE
+        }
+    }
+    def construct(self):
+        self.set_camera_orientation(phi=90*DEGREES, theta=45*DEGREES, distance=10000, gamma=90*DEGREES)
+        line = ParametricFunction(
+            lambda t: np.array([np.cos(2 * t), np.sin(2 * t), 0.6 * np.sin(3 * t)]),
+            t_min=0, t_max=4 * TAU, color=BLUE, stroke_width=20
+        ).scale(2)
+        self.play(FadeIn(line))
+        self.wait()
+        self.begin_ambient_camera_rotation(rate=0.5)
+        self.wait(6)
+
+        bg = Rectangle(width=16, height=10).set_fill(color=BLACK, opacity=0.8)
+        self.camera.add_fixed_in_frame_mobjects(bg)
+        self.wait()
+        self.play(FadeIn(bg))
+
+        thanks = Group(
+            Text("特别鸣谢", font="Source Han Sans CN").scale(0.55).set_color(RED),
+            ImageMobject("GZTime.png").scale(0.3),
+            Text("@GZTime", font="Source Han Serif CN").scale(0.35).set_color(BLUE),
+            ImageMobject("cigar.png").scale(0.3),
+            Text("@cigar666", font="Source Han Serif CN").scale(0.35).set_color(BLUE)
+        )
+        self.camera.add_fixed_in_frame_mobjects(thanks)
+        thanks[0].to_corner(UR)
+        thanks[2].next_to(thanks[0], DOWN, aligned_edge=RIGHT)
+        thanks[1].next_to(thanks[2], LEFT)
+        thanks[3].next_to(thanks[1], DOWN)
+        thanks[4].next_to(thanks[3], RIGHT)
+        thanks[1:].next_to(thanks[0], DOWN, aligned_edge=RIGHT)
+        thanks[1].scale(1.5, about_point=thanks[1].get_center())
+
+        refer = VGroup(
+            Text("参考", font="Source Han Sans CN").scale(0.55).set_color(RED),
+            Text("[1] Wikipedia利萨茹曲线 https://en.wikipedia.org/wiki/Lissajous_curve", font="Source Han Serif CN").scale(0.3),
+            Text("[2] processing利萨如图形 https://www.bilibili.com/video/av33110155", font="Source Han Serif CN").scale(0.3),
+            Text("[3] 双轴错觉 https://killedbyapixel.github.io/Dual-Axis-Illusion/", font="Source Han Serif CN").scale(0.3),
+            Text("[4] 双周错觉代码仓库 https://github.com/KilledByAPixel/Dual-Axis-Illusion", font="Source Han Serif CN").scale(0.3),
+        )
+        self.camera.add_fixed_in_frame_mobjects(refer)
+        refer.arrange(DOWN, aligned_edge=LEFT)
+        refer.to_corner(DL)
+
+        self.wait()
+        self.play(FadeInFromDown(thanks))
+        self.play(FadeIn(refer))
+        self.wait(10)
+
+
+class VideoCover(Scene):
+    def construct(self):
+        background = Rectangle(width=18, height=3.5, fill_opacity=0.7, fill_color=BLACK, stroke_width=0).shift(DOWN*0.5)
+        title = VGroup(
+            Text("可视/三维", font="Source Han Serif CN", color=BLUE).scale(1),
+            Text("Lissajous图形", font="Source Han Serif CN", color=RED).scale(1.2)
+        ).arrange(DOWN, aligned_edge=RIGHT, buff=0.4)
+        title_bg = VGroup(
+            Text("可视/三维", font="Source Han Serif CN", color=BLUE_B).scale(1).set_stroke(width=12, opacity=0.4),
+            Text("Lissajous图形", font="Source Han Serif CN", color=RED_B).scale(1.2).set_stroke(width=12, opacity=0.4)
+        ).arrange(DOWN, aligned_edge=RIGHT, buff=0.4)
+        title.to_edge(RIGHT, buff=1.3).shift(DOWN*0.5)
+        title_bg.to_edge(RIGHT, buff=1.3).shift(DOWN*0.5)
+        author = VGroup(
+            TextMobject("@鹤翔万里", background_stroke_width=0).scale(1.2).set_color([YELLOW, RED]),
+            TextMobject("@\ GZTime", background_stroke_width=0).scale(1.2).set_color([WHITE, BLUE])
+        ).arrange(DOWN, aligned_edge=LEFT)
+        author.shift(LEFT*4 + DOWN*0.5)
+        self.add(background, title_bg, title, author)
+

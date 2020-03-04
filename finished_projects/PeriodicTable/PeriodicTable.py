@@ -445,7 +445,7 @@ class EndScene(ThreeDScene):
 
 class VideoCover(Scene):
     def construct(self):
-        background = Rectangle(width=18, height=3.5, fill_opacity=0.7, fill_color=BLACK, stroke_width=0)
+        background = Rectangle(width=18, height=3.5, fill_opacity=0.7, fill_color=BLACK, stroke_width=0).shift(DOWN*0.5)
         title = VGroup(
             Text("可视化", font="Source Han Serif CN", color=BLUE).scale(1.2),
             Text("元素周期表", font="Source Han Serif CN", color=RED).scale(1.4)
@@ -454,10 +454,13 @@ class VideoCover(Scene):
             Text("可视化", font="Source Han Serif CN", color=BLUE_B).scale(1.2).set_stroke(width=12, opacity=0.4),
             Text("元素周期表", font="Source Han Serif CN", color=RED_B).scale(1.4).set_stroke(width=12, opacity=0.4)
         ).arrange(DOWN, aligned_edge=RIGHT, buff=0.4)
-        title.to_edge(RIGHT, buff=1.5)
-        title_bg.to_edge(RIGHT, buff=1.5)
-        author = TextMobject("@鹤翔万里", background_stroke_width=0).scale(1.2).set_color([BLUE, YELLOW, ORANGE, RED])
-        author.shift(LEFT * 3.2)
+        title.to_edge(RIGHT, buff=1.5).shift(DOWN*0.5)
+        title_bg.to_edge(RIGHT, buff=1.5).shift(DOWN*0.5)
+        author = VGroup(
+            TextMobject("@鹤翔万里", background_stroke_width=0).scale(1.2).set_color([YELLOW, RED]),
+            TextMobject("@\ cigar666", background_stroke_width=0).scale(1.2).set_color([WHITE, BLUE])
+        ).arrange(DOWN, aligned_edge=LEFT)
+        author.shift(LEFT * 3.5 + DOWN * 0.5)
         self.add(background, title_bg, title, author)
 
 
