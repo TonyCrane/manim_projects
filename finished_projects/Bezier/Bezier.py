@@ -1,4 +1,5 @@
 from manimlib.imports import *
+from manim_projects.tony_useful.imports import *
 
 
 class LinearBezierCurve(Scene):
@@ -282,3 +283,69 @@ class WhiteBackground(Scene):
             "background_color": WHITE
         }
     }
+
+
+class VideoCover(Scene):
+    def construct(self):
+        background = Rectangle(width=18, height=3.5, fill_opacity=0.7, fill_color=BLACK, stroke_width=0).shift(DOWN*0.5)
+        title = VGroup(
+            Text("推导/原理", font="Source Han Serif CN", color=BLUE).scale(1),
+            Text("贝塞尔曲线", font="Source Han Serif CN", color=RED).scale(1.4)
+        ).arrange(DOWN, aligned_edge=RIGHT, buff=0.4)
+        title_bg = VGroup(
+            Text("推导/原理", font="Source Han Serif CN", color=BLUE_B).scale(1).set_stroke(width=12, opacity=0.4),
+            Text("贝塞尔曲线", font="Source Han Serif CN", color=RED_B).scale(1.4).set_stroke(width=12, opacity=0.4)
+        ).arrange(DOWN, aligned_edge=RIGHT, buff=0.4)
+        title.to_edge(RIGHT, buff=1.3).shift(DOWN*0.5)
+        title_bg.to_edge(RIGHT, buff=1.3).shift(DOWN*0.5)
+        author = VGroup(
+            TextMobject("@有一种悲伤叫颓废", background_stroke_width=0).scale(1.1).set_color([YELLOW, RED]),
+            TextMobject("@鹤翔万里", background_stroke_width=0).scale(1.1).set_color([WHITE, BLUE])
+        ).arrange(DOWN, aligned_edge=LEFT)
+        author.shift(LEFT*3.5 + DOWN*0.5)
+        self.add(background, title_bg, title, author)
+
+class Formula1(Scene):
+    def construct(self):
+        formula1 = TexMobject("""
+            P^k_i(t) = \\begin{cases}
+            P_i & k=0\\\\
+            (1-t)P^{k-1}_i(t)+tP^{k-1}_{i+1}(t) & k\\neq 0\\\\
+            \\end{cases}
+        """, color=BLACK, background_stroke_width=0)
+        VGroup(
+            formula1[0][0], formula1[0][8], formula1[0][18], formula1[0][28], 
+        ).set_color(ORANGE)
+        VGroup(
+            formula1[0][4], formula1[0][16], formula1[0][24], formula1[0][27], formula1[0][36], 
+        ).set_color(RED)
+        VGroup(
+            formula1[0][2], formula1[0][9], formula1[0][22], formula1[0][32:35], 
+        ).set_color(GOLD)
+        VGroup(
+            formula1[0][1], formula1[0][19:22], formula1[0][29:32], formula1[0][10], formula1[0][38],
+        ).set_color(BLUE)
+        self.add(formula1)
+
+class Formula2(Scene):
+    def construct(self):
+        formula2 = TexMobject("""
+            B(t) &= \\sum^n_{i=0}{n\\choose i}(1-t)^{n-i}t^iP_i\\\\
+                 &= \\sum^n_{i=0}P_ib_{i,n}(t)
+        """, color=BLACK, background_stroke_width=0)
+        VGroup(
+            formula2[0][0], formula2[0][24], formula2[0][32]
+        ).set_color(ORANGE)
+        VGroup(
+            formula2[0][2], formula2[0][17], formula2[0][22], formula2[0][39]
+        ).set_color(RED)
+        VGroup(
+            formula2[0][7], formula2[0][12], formula2[0][21], formula2[0][23],
+            formula2[0][25], formula2[0][29], formula2[0][33], formula2[0][35], 
+        ).set_color(BLUE)
+        VGroup(
+            formula2[0][5], formula2[0][11], formula2[0][19],
+            formula2[0][27], formula2[0][37], 
+        ).set_color(GOLD)
+        formula2[0][34].set_color(GREEN)
+        self.add(formula2.scale(1.5))
