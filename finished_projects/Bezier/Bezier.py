@@ -299,8 +299,8 @@ class VideoCover(Scene):
         title.to_edge(RIGHT, buff=1.3).shift(DOWN*0.5)
         title_bg.to_edge(RIGHT, buff=1.3).shift(DOWN*0.5)
         author = VGroup(
-            TextMobject("@有一种悲伤叫颓废", background_stroke_width=0).scale(1.1).set_color([YELLOW, RED]),
-            TextMobject("@鹤翔万里", background_stroke_width=0).scale(1.1).set_color([WHITE, BLUE])
+            TextMobject("@鹤翔万里", background_stroke_width=0).scale(1.1).set_color([YELLOW, RED]),
+            TextMobject("@有一种悲伤叫颓废", background_stroke_width=0).scale(0.95).set_color([WHITE, BLUE])
         ).arrange(DOWN, aligned_edge=LEFT)
         author.shift(LEFT*3.5 + DOWN*0.5)
         self.add(background, title_bg, title, author)
