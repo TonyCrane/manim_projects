@@ -30,7 +30,7 @@ class MyTransform(Animation):
         self.mobject.become(now)
 
 
-class Test78(Scene):
+class Logo(Scene):
     def construct(self):
         logo1 = VGroup(
             Polygon(np.array([0, 0, 0]), np.array([1, 0, 0]), np.array([0, 2, 0])),
