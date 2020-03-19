@@ -38,6 +38,9 @@ class Logo(Scene):
         # "font": "Cairo",
         # "font": "Nexa Bold",
         # "font": "Comfortaa"
+        "camera_config": {
+            "background_color": WHITE,
+        },
     }
     def construct(self):
         logo1 = VGroup(
@@ -45,9 +48,9 @@ class Logo(Scene):
             Polygon(np.array([1.5, 0, 0]), np.array([3, 3, 0]), np.array([0, 3, 0])),
             Polygon(np.array([2, 0, 0]), np.array([3, 0, 0]), np.array([3, 2, 0])),
         ).set_stroke(width=0).center()
-        logo1[0].set_fill(WHITE, 1)
-        logo1[1].set_fill(BLUE_B, 1)
-        logo1[2].set_fill(BLUE_C, 1)
+        logo1[0].set_fill(average_color("#CCCCCC", BLUE_C), 1)
+        logo1[1].set_fill(BLUE_C, 1)
+        logo1[2].set_fill(BLUE_D, 1)
         logo1.move_to(np.array([2.5, 1, 0]))
 
         logo2 = logo1.copy().rotate(PI/2, about_point=ORIGIN)
@@ -55,21 +58,22 @@ class Logo(Scene):
         logo4 = logo3.copy().rotate(PI/2, about_point=ORIGIN)
         logo = VGroup(logo1, logo2, logo3, logo4).scale(1/3)
 
+        logo[0][0].set_fill(average_color("#CCCCCC", "#C59978"), 1)
         logo[0][1].set_fill("#C59978", 1)
         logo[0][2].set_fill("#8D5630", 1)
 
         text = VGroup(
-            Text("Manim", font=self.font),
-            Text("Kindergarten", font=self.font)
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).set_height(2).next_to(logo, buff=1.2).shift(DOWN*0.2)
-        text[1][0].set_color(BLUE_C)
+            Text("Manim", font=self.font, color=BLACK),
+            Text("Kindergarten", font=self.font, color=BLACK)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).set_height(2.3).next_to(logo, buff=1.8).shift(DOWN*0.2)
+        text[1][0].set_color(BLUE_D)
         text[0][0].set_color("#8D5630")
         all_logo = VGroup(logo, text).center()
 
-        line = Line(UP, DOWN, stroke_width=8).move_to(mid(logo.get_right(), text.get_left()))
+        line = Line(UP, DOWN, stroke_width=8, color=BLACK).move_to(mid(logo.get_right(), text.get_left()))
         line.set_length(1.4)
 
-        bg = Rectangle(height=10, width=10, fill_color=BLACK, fill_opacity=1, stroke_width=0)
+        bg = Rectangle(height=10, width=10, fill_color=WHITE, fill_opacity=1, stroke_width=0)
         bg.add_updater(lambda m: m.move_to(logo, aligned_edge=RIGHT))
 
         text.save_state()
