@@ -31,6 +31,14 @@ class MyTransform(Animation):
 
 
 class Logo(Scene):
+    CONFIG = {
+        # "font": "Gray Design Bold",
+        # "font": "Quicksand Bold",
+        "font": "Orbitron",
+        # "font": "Cairo",
+        # "font": "Nexa Bold",
+        # "font": "Comfortaa"
+    }
     def construct(self):
         logo1 = VGroup(
             Polygon(np.array([0, 0, 0]), np.array([1, 0, 0]), np.array([0, 2, 0])),
@@ -51,12 +59,15 @@ class Logo(Scene):
         logo[0][2].set_fill("#8D5630", 1)
 
         text = VGroup(
-            Text("Manim", font="Nexa Bold"),
-            Text("Kindergarten", font="Nexa Bold")
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).set_height(2).next_to(logo, buff=0.8).shift(DOWN*0.2)
-        text[0][0].set_color(BLUE_C)
-        text[1][0].set_color("#8D5630")
+            Text("Manim", font=self.font),
+            Text("Kindergarten", font=self.font)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).set_height(2).next_to(logo, buff=1.2).shift(DOWN*0.2)
+        text[1][0].set_color(BLUE_C)
+        text[0][0].set_color("#8D5630")
         all_logo = VGroup(logo, text).center()
+
+        line = Line(UP, DOWN, stroke_width=8).move_to(mid(logo.get_right(), text.get_left()))
+        line.set_length(1.4)
 
         bg = Rectangle(height=10, width=10, fill_color=BLACK, fill_opacity=1, stroke_width=0)
         bg.add_updater(lambda m: m.move_to(logo, aligned_edge=RIGHT))
@@ -65,6 +76,7 @@ class Logo(Scene):
         text.shift((text.get_right()[0]-bg.get_right()[0]+0.2)*LEFT)
         logo.save_state()
         logo.center().scale(1.5)
+        logo.rotate(TAU, axis=IN)
         
         self.add(text, bg)
         self.play(FadeIn(logo[0]))
@@ -77,3 +89,4 @@ class Logo(Scene):
             rate_func=smooth, run_time=1
         )
         self.wait()
+        self.add(line)
