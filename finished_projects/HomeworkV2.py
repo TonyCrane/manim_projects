@@ -2,7 +2,7 @@ from manimlib.imports import *
 from manim_projects.tony_useful.imports import *
 from manim_sandbox.utils.imports import *
 
-class Homework_01(Scene):
+class Homework_02(Scene):
     def construct(self):
         self.intro_problem()
         self.main_proof()
