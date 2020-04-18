@@ -368,7 +368,7 @@ class ConvertColor(Scene_):
         self.wait(2)
         self.play(Transform(caps[0], caps[4]))
         self.play(Write(dars))
-        self.wait(3)
+        self.wait(4)
 
         self.play(Transform(caps[0], caps[5]), FadeOut(VGroup(color_type, dar1, dars, times255)))
         convert_hex_and_rgb = VGroup(
@@ -410,7 +410,7 @@ class ConvertColor(Scene_):
         self.wait()
         self.play(Write(VGroup(code1[2][0][-1], code1[2][1:])))
         self.play(Write(code1[3]))
-        self.wait(4)
+        self.wait(5)
         self.play(
             Transform(caps[0], caps[6]),
             FadeOut(VGroup(bg, code1, convert_hex_and_rgb))    
@@ -485,11 +485,11 @@ class ConvertColor(Scene_):
         self.play(Transform(caps[0], caps[8]))
         self.play(Write(code2[5]))
         self.play(Write(code2[6]))
-        self.wait(2)
+        self.wait(3)
 
         self.play(Transform(caps[0], caps[9]))
 
-        self.wait(2)
+        self.wait(3)
         self.play(FadeOut(VGroup(bg2, code2, convert_rgb_and_color)))
         self.wait()
         dar2 = DoubleArrow(color_type[0].get_bottom(), color_type[1].get_top(), color=ORANGE)
