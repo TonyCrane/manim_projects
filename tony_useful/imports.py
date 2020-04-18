@@ -7,3 +7,4 @@ from manim_projects.tony_useful.Subtitle import *
 from manim_projects.tony_useful.debugTeX import *
 from manim_projects.tony_useful.Boxes import *
 from manim_projects.tony_useful.sector import *
+from manim_projects.tony_useful.RandomAnim import *
