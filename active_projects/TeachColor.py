@@ -1012,7 +1012,10 @@ class ColorOperations(Scene_):
         # def random_updater(obj):
         #     new_color = random_color()
         #     obj.become(ColorText(new_color).move_to(code5[1][2]))
-        fps = 15
+        fps = 30
+        for color in COLOR_MAP.values():
+            code5[1][2].become(ColorText(color).move_to(code5[1][2]))
+            self.wait(1 / fps)
         for color in COLOR_MAP.values():
             code5[1][2].become(ColorText(color).move_to(code5[1][2]))
             self.wait(1 / fps)
