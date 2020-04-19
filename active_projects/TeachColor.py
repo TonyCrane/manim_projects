@@ -33,13 +33,12 @@ class ColorText(Text):
                 self[name.index(",", name.index(",")+1)+2:-2].set_color(BLUE)
                 self.set_color_by_t2c({"~": "#EBEBEB"})
             else:
-                name = 'np.array([{},~{},~{}])'.format(color[0], color[1], color[2])
+                name = 'np.array([{:.1f},~{:.1f},~{:.1f}])'.format(color[0], color[1], color[2])
                 Text.__init__(self, name, **kwargs)
                 self[10:name.index(",")].set_color(RED)
                 self[name.index(",")+2:name.index(",", name.index(",")+1)].set_color(GREEN)
                 self[name.index(",", name.index(",")+1)+2:-2].set_color(BLUE)
                 self.set_color_by_t2c({"~": "#EBEBEB"})
-                
 
 
 class TestColor(Scene):
@@ -55,7 +54,287 @@ class TestColor(Scene):
             ColorText(np.array([255, 165, 0])),
         ).arrange(DOWN)
         test = Text("test", font="Consolas").set_color(rgb_to_color(np.array([255/255, 165/255, 0])))
-        self.add(color)
+        self.add(color)    
+
+
+class CodeLine(Text):
+    CONFIG = {
+        't2c': {
+            'x': average_color(BLUE, PINK),
+            'y': average_color(BLUE, PINK),
+            'z': average_color(BLUE, PINK),
+            'RIGHT': ORANGE,
+            'LEFT': ORANGE,
+            'DOWN': ORANGE,
+            'UP': ORANGE,
+            'IN': ORANGE,
+            'OUT': ORANGE,
+            'ORIGIN': ORANGE,
+            'DL': ORANGE,
+            'DR': ORANGE,
+            'UL': ORANGE,
+            'UR': ORANGE,
+            'TOP': ORANGE,
+            'BOTTOM': ORANGE,
+            'LEFT_SIDE': ORANGE,
+            'RIGHT_SIDE': ORANGE,
+            'manim': GOLD,
+            'constants.py': GOLD,
+            'manimlib/utils/color.py': GOLD,
+            '#': GOLD,
+            '_C': BLUE,
+            'BLUE_C': BLUE,
+            'BLUE': BLUE,
+            'GREEN': GREEN,
+            'YELLOW': YELLOW,
+            'RED': RED,
+            'RGB': PURPLE,
+            'rgb': PURPLE,
+            'int_rgb': PURPLE,
+            'hex': PURPLE,
+            'Color': GREEN,
+            'FRAME_HEIGHT': BLUE_D,
+            'FRAME_WIDTH': BLUE_D,
+            'PIXEL_HEIGHT': RED_B,
+            'PIXEL_WIDTH': RED_B,
+            'np': BLACK,
+            'array': BLUE_D,
+            'ndarray': BLUE,
+            'FadeIn': average_color(RED, ORANGE),
+            'move_to': BLUE_D,
+            'shift': BLUE_D,
+            'arrange': BLUE_D,
+            'VGroup': BLUE_D,
+            'VMobject': BLUE_D,
+            'ImageMobject': BLUE_D,
+            'list': BLUE_D,
+            'append': BLUE_D,
+            'remove': BLUE_D,
+            'next_to': BLUE_D,
+            'to_corner': BLUE_D,
+            'to_edge': BLUE_D,
+            'GREY_BROWN': GREY_BROWN,
+            'align_to': BLUE_D,
+            'scale': BLUE_D,
+            'rotate': BLUE_D,
+            'flip': BLUE_D,
+            'add': BLUE_D,
+            'add_to_back': BLUE_D,
+            'vector': ORANGE,
+            'play': BLUE_D,
+            'set_width': BLUE_D,
+            'set_stroke': BLUE_D,
+            'aligned_edge': RED,
+            'center': RED,
+            ">>>": RED,
+            'coor_mask': RED,
+            'point_or_mobject': RED,
+            'python': GOLD,
+            '0': average_color(BLUE, PINK),
+            '1': average_color(BLUE, PINK),
+            '2': average_color(BLUE, PINK),
+            '3': average_color(BLUE, PINK),
+            '4': average_color(BLUE, PINK),
+            '5': average_color(BLUE, PINK),
+            '6': average_color(BLUE, PINK),
+            '7': average_color(BLUE, PINK),
+            '8': average_color(BLUE, PINK),
+            '9': average_color(BLUE, PINK),
+            'True': average_color(BLUE, PINK),
+            '2D': RED_B,
+            '3D': RED_B,
+            'self': PINK,
+            'mob': RED_D,
+            'mob1': RED_D,
+            'mob2': RED_D,
+            'mob3': RED_D,
+            'mob0': RED_D,
+            "~": "#EBEBEB",
+            "vg2": DARK_GRAY,
+            'hex_to_rgb': BLUE_D,
+            'rgb_to_hex': BLUE_D,
+            'color_to_rgb': BLUE_D,
+            'rgb_to_color': BLUE_D,
+            'color_to_int_rgb': BLUE_D,
+            'get_hex_l': BLUE_D,
+            'invert_color': BLUE_D,
+            'interpolate_color': BLUE_D,
+            'average_color': BLUE_D,
+            'color_gradient': BLUE_D,
+            'random_color': BLUE_D,
+            'alpha': GOLD,
+            '#6cf': "#66CCFF",
+            '#66CCFF': "#66CCFF",
+            '#930': "#993300",
+            '#9da288': "#9da288",
+        },
+        'font': 'Consolas',
+        'size': 0.36,
+        'color': DARK_GRAY,
+        'plot_depth': 2,
+    }
+    def __init__(self, text, **kwargs):
+        Text.__init__(self, text, **kwargs)
+
+
+class DecimalNumberText(VMobject):
+    CONFIG = {
+        "num_decimal_places": 2,
+        "include_sign": False,
+        "group_with_commas": True,
+        "digit_to_digit_buff": 0.05,
+        "show_ellipsis": False,
+        "unit": None,  # Aligned to bottom unless it starts with "^"
+        "include_background_rectangle": False,
+        "edge_to_fix": LEFT,
+        "text_config": {
+            "font": "Consolas",
+            "size": 0.4,
+            "color": GOLD,
+        }
+    }
+
+    def __init__(self, number=0, **kwargs):
+        super().__init__(**kwargs)
+        self.number = number
+        self.initial_config = kwargs
+
+        if isinstance(number, complex):
+            formatter = self.get_complex_formatter()
+        else:
+            formatter = self.get_formatter()
+        num_string = formatter.format(number)
+
+        rounded_num = np.round(number, self.num_decimal_places)
+        if num_string.startswith("-") and rounded_num == 0:
+            if self.include_sign:
+                num_string = "+" + num_string[1:]
+            else:
+                num_string = num_string[1:]
+
+        self.add(*[
+            Text(char, **kwargs, **self.text_config)
+            for char in num_string
+        ])
+
+        # Add non-numerical bits
+        if self.show_ellipsis:
+            self.add(Text("...", **self.text_config))
+
+        if num_string.startswith("-"):
+            minus = self.submobjects[0]
+            minus.next_to(
+                self.submobjects[1], LEFT,
+                buff=self.digit_to_digit_buff
+            )
+
+        if self.unit is not None:
+            self.unit_sign = Text(self.unit, color=self.color, **self.text_config)
+            self.add(self.unit_sign)
+
+        self.arrange(
+            buff=self.digit_to_digit_buff,
+            aligned_edge=DOWN
+        )
+
+        # Handle alignment of parts that should be aligned
+        # to the bottom
+        for i, c in enumerate(num_string):
+            if c == "-" and len(num_string) > i + 1:
+                self[i].align_to(self[i + 1], UP)
+                self[i].shift(self[i+1].get_height() * DOWN / 2)
+            elif c == ",":
+                self[i].shift(self[i].get_height() * DOWN / 2)
+        if self.unit and self.unit.startswith("^"):
+            self.unit_sign.align_to(self, UP)
+        #
+        if self.include_background_rectangle:
+            self.add_background_rectangle()
+
+    def get_formatter(self, **kwargs):
+        """
+        Configuration is based first off instance attributes,
+        but overwritten by any kew word argument.  Relevant
+        key words:
+        - include_sign
+        - group_with_commas
+        - num_decimal_places
+        - field_name (e.g. 0 or 0.real)
+        """
+        config = dict([
+            (attr, getattr(self, attr))
+            for attr in [
+                "include_sign",
+                "group_with_commas",
+                "num_decimal_places",
+            ]
+        ])
+        config.update(kwargs)
+        return "".join([
+            "{",
+            config.get("field_name", ""),
+            ":",
+            "+" if config["include_sign"] else "",
+            "," if config["group_with_commas"] else "",
+            ".", str(config["num_decimal_places"]), "f",
+            "}",
+        ])
+
+    def get_complex_formatter(self, **kwargs):
+        return "".join([
+            self.get_formatter(field_name="0.real"),
+            self.get_formatter(field_name="0.imag", include_sign=True),
+            "i"
+        ])
+
+    def set_value(self, number, **config):
+        full_config = dict(self.CONFIG)
+        full_config.update(self.initial_config)
+        full_config.update(config)
+        new_decimal = DecimalNumberText(number, **full_config)
+        # Make sure last digit has constant height
+        new_decimal.scale(
+            self[-1].get_height() / new_decimal[-1].get_height()
+        )
+        new_decimal.move_to(self, self.edge_to_fix)
+        new_decimal.match_style(self)
+
+        old_family = self.get_family()
+        self.submobjects = new_decimal.submobjects
+        for mob in old_family:
+            # Dumb hack...due to how scene handles families
+            # of animated mobjects
+            mob.points[:] = 0
+        self.number = number
+        return self
+
+    def get_value(self):
+        return self.number
+
+    def increment_value(self, delta_t=1):
+        self.set_value(self.get_value() + delta_t)
+
+
+class TestDecimalNumberText(Scene):
+    def construct(self):
+        decimal = DecimalNumberText(
+            0,
+            show_ellipsis=True,
+            num_decimal_places=3,
+            include_sign=True,
+        )
+        square = Square().to_edge(UP)
+
+        decimal.add_updater(lambda d: d.next_to(square, RIGHT))
+        decimal.add_updater(lambda d: d.set_value(square.get_center()[1]))
+        self.add(square, decimal)
+        self.play(
+            square.to_edge, DOWN,
+            rate_func=there_and_back,
+            run_time=5,
+        )
+        self.wait()
+
 
 
 class Scene_(Scene):
@@ -506,6 +785,246 @@ class ConvertColor(Scene_):
         self.play(FadeOut(VGroup(*self.mobjects)))
 
 
+class ColorOperations(Scene_):
+    def start(self):
+        t2c = {"manim": GOLD,
+               "颜色": BLUE_D}
+        title = VGroup(
+            Text("Chapter III.", font="Monaco for Powerline", color=BLUE_D, size=0.5, t2c=t2c),
+            Text("颜色的运算函数", font="Source Han Sans CN Bold", color=DARK_GRAY, size=0.5, t2c=t2c),
+        ).arrange(RIGHT, buff=0.5, aligned_edge=DOWN)
+        self.wait()
+        self.play(DrawBorderThenFill(title))
+        self.wait(2)
+        self.play(FadeOutAndShiftDown(title))
+    def construct(self):
+        self.start()
+        captions = [
+            "首先第一个函数，invert_color，用来对颜色反色",
+            "输入一个hex或者Color，返回反色的Color类",
+            "第二个函数，interpolate_color，在两个颜色之间用alpha比例插值",
+            "也是输入hex或者Color，返回插值结果的Color类，alpha为0到1之间的数",
+            "（为了方便，这里显示的结果是将Color转换为hex后的）",
+            "第三个函数，average_color，传入多个颜色，返回其平均颜色",
+            "第四个函数，color_gradient，传入多个参考颜色列表，和需要的长度n",
+            "返回长度为n的颜色梯度序列（还是为了方便，这里显示hex）",
+            "第五个函数，random_color，随机返回constants.py中定义的一个颜色"
+        ]
+        caps = VGroup(
+            *[
+                CodeLine(cap, font='Source Han Sans CN Bold', size=0.32).to_edge(DOWN * 1.2)
+                for cap in captions
+            ]
+        )
+
+        func_title = [
+            "invert_color(color)",
+            "interpolate_color(color1,~color2,~alpha)",
+            "average_color(*colors)",
+            "color_gradient(reference_colors,~length_of_output)",
+            "random_color()"
+        ]
+        t2c = {
+            'colors': ORANGE,
+            'color1': ORANGE,
+            'color2': ORANGE,
+            'reference_colors': ORANGE,
+            'length_of_output': ORANGE,
+            'invert_color': BLUE_D,
+            'interpolate_color': BLUE_D,
+            'average_color': BLUE_D,
+            'color_gradient': BLUE_D,
+            'random_color': BLUE_D,
+            'alpha': GOLD,
+            '~': WHITE,
+        }
+        funcs = VGroup(
+            *[
+                CodeLine(func, size=0.5, t2c=t2c).to_corner(UL, buff=0.7)
+                for func in func_title
+            ]
+        )
+        funcs[0][-6:-1].set_color(ORANGE)
+        funcs[3].scale(0.85, about_edge=LEFT)
+
+        self.play(Write(caps[0]))
+        self.play(Write(funcs[0]))
+        code1 = VGroup(
+            VGroup(
+                CodeLine("invert_color(", size=0.4),
+                ColorText("#66CCFF"),
+                CodeLine(")", size=0.4),
+            ).arrange(RIGHT),
+            VGroup(
+                CodeLine("~~~~", size=0.4).set_color("#EBEBEB"),
+                TexMobject("\\rightarrow", background_stroke_width=0, color=BLACK),
+                CodeLine("<Color #930>", size=0.4)
+            ).arrange(RIGHT),
+            VGroup(
+                CodeLine("color_to_rgb(invert_color(", size=0.4),
+                VGroup(
+                    CodeLine("~~~~rgb_to_hex("),
+                    ColorText(hex_to_rgb("#66CCFF")),
+                    CodeLine(")))", size=0.4),
+                ).arrange(RIGHT)
+            ).arrange(DOWN, aligned_edge=LEFT),
+            VGroup(
+                CodeLine("~~~~~~~~~~", size=0.4).set_color("#EBEBEB"),
+                TexMobject("\\rightarrow", background_stroke_width=0, color=BLACK),
+                ColorText(color_to_rgb(invert_color("#66CCFF")))
+            ).arrange(RIGHT),
+        ).arrange(DOWN, aligned_edge=LEFT)
+        code1[:2].shift(UP*0.5)
+        code1[2:].shift(DOWN*0.5)
+        bg = Rectangle(stroke_width=1, fill_color="#EBEBEB", plot_depth=-10, stroke_color=DARK_GRAY, fill_opacity=1)
+        bg.surround(code1, buff=0.5)
+        self.play(FadeInFromDown(bg))
+        self.play(Write(code1[0][0][:-1]))
+        self.wait(2)
+        self.play(Transform(caps[0], caps[1]))
+        self.wait()
+        self.play(Write(VGroup(code1[0][0][-1], code1[0][1:])))
+        self.play(Write(code1[1]))
+        self.wait(2)
+        self.play(Write(code1[2]))
+        self.wait()
+        self.play(Write(code1[3]))
+        self.wait()
+        self.play(
+            ShowCreationThenDestructionAround(VGroup(code1[2][1][1], code1[3][2]))
+        )
+        self.wait(2)
+        self.play(Transform(caps[0], caps[2]), Transform(funcs[0], funcs[1]))
+        
+        alpha = ValueTracker(0)
+        code2 = VGroup(
+            VGroup(
+                CodeLine("interpolate_color(BLUE, GREEN, ", size=0.4),
+                DecimalNumberText(0),
+                CodeLine(")", size=0.4)
+            ).arrange(RIGHT),
+            VGroup(
+                CodeLine("~~~~", size=0.4).set_color("#EBEBEB"),
+                TexMobject("\\rightarrow", background_stroke_width=0, color=BLACK),
+                ColorText(
+                    interpolate_color(BLUE, GREEN, alpha.get_value()).get_hex_l()
+                )
+            ).arrange(RIGHT),
+        ).arrange(DOWN, aligned_edge=LEFT)
+        bg2 = BackgroundRectangle(code2, fill_color="#EBEBEB", fill_opacity=1, stroke_width=1, stroke_opacity=1, stroke_color=DARK_GRAY, buff=0.4)
+
+        self.play(Transform(bg, bg2), FadeOut(code1))
+        self.wait(3)
+        self.play(Transform(caps[0], caps[3]))
+        self.play(Write(code2[0]))
+        self.wait(3)
+        self.play(Transform(caps[0], caps[4]), Write(code2[1]))
+        self.wait()
+        code2[0][1].add_updater(
+            lambda m: m.set_value(alpha.get_value())
+        )
+        code2[1][2].add_updater(
+            lambda m: m.become(
+                ColorText(
+                    interpolate_color(BLUE, GREEN, alpha.get_value()).get_hex_l()
+                ).move_to(code2[1][2])
+            )
+        )
+        self.play(
+            alpha.increment_value, 1, run_time=3, rate_func=linear
+        )
+        self.wait(0.5)
+        self.play(
+            alpha.increment_value, -1, run_time=2, rate_func=linear
+        )
+        code2[0][1].clear_updaters()
+        code2[1][2].clear_updaters()
+        self.wait(3)
+        
+        self.play(Transform(caps[0], caps[5]), Transform(funcs[0], funcs[2]))
+        code3 = VGroup(
+            CodeLine("average_color(BLUE, GREEN, RED)", size=0.4),
+            VGroup(
+                CodeLine("~~~~", size=0.4).set_color("#EBEBEB"),
+                TexMobject("\\rightarrow", background_stroke_width=0, color=BLACK),
+                CodeLine("<Color #9da288>", size=0.4)
+            ).arrange(RIGHT),
+        ).arrange(DOWN, aligned_edge=LEFT)
+        bg3 = BackgroundRectangle(code3, fill_color="#EBEBEB", fill_opacity=1, stroke_width=1, stroke_opacity=1, stroke_color=DARK_GRAY, buff=0.5)
+        self.play(Transform(bg, bg3), FadeOut(code2))
+        self.wait(3)
+        self.play(Write(code3[0]))
+        self.wait(1)
+        self.play(Write(code3[1]))
+        self.wait(3)
+        
+        self.play(Transform(caps[0], caps[6]), Transform(funcs[0], funcs[3]))
+        ans = VGroup(
+            VGroup(
+                ColorText("#58C4DD"), CodeLine(", ", size=0.4),
+                ColorText("#63C3BF"), CodeLine(", ", size=0.4),
+                ColorText("#6DC2A2"), CodeLine(", ", size=0.4),
+            ).arrange(RIGHT, aligned_edge=DOWN),
+            VGroup(
+                ColorText("#78C284"), CodeLine(", ", size=0.4),
+                ColorText("#83C167"), CodeLine(", ", size=0.4),
+                ColorText("#A1A962"), CodeLine(", ", size=0.4),
+            ).arrange(RIGHT, aligned_edge=DOWN),
+            VGroup(
+                ColorText("#BF915E"), CodeLine(", ", size=0.4),
+                ColorText("#DE7A59"), CodeLine(", ", size=0.4),
+                ColorText("#FC6255"), CodeLine("~]", size=0.4)
+            ).arrange(RIGHT, aligned_edge=DOWN),
+        ).arrange(DOWN, aligned_edge=LEFT)
+        code4 = VGroup(
+            CodeLine("color_gradient([BLUE, GREEN, RED], 9)", size=0.4),
+            VGroup(
+                CodeLine("~~~~", size=0.4).set_color("#EBEBEB"),
+                TexMobject("\\rightarrow", background_stroke_width=0, color=BLACK),
+                CodeLine("[", size=0.4),
+                ans
+            ).arrange(RIGHT, aligned_edge=UP),
+        ).arrange(DOWN, aligned_edge=LEFT)
+        bg4 = BackgroundRectangle(code4, fill_color="#EBEBEB", fill_opacity=1, stroke_width=1, stroke_opacity=1, stroke_color=DARK_GRAY, buff=0.5)
+        self.play(Transform(bg, bg4), FadeOut(code3))
+        self.wait(2)
+        self.play(Write(code4[0]))
+        self.wait()
+        self.play(Transform(caps[0], caps[7]), Write(code4[1]))
+        self.wait(5)
+
+        self.play(Transform(caps[0], caps[8]), Transform(funcs[0], funcs[4]))
+        code5 = VGroup(
+            CodeLine("random_color()", size=0.4),
+            VGroup(
+                CodeLine("~~~~", size=0.4).set_color("#EBEBEB"),
+                TexMobject("\\rightarrow", background_stroke_width=0, color=BLACK),
+                ColorText(random_color())
+            ).arrange(RIGHT),
+        ).arrange(DOWN, aligned_edge=LEFT)
+        bg5 = BackgroundRectangle(code5, fill_color="#EBEBEB", fill_opacity=1, stroke_width=1, stroke_opacity=1, stroke_color=DARK_GRAY, buff=0.5)
+        self.play(Transform(bg, bg5), FadeOut(code4))
+        self.wait(3)
+        self.play(Write(code5[0]))
+        self.wait(1)
+        self.play(Write(code5[1]))
+        self.wait(1)
+        # def random_updater(obj):
+        #     new_color = random_color()
+        #     obj.become(ColorText(new_color).move_to(code5[1][2]))
+        fps = 15
+        for color in COLOR_MAP.values():
+            code5[1][2].become(ColorText(color).move_to(code5[1][2]))
+            self.wait(1 / fps)
+        # code5[1][2].remove_updater(random_updater)
+        self.wait(4)
+        self.play(
+            FadeOut(VGroup(caps[0], funcs[0], bg, code5))
+        )
+        self.wait()
+
+
+
 
         
 
@@ -514,113 +1033,3 @@ class ConvertColor(Scene_):
 
 
 
-
-
-
-class CodeLine(Text):
-    CONFIG = {
-        't2c': {
-            'x': average_color(BLUE, PINK),
-            'y': average_color(BLUE, PINK),
-            'z': average_color(BLUE, PINK),
-            'RIGHT': ORANGE,
-            'LEFT': ORANGE,
-            'DOWN': ORANGE,
-            'UP': ORANGE,
-            'IN': ORANGE,
-            'OUT': ORANGE,
-            'ORIGIN': ORANGE,
-            'DL': ORANGE,
-            'DR': ORANGE,
-            'UL': ORANGE,
-            'UR': ORANGE,
-            'TOP': ORANGE,
-            'BOTTOM': ORANGE,
-            'LEFT_SIDE': ORANGE,
-            'RIGHT_SIDE': ORANGE,
-            'manim': GOLD,
-            'constants.py': GOLD,
-            'manimlib/utils/color.py': GOLD,
-            '#': GOLD,
-            '_C': BLUE,
-            'BLUE_C': BLUE,
-            'BLUE': BLUE,
-            'RGB': PURPLE,
-            'rgb': PURPLE,
-            'int_rgb': PURPLE,
-            'hex': PURPLE,
-            'Color': GREEN,
-            'FRAME_HEIGHT': BLUE_D,
-            'FRAME_WIDTH': BLUE_D,
-            'PIXEL_HEIGHT': RED_B,
-            'PIXEL_WIDTH': RED_B,
-            'np': BLACK,
-            'array': BLUE_D,
-            'ndarray': BLUE,
-            'FadeIn': average_color(RED, ORANGE),
-            'move_to': BLUE_D,
-            'shift': BLUE_D,
-            'arrange': BLUE_D,
-            'VGroup': BLUE_D,
-            'VMobject': BLUE_D,
-            'ImageMobject': BLUE_D,
-            'list': BLUE_D,
-            'append': BLUE_D,
-            'remove': BLUE_D,
-            'next_to': BLUE_D,
-            'to_corner': BLUE_D,
-            'to_edge': BLUE_D,
-            'GREY_BROWN': GREY_BROWN,
-            'align_to': BLUE_D,
-            'scale': BLUE_D,
-            'rotate': BLUE_D,
-            'flip': BLUE_D,
-            'add': BLUE_D,
-            'add_to_back': BLUE_D,
-            'vector': ORANGE,
-            'play': BLUE_D,
-            'set_width': BLUE_D,
-            'set_stroke': BLUE_D,
-            'aligned_edge': RED,
-            'center': RED,
-            ">>>": RED,
-            'coor_mask': RED,
-            'point_or_mobject': RED,
-            'python': GOLD,
-            '0': average_color(BLUE, PINK),
-            '1': average_color(BLUE, PINK),
-            '2': average_color(BLUE, PINK),
-            '3': average_color(BLUE, PINK),
-            '4': average_color(BLUE, PINK),
-            '5': average_color(BLUE, PINK),
-            '6': average_color(BLUE, PINK),
-            '7': average_color(BLUE, PINK),
-            '8': average_color(BLUE, PINK),
-            '9': average_color(BLUE, PINK),
-            'True': average_color(BLUE, PINK),
-            '2D': RED_B,
-            '3D': RED_B,
-            'self': PINK,
-            'mob': RED_D,
-            'mob1': RED_D,
-            'mob2': RED_D,
-            'mob3': RED_D,
-            'mob0': RED_D,
-            "~": WHITE,
-            "vg2": DARK_GRAY,
-            'hex_to_rgb': BLUE_D,
-            'rgb_to_hex': BLUE_D,
-            'color_to_rgb': BLUE_D,
-            'rgb_to_color': BLUE_D,
-            'color_to_int_rgb': BLUE_D,
-            'get_hex_l': BLUE_D,
-            '#6cf': "#66CCFF",
-            '#66CCFF': "#66CCFF",
-        },
-        'font': 'Consolas',
-        'size': 0.36,
-        'color': DARK_GRAY,
-        'plot_depth': 2,
-    }
-    def __init__(self, text, **kwargs):
-        Text.__init__(self, text, **kwargs)
