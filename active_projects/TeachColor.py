@@ -31,14 +31,14 @@ class ColorText(Text):
                 self[10:name.index(",")].set_color(RED)
                 self[name.index(",")+2:name.index(",", name.index(",")+1)].set_color(GREEN)
                 self[name.index(",", name.index(",")+1)+2:-2].set_color(BLUE)
-                self.set_color_by_t2c({"~": "#EBEBEB"})
+                self.set_color_by_t2c({"~": WHITE})
             else:
                 name = 'np.array([{:.1f},~{:.1f},~{:.1f}])'.format(color[0], color[1], color[2])
                 Text.__init__(self, name, **kwargs)
                 self[10:name.index(",")].set_color(RED)
                 self[name.index(",")+2:name.index(",", name.index(",")+1)].set_color(GREEN)
                 self[name.index(",", name.index(",")+1)+2:-2].set_color(BLUE)
-                self.set_color_by_t2c({"~": "#EBEBEB"})
+                self.set_color_by_t2c({"~": WHITE})
 
 
 class TestColor(Scene):
