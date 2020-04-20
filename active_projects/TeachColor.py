@@ -89,6 +89,7 @@ class CodeLine(Text):
             'YELLOW': YELLOW,
             'RED': RED,
             'RGB': PURPLE,
+            'RGBA': PURPLE,
             'rgb': PURPLE,
             'int_rgb': PURPLE,
             'hex': PURPLE,
@@ -107,6 +108,7 @@ class CodeLine(Text):
             'VGroup': BLUE_D,
             'VMobject': BLUE_D,
             'ImageMobject': BLUE_D,
+            'Mobject': BLUE_D,
             'list': BLUE_D,
             'append': BLUE_D,
             'remove': BLUE_D,
@@ -126,6 +128,7 @@ class CodeLine(Text):
             'set_stroke': BLUE_D,
             'aligned_edge': RED,
             'center': RED,
+            'radius': RED,
             ">>>": RED,
             'coor_mask': RED,
             'point_or_mobject': RED,
@@ -167,6 +170,26 @@ class CodeLine(Text):
             '#66CCFF': "#66CCFF",
             '#930': "#993300",
             '#9da288': "#9da288",
+            'style': PURPLE,
+            'stroke': BLUE_D,
+            'fill': BLUE_D,
+            'background_stroke': BLUE_D,
+            'opacity': BLUE_D,
+            'set_color': BLUE_D,
+            'set_fill': BLUE_D,
+            'set_background_stroke': BLUE_D,
+            "stroke_color": ORANGE,
+            "stroke_opacity": ORANGE,
+            "fill_color": ORANGE,
+            "fill_opacity": ORANGE,
+            "background_stroke_color": ORANGE,
+            "background_stroke_opacity": ORANGE,
+            "set_color_by_gradient": BLUE_D,
+            "set_colors_by_radial_gradient": BLUE_D,
+            "outer_color": RED,
+            "set_sheen_direction": BLUE_D,
+            "set_sheen": BLUE_D,
+            "sheen": BLUE_D,
         },
         'font': 'Consolas',
         'size': 0.36,
@@ -349,7 +372,7 @@ class Scene_(Scene):
 class OpeningScene(Scene_):
     def construct(self):
         t2c = {"manim": average_color(PINK, RED),
-               "颜色": BLUE_D}
+               "颜色": ORANGE}
         text_color = DARK_GRAY
 
         font = "PangMenZhengDao"
@@ -390,7 +413,7 @@ class OpeningScene(Scene_):
 class ExpressAColor(Scene_):
     def start(self):
         t2c = {"manim": GOLD,
-               "颜色": BLUE_D}
+               "颜色": ORANGE}
         title = VGroup(
             Text("Chapter Ⅰ.", font="Monaco for Powerline", color=BLUE_D, size=0.5, t2c=t2c),
             Text("manim中颜色的表示", font="Source Han Sans CN Bold", color=DARK_GRAY, size=0.5, t2c=t2c),
@@ -566,7 +589,7 @@ class ExpressAColor(Scene_):
 class ConvertColor(Scene_):
     def start(self):
         t2c = {"manim": GOLD,
-               "颜色": BLUE_D}
+               "颜色": ORANGE}
         title = VGroup(
             Text("Chapter II.", font="Monaco for Powerline", color=BLUE_D, size=0.5, t2c=t2c),
             Text("颜色表示方法的相互转换", font="Source Han Sans CN Bold", color=DARK_GRAY, size=0.5, t2c=t2c),
@@ -788,7 +811,7 @@ class ConvertColor(Scene_):
 class ColorOperations(Scene_):
     def start(self):
         t2c = {"manim": GOLD,
-               "颜色": BLUE_D}
+               "颜色": ORANGE}
         title = VGroup(
             Text("Chapter III.", font="Monaco for Powerline", color=BLUE_D, size=0.5, t2c=t2c),
             Text("颜色的运算函数", font="Source Han Sans CN Bold", color=DARK_GRAY, size=0.5, t2c=t2c),
@@ -1027,12 +1050,362 @@ class ColorOperations(Scene_):
         self.wait()
 
 
+class SetColors(Scene_):
+    def start(self):
+        t2c = {"manim": GOLD,
+               "颜色": ORANGE}
+        title = VGroup(
+            Text("Chapter IV.", font="Monaco for Powerline", color=BLUE_D, size=0.5, t2c=t2c),
+            Text("物体颜色的设置", font="Source Han Sans CN Bold", color=DARK_GRAY, size=0.5, t2c=t2c),
+        ).arrange(RIGHT, buff=0.5, aligned_edge=DOWN)
+        self.wait()
+        self.play(DrawBorderThenFill(title))
+        self.wait(2)
+        self.play(FadeOutAndShiftDown(title))
+    def construct(self):
+        self.start()
+        captions = [
+            "由于Mobject一般不使用颜色,所以这里只介绍VMobject及子类的上色方法",
+            "VMobject涉及颜色有关的style有stroke、fill和background_stroke",
+            "而且manim中使用RGBA格式,所以还有opacity不透明度这一设置",
+            "所以也就有了这六个style",
+            "那么我们先来看一下set_color方法",
+            "set_color会将stroke和fill均设为给出的颜色,并保持opacity不变",
+            "set_stroke方法可以更改线条的颜色和不透明度",
+            "set_fill方法可以更改填充的颜色和不透明度",
+            "set_background_stroke方法可以更改背景线条的颜色和不透明度"
+        ]
+        caps = VGroup(
+            *[
+                CodeLine(cap, font='Source Han Sans CN Bold', size=0.32).to_edge(DOWN * 1.2)
+                for cap in captions
+            ]
+        )
 
+        styles = VGroup(
+            VGroup(
+                CodeLine("stroke", size=0.45),
+                CodeLine("stroke_color", size=0.35),
+                CodeLine("stroke_opacity", size=0.35),
+            ).arrange(DOWN),
+            VGroup(
+                CodeLine("fill", size=0.45),
+                CodeLine("fill_color", size=0.35),
+                CodeLine("fill_opacity", size=0.35),
+            ).arrange(DOWN),
+            VGroup(
+                CodeLine("background_stroke", size=0.45),
+                CodeLine("background_stroke_color", size=0.35),
+                CodeLine("background_stroke_opacity", size=0.35),
+            ).arrange(DOWN)
+        ).arrange(RIGHT, buff=0.5)
+        styles[0][0].shift(UP*0.7)
+        styles[1][0].shift(UP*0.7)
+        styles[2][0].shift(UP*0.7)
 
+        rec = Square(side_length=3, fill_opacity=0.5, color=BLUE).shift(LEFT*3)
+        rec_bg = SurroundingRectangle(rec, fill_color=DARKER_GRAY, fill_opacity=0, buff=1, stroke_width=0)
+        code = [
+            ">>> rec.set_color(GREEN)",
+            ">>> rec.set_stroke(color=RED,",
+            "~~~~~~~~width=15, opacity=0.4)",
+            ">>> rec.set_fill(color=ORANGE,",
+            "~~~~~~~~opacity=0.9)",
+            ">>> rec.set_background_stroke(",
+            "~~~~~~~~color=WHITE,",
+            "~~~~~~~~width=10,",
+            "~~~~~~~~opacity=1",
+            "~~~~)"
+        ]
+        t2c2 = {
+            "color": ORANGE,
+            "set_color": BLUE_D,
+            "set_stroke": BLUE_D,
+            "set_fill": BLUE_D,
+            "set_background_stroke": BLUE_D,
+            "GREEN": GREEN,
+            "RED": RED,
+            "WHITE": BLACK,
+            "opacity": ORANGE,
+            "ORANGE": ORANGE,
+            "width": ORANGE,
+            "10": average_color(BLUE, PINK),
+            "0.2": average_color(BLUE, PINK),
+            "0.9": average_color(BLUE, PINK),
+            "1": average_color(BLUE, PINK),
+        }
+        codes = VGroup(
+            *[
+                CodeLine(code_, t2c=t2c2) for code_ in code
+            ]
+        ).arrange(DOWN, aligned_edge=LEFT)
+        codes.next_to(ORIGIN, aligned_edge=LEFT, buff=0.5).shift(UP*0.5)
+        codes[0][8:17].set_color(BLUE_D)
+        bg = SurroundingRectangle(codes, stroke_width=1, stroke_color=DARK_GRAY, fill_color="#EBEBEB", fill_opacity=1, buff=0.2)
         
+        self.play(Write(caps[0]))
+        self.wait(3)
+        self.play(Transform(caps[0], caps[1]))
+        self.wait(1)
+        self.play(
+            Write(styles[0][0]),
+            Write(styles[1][0]),
+            Write(styles[2][0]),
+        )
+        self.wait()
+        self.play(Transform(caps[0], caps[2]))
+        self.wait(3)
+        self.play(
+            Transform(caps[0], caps[3]),
+            Write(styles[0][1:]),
+            Write(styles[1][1:]),
+            Write(styles[2][1:]),
+        )
+        self.wait(4)
+        self.play(Transform(caps[0], caps[4]), FadeOut(styles))
+        self.wait(1)
+        self.add(rec_bg)
+        self.play(ShowCreation(rec), FadeInFromDown(bg))
+        self.wait()
+        self.play(Transform(caps[0], caps[5]))
+        self.wait()
+        self.play(Write(codes[0]))
+        self.play(rec.set_color, GREEN)
+        self.wait(4)
+        self.play(Transform(caps[0], caps[6]))
+        self.wait()
+        self.play(Write(codes[1]))
+        self.play(Write(codes[2]))
+        self.play(rec.set_stroke, RED, 15, 0.4)
+        self.wait(4)
+        self.play(Transform(caps[0], caps[7]))
+        self.wait()
+        self.play(Write(codes[3]))
+        self.play(Write(codes[4]))
+        self.play(rec.set_fill, ORANGE, 0.9)
+        self.wait(4)
+        self.play(Transform(caps[0], caps[8]))
+        self.wait()
+        self.play(Write(codes[5]), Write(codes[-1]))
+        self.wait()
+        self.play(Write(codes[6:9]))
+        self.play(rec_bg.set_fill, {"opacity": 1})
+        self.wait()
+        self.play(rec.set_background_stroke, {"color": WHITE, "width": 10, "opacity": 1})
+        self.wait(5)
+        self.play(FadeOut(VGroup(bg, codes, rec_bg, rec, caps[0])))
 
 
+class SubmobjectSetColor(Scene_):
+    def start(self):
+        t2c = {"manim": GOLD,
+               "颜色": ORANGE}
+        title = VGroup(
+            Text("Chapter V.", font="Monaco for Powerline", color=BLUE_D, size=0.5, t2c=t2c),
+            Text("给子物体上颜色", font="Source Han Sans CN Bold", color=DARK_GRAY, size=0.5, t2c=t2c),
+        ).arrange(RIGHT, buff=0.5, aligned_edge=DOWN)
+        self.wait()
+        self.play(DrawBorderThenFill(title))
+        self.wait(2)
+        self.play(FadeOutAndShiftDown(title))
+    def construct(self):
+        self.start()
+        captions = [
+            "给一个VGroup的所有子物体上色",
+            "可以使用前述三个方法如set_color将所有物体上为同一颜色",
+            "使用set_color_by_gradient方法可以从首至尾上为梯度颜色",
+            "使用set_colors_by_radial_gradient方法根据距离半径上梯度颜色",
+            "传入的参数为center(默认物体中心),梯度达到的最远半径radius,和内外颜色",
+            "距离center超过radius的子物体都会上为outer_color的颜色"
+        ]
+        caps = VGroup(
+            *[
+                CodeLine(cap, font='Source Han Sans CN Bold', size=0.32).to_edge(DOWN * 1.2)
+                for cap in captions
+            ]
+        )
 
+        vg = VGroup(
+            *[
+                VGroup(
+                    *[
+                        Square(side_length=0.5, color=GRAY, fill_opacity=1) for i in range(7)
+                    ]
+                ).arrange(RIGHT)
+                for _ in range(7)
+            ]
+        ).arrange(DOWN).shift(LEFT*4)
+        code = [
+            ">>> vg.set_color(BLUE_B)",
+            ">>> vg.set_color_by_gradient(",
+            "~~~~~~~~GREEN, RED, BLUE)",
+            ">>> vg.set_colors_by_radial_gradient(",
+            "~~~~~~~~# center=vg.get_center(),",
+            "~~~~~~~~radius=2.7,",
+            "~~~~~~~~inner_color=BLUE,",
+            "~~~~~~~~outer_color=PINK",
+            "~~~~)"
+        ]
+        t2c2 = {
+            "set_color": BLUE_D,
+            "set_color_by_gradient": BLUE_D,
+            "set_colors_by_radial_gradient": BLUE_D,
+            "BLUE_B": BLUE_B,
+            "GREEN": GREEN,
+            "RED": RED,
+            "BLUE": BLUE,
+            "radius": ORANGE,
+            "inner_color": ORANGE,
+            "outer_color": ORANGE,
+            "# center=vg.get_center(),": GREEN,
+            "3": average_color(BLUE, PINK),
+            "PINK": PINK,
+        }
+        codes = VGroup(
+            *[
+                CodeLine(code_, t2c=t2c2, size=0.34) for code_ in code
+            ]
+        ).arrange(DOWN, aligned_edge=LEFT)
+        codes.next_to(ORIGIN, aligned_edge=LEFT, buff=-0.5)
+        bg = SurroundingRectangle(codes, stroke_width=1, stroke_color=DARK_GRAY, fill_color="#EBEBEB", fill_opacity=1, buff=0.2)
+
+        self.play(Write(caps[0]))
+        self.play(ShowCreation(vg, lag_ratio=0.8), run_time=2.5)
+        self.play(FadeInFromDown(bg))
+        self.wait(1.5)
+        self.play(Transform(caps[0], caps[1]))
+        self.wait()
+        self.play(Write(codes[0]))
+        self.wait(2)
+        self.play(vg.set_color, BLUE_B)
+        self.wait(3)
+        self.play(Transform(caps[0], caps[2]))
+        self.wait()
+        self.play(Write(codes[1]))
+        self.play(Write(codes[2]))
+        self.wait(2)
+        self.play(vg.set_color_by_gradient, GREEN, RED, BLUE, lag_ratio=0.8, run_time=2.5, rate_func=linear)
+        self.wait(4)
+        self.play(Transform(caps[0], caps[3]))
+        self.wait()
+        self.play(Write(codes[3]))
+        self.play(Write(codes[-1]))
+        self.wait(2)
+        self.play(Transform(caps[0], caps[4]))
+        self.wait()
+        self.play(Write(codes[4:-1]))
+        self.wait(2)
+        circle = Circle(radius=2.7, color=DARK_GRAY).shift(LEFT*4)
+        dc = DashedVMobject(circle, num_dashes=40)
+        self.play(vg.set_colors_by_radial_gradient, None, 2.7, BLUE, PINK)
+        self.wait()
+        self.play(Transform(caps[0], caps[5]))
+        self.play(ShowCreation(dc))
+        self.wait(6)
+        self.play(FadeOut(VGroup(vg, dc, caps[0], bg, codes)))
+
+
+class SheenAndGradientColor(Scene_):
+    def start(self):
+        t2c = {"manim": GOLD,
+               "光泽": GOLD,
+               "颜色": ORANGE}
+        title = VGroup(
+            Text("Chapter VI.", font="Monaco for Powerline", color=BLUE_D, size=0.5, t2c=t2c),
+            Text("光泽与渐变颜色", font="Source Han Sans CN Bold", color=DARK_GRAY, size=0.5, t2c=t2c),
+        ).arrange(RIGHT, buff=0.5, aligned_edge=DOWN)
+        self.wait()
+        self.play(DrawBorderThenFill(title))
+        self.wait(2)
+        self.play(FadeOutAndShiftDown(title))
+    def construct(self):
+        self.start()
+        captions = [
+            "manim中,可以使用set_sheen来给物体增加光泽(本质上是将RGB加上一个数)",
+            "传入factor表示光泽的尺度、direction表示光泽变化的方向",
+            "或者仅仅使用set_sheen_direction来改变sheen的方向",
+            "达到渐变色的效果,可以向set_color中传入一个列表表示渐变的颜色",
+            "再用set_sheen_direction来改变渐变色的渐变方向",
+        ]
+        caps = VGroup(
+            *[
+                CodeLine(cap, font='Source Han Sans CN Bold', size=0.32).to_edge(DOWN * 1.2)
+                for cap in captions
+            ]
+        )
+
+        factor = ValueTracker(0.5)
+        codes = VGroup(
+            VGroup(
+                CodeLine(">>> rec.set_sheen("),
+                DecimalNumberText(factor.get_value(), text_config={"size": 0.36, "color": RED}),
+                CodeLine(", RIGHT)")
+            ).arrange(RIGHT, buff=0.15),
+            CodeLine(">>> rec.set_sheen_direction(UL)"),
+            CodeLine(">>> rec.set_sheen_direction(DR)"),
+            CodeLine(">>> rec.set_color([BLUE, RED, GREEN])"),
+            CodeLine(">>> rec.set_sheen_direction(RIGHT)"),
+            CodeLine("~~~~"),
+            CodeLine("~~~~"),
+            CodeLine("~~~~"),
+            CodeLine("~~~~"),
+            CodeLine("~~~~"),
+            CodeLine("~~~~"),
+            CodeLine("~~~~"),
+        ).arrange(DOWN, aligned_edge=LEFT)
+        codes.next_to(ORIGIN, aligned_edge=LEFT, buff=-1)
+        bg = SurroundingRectangle(codes, stroke_width=1, stroke_color=DARK_GRAY, fill_color="#EBEBEB", fill_opacity=1, buff=0.2)
+
+        rec = Square(side_length=3, fill_opacity=1, color=BLUE_D).shift(LEFT*4)
+        arrow = Arrow(ORIGIN, RIGHT, color=ORANGE).set_width(rec.get_width()).next_to(rec, UP)
+        # self.add(rec, bg)
+
+        self.play(Write(caps[0]))
+        self.wait()
+        self.play(ShowCreation(rec), FadeInFromDown(bg))
+        self.wait(3)
+        self.play(Transform(caps[0], caps[1]))
+        self.play(Write(codes[0]))
+        self.play(rec.set_sheen, 0.5, RIGHT)
+        self.wait()
+        self.play(Write(arrow))
+        self.wait()
+        codes[0][1].add_updater(lambda m: m.set_value(factor.get_value()))
+        rec.add_updater(
+            lambda m: m.become(
+                Square(side_length=3, fill_opacity=1, color=BLUE_D).shift(LEFT*4).set_sheen(factor.get_value(), RIGHT)
+            )
+        )
+        self.play(factor.increment_value, 2, rate_func=linear, run_time=3)
+        self.play(factor.increment_value, -2.5, rate_func=linear, run_time=3)
+        self.wait()
+        self.play(factor.increment_value, 0.5, rate_func=linear, run_time=2)
+        codes[0][1].clear_updaters()
+        rec.clear_updaters()
+        self.wait(3)
+        self.play(Transform(caps[0], caps[2]), FadeOut(arrow))
+        self.wait()
+        self.play(Write(codes[1]))
+        corners = rec.get_vertices()
+        arrow2 = Arrow(corners[2], corners[0], color=ORANGE)
+        arrow3 = Arrow(corners[0], corners[2], color=ORANGE)
+        self.play(Write(arrow2))
+        self.play(rec.set_sheen_direction, UL)
+        self.wait(3)
+        self.play(Write(codes[2]))
+        self.play(rec.set_sheen_direction, DR, Transform(arrow2, arrow3))
+        self.wait(3)
+        self.play(Transform(caps[0], caps[3]))
+        self.wait(2)
+        self.play(Write(codes[3]))
+        self.play(rec.set_color, [BLUE, RED, GREEN])
+        self.wait(3)
+        self.play(Transform(caps[0], caps[4]))
+        self.wait(2)
+        self.play(Write(codes[4]))
+        self.play(rec.set_sheen_direction, RIGHT, Transform(arrow2, arrow))
+        self.wait(5)
+        self.play(FadeOut(Group(*self.mobjects)))
 
 
 
