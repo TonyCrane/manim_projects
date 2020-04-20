@@ -1439,3 +1439,49 @@ class DownProgressBar(Scene_):
             texts[i].move_to(lines[i+1])
 
         self.add(lines, texts, text)
+
+
+class VideoCover(Scene):
+    def construct(self):
+        background = Polygon(
+            LEFT_SIDE * 2 + BOTTOM, BOTTOM, LEFT_SIDE / 2 + TOP, LEFT_SIDE * 2 + TOP,
+            fill_opacity=0.7, fill_color=BLACK, stroke_width=0
+        ).shift(RIGHT)
+        text = VGroup(
+            Text("manim教程", font="庞门正道标题体", color=BLUE).scale(0.9),
+            Text("第三讲", font="庞门正道标题体", color=BLUE).scale(1.1),
+            Text("颜色的表示和设置", font="庞门正道标题体", color=ORANGE).scale(1.5)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.4)
+        text[2].shift(DOWN*0.4)
+        text.center().to_edge(LEFT, buff=0.8).shift(UP*0.5)
+        text2 = VGroup(
+            Text("manim教程", font="庞门正道标题体", color=BLUE).scale(0.9).set_stroke(width=12, opacity=0.4),
+            Text("第三讲", font="庞门正道标题体", color=BLUE).scale(1.1).set_stroke(width=12, opacity=0.4),
+            Text("颜色的表示和设置", font="庞门正道标题体", color=ORANGE).scale(1.5).set_stroke(width=13, opacity=0.4)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.4)
+        text2[2].shift(DOWN*0.4)
+        text2.center().to_edge(LEFT, buff=0.8).shift(UP*0.5)
+        self.add(background, text2, text)
+
+
+class VideoCover1(Scene):
+    def construct(self):
+        background = Polygon(
+            LEFT_SIDE * 2 + BOTTOM, BOTTOM, LEFT_SIDE / 2 + TOP, LEFT_SIDE * 2 + TOP,
+            fill_opacity=0.7, fill_color=BLACK, stroke_width=0
+        ).shift(RIGHT)
+        text = VGroup(
+            Text("manim教程", font="庞门正道标题体", color=BLUE).scale(0.9),
+            Text("第一讲", font="庞门正道标题体", color=BLUE).scale(1.1),
+            Text("物体的位置与变换", font="庞门正道标题体", color=ORANGE).scale(1.5)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.4)
+        text[2].shift(DOWN*0.4)
+        text.center().to_edge(LEFT, buff=0.8).shift(UP*0.5)
+        text2 = VGroup(
+            Text("manim教程", font="庞门正道标题体", color=BLUE).scale(0.9).set_stroke(width=12, opacity=0.4),
+            Text("第一讲", font="庞门正道标题体", color=BLUE).scale(1.1).set_stroke(width=12, opacity=0.4),
+            Text("物体的位置与变换", font="庞门正道标题体", color=ORANGE).scale(1.5).set_stroke(width=13, opacity=0.4)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.4)
+        text2[2].shift(DOWN*0.4)
+        text2.center().to_edge(LEFT, buff=0.8).shift(UP*0.5)
+        self.add(background, text2, text)
