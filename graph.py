@@ -234,3 +234,139 @@ class NF24P3357(Scene_):
         )
 
         self.add(axes, line1, line1_, line2, line2_, dls, dots, arrows, changes, braces, problem, author, comment, dots2)
+
+
+class NF24P2754(Scene_):
+    def construct(self):
+        self.camera.set_frame_height(10)
+        self.camera.resize_frame_shape(1)
+        rad = 0.3
+        lis = [3, 1.8, 0.6, -0.6, -1.8, -3]
+        times = VGroup(
+            *[
+                VGroup(
+                    TextMobject("time={}".format(i), color=GRAY, background_stroke_color=GRAY).scale(0.6),
+                    DashedLine(np.array([-5, lis[i], 0]), np.array([5, lis[i], 0]), color=GRAY)
+                )
+                for i in range(6)
+            ]
+        ).shift(DL + LEFT)
+        for i in range(6):
+            times[i][0].next_to(times[i][1], LEFT)
+        nodes_0 = VGroup(
+            *[
+                VGroup(
+                    Circle(radius=rad, fill_color=WHITE, fill_opacity=1, stroke_color=BLACK).shift(LEFT*0.4).set_opacity(0),
+                    RoundedRectangle(height=rad*2, width=1.4, corner_radius=rad, color=BLACK, fill_color=WHITE, fill_opacity=1),
+                    TextMobject("0\ 地", color=BLACK, background_stroke_color=BLACK).scale(0.75),
+                    Circle(radius=rad, fill_color=WHITE, fill_opacity=1, stroke_color=BLACK).shift(RIGHT*0.4).set_opacity(0)
+                ).move_to(np.array([-3.6, i, 0]))
+                for i in lis
+            ]
+        )
+        nodes_1 = VGroup(
+            *[
+                VGroup(
+                    Circle(radius=rad, fill_color=WHITE, fill_opacity=1, stroke_color=BLACK).shift(LEFT*0.4).set_opacity(0),
+                    RoundedRectangle(height=rad*2, width=1.4, corner_radius=rad, color=ORANGE, fill_color=WHITE, fill_opacity=1),
+                    TextMobject("1\ 站", color=ORANGE, background_stroke_color=ORANGE).scale(0.75),
+                    Circle(radius=rad, fill_color=WHITE, fill_opacity=1, stroke_color=BLACK).shift(RIGHT*0.4).set_opacity(0)
+                ).move_to(np.array([-1.2, i, 0]))
+                for i in lis
+            ]
+        )
+        nodes_2 = VGroup(
+            *[
+                VGroup(
+                    Circle(radius=rad, fill_color=WHITE, fill_opacity=1, stroke_color=BLACK).shift(LEFT*0.4).set_opacity(0),
+                    RoundedRectangle(height=rad*2, width=1.4, corner_radius=rad, color=ORANGE, fill_color=WHITE, fill_opacity=1),
+                    TextMobject("2\ 站", color=ORANGE, background_stroke_color=ORANGE).scale(0.75),
+                    Circle(radius=rad, fill_color=WHITE, fill_opacity=1, stroke_color=BLACK).shift(RIGHT*0.4).set_opacity(0)
+                ).move_to(np.array([1.2, i, 0]))
+                for i in lis
+            ]
+        )
+        nodes_3 = VGroup(
+            *[
+                VGroup(
+                    Circle(radius=rad, fill_color=BLACK, fill_opacity=1, stroke_color=BLACK).shift(LEFT*0.4).set_opacity(0),
+                    RoundedRectangle(height=rad*2, width=1.4, corner_radius=rad, color=BLACK, fill_opacity=1),
+                    TextMobject("-1\ 月", color=WHITE, background_stroke_color=WHITE).scale(0.75),
+                    Circle(radius=rad, fill_color=WHITE, fill_opacity=1, stroke_color=BLACK).shift(RIGHT*0.4).set_opacity(0)
+                ).move_to(np.array([3.6, i, 0]))
+                for i in lis
+            ]
+        )
+        nodes = VGroup(nodes_0, nodes_1, nodes_2, nodes_3).shift(DL+LEFT)
+        
+        sw = 6
+        edges_0 = VGroup(
+            *[
+                Arrow(nodes_0[i][1].get_center(), nodes_0[i + 1][1].get_center(), color=BLACK, buff=rad, stroke_width=sw)
+                for i in range(5)
+            ]
+        )
+        edges_1 = VGroup(
+            *[
+                Arrow(nodes_1[i][1].get_center(), nodes_1[i + 1][1].get_center(), color=ORANGE, buff=rad, stroke_width=sw)
+                for i in range(5)
+            ]
+        )
+        edges_2 = VGroup(
+            *[
+                Arrow(nodes_2[i][1].get_center(), nodes_2[i + 1][1].get_center(), color=ORANGE, buff=rad, stroke_width=sw)
+                for i in range(5)
+            ]
+        )
+        edges_3 = VGroup(
+            *[
+                Arrow(nodes_3[i + 1][1].get_center(), nodes_3[i][1].get_center(), color=BLACK, buff=rad, stroke_width=sw)
+                for i in range(5)
+            ]
+        )
+
+        car_1 = VGroup(
+            Arrow(nodes[0][0][-1].get_center(),  nodes[1][1][0].get_center(), buff=rad+0.03, color=BLUE_D, max_tip_length_to_length_ratio=0.1).set_stroke(width=4),
+            Arrow(nodes[1][1][-1].get_center(),  nodes[2][2][0].get_center(), buff=rad+0.03, color=BLUE_D, max_tip_length_to_length_ratio=0.1).set_stroke(width=4),
+            Arrow(nodes[2][2][0].get_center(),  nodes[0][3][-1].get_center(), buff=rad+0.03, color=BLUE_D, max_tip_length_to_length_ratio=0.05).set_stroke(width=4),
+            Arrow(nodes[0][3][-1].get_center(),  nodes[1][4][0].get_center(), buff=rad+0.03, color=BLUE_D, max_tip_length_to_length_ratio=0.1).set_stroke(width=4),
+            Arrow(nodes[1][4][-1].get_center(),  nodes[2][5][0].get_center(), buff=rad+0.03, color=BLUE_D, max_tip_length_to_length_ratio=0.1).set_stroke(width=4),
+        )
+        car_2 = VGroup(
+            Arrow(nodes[1][0][-1].get_center(),  nodes[2][1][0].get_center(), buff=rad+0.03, color=BLUE_D, max_tip_length_to_length_ratio=0.1).set_stroke(width=4),
+            Arrow(nodes[2][1][-1].get_center(),  nodes[3][2][0].get_center(), buff=rad+0.03, color=BLUE_D, max_tip_length_to_length_ratio=0.1).set_stroke(width=4),
+            Arrow(nodes[3][2][0].get_center(),  nodes[1][3][-1].get_center(), buff=rad+0.03, color=BLUE_D, max_tip_length_to_length_ratio=0.05).set_stroke(width=4),
+            Arrow(nodes[1][3][-1].get_center(),  nodes[2][4][0].get_center(), buff=rad+0.03, color=BLUE_D, max_tip_length_to_length_ratio=0.1).set_stroke(width=4),
+            Arrow(nodes[2][4][-1].get_center(),  nodes[3][5][0].get_center(), buff=rad+0.03, color=BLUE_D, max_tip_length_to_length_ratio=0.1).set_stroke(width=4),
+        )
+        cars = VGroup(car_1, car_2)
+        labels = VGroup(
+            *[
+                TextMobject("1", color=BLUE_D, background_stroke_color=BLUE_D).scale(0.6).add_background_rectangle(color=WHITE, opacity=0.8, buff=0.1)\
+                    .move_to(car_1[i])
+                for i in range(5)
+            ],
+            *[
+                TextMobject("1", color=BLUE_D, background_stroke_color=BLUE_D).scale(0.6).add_background_rectangle(color=WHITE, opacity=0.8, buff=0.1)\
+                    .move_to(car_2[i])
+                for i in range(5)
+            ],
+        )
+        
+        s = VGroup(
+            Circle(radius=rad, fill_color=WHITE, fill_opacity=1, stroke_color=RED),
+            TextMobject("s", color=RED, background_stroke_width=0).scale(0.75)
+        ).move_to(np.array([-7, 3, 0]))
+        t = VGroup(
+            Circle(radius=rad, fill_color=WHITE, fill_opacity=1, stroke_color=RED),
+            TextMobject("t", color=RED, background_stroke_width=0).scale(0.75)
+        ).move_to(np.array([3, 3, 0]))
+        edge_s = Arrow(s[0].get_center() , nodes[0][0][0].get_center(), color=RED, buff=rad)
+        edge_t = Arrow(nodes[3][0][-1].get_center(), t[0].get_center(), color=RED, buff=rad)
+
+        problem = TextMobject("星际转移问题", color=WHITE, background_stroke_color=WHITE).scale(1.3)
+        problem.add_background_rectangle(color=GOLD_D, opacity=1, buff=0.15).move_to(np.array([-5.5, 4, 0]))
+
+        edges = VGroup(edges_0, edges_1, edges_2, edges_3)
+
+        self.add(times, edges, cars, labels, edge_s, edge_t, nodes, s, t, problem)
