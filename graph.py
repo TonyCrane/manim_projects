@@ -238,7 +238,7 @@ class NF24P3357(Scene_):
 
 class NF24P2754(Scene_):
     def construct(self):
-        self.camera.set_frame_height(10)
+        self.camera.set_frame_height(9)
         self.camera.resize_frame_shape(1)
         rad = 0.3
         lis = [3, 1.8, 0.6, -0.6, -1.8, -3]
@@ -250,7 +250,7 @@ class NF24P2754(Scene_):
                 )
                 for i in range(6)
             ]
-        ).shift(DL + LEFT)
+        ).shift(DL+UP*0.5)
         for i in range(6):
             times[i][0].next_to(times[i][1], LEFT)
         nodes_0 = VGroup(
@@ -297,7 +297,7 @@ class NF24P2754(Scene_):
                 for i in lis
             ]
         )
-        nodes = VGroup(nodes_0, nodes_1, nodes_2, nodes_3).shift(DL+LEFT)
+        nodes = VGroup(nodes_0, nodes_1, nodes_2, nodes_3).shift(DL+UP*0.5)
         
         sw = 6
         edges_0 = VGroup(
@@ -356,17 +356,30 @@ class NF24P2754(Scene_):
         s = VGroup(
             Circle(radius=rad, fill_color=WHITE, fill_opacity=1, stroke_color=RED),
             TextMobject("s", color=RED, background_stroke_width=0).scale(0.75)
-        ).move_to(np.array([-7, 3, 0]))
+        ).move_to(np.array([-6, 3.5, 0]))
         t = VGroup(
             Circle(radius=rad, fill_color=WHITE, fill_opacity=1, stroke_color=RED),
             TextMobject("t", color=RED, background_stroke_width=0).scale(0.75)
-        ).move_to(np.array([3, 3, 0]))
+        ).move_to(np.array([4, 3.5, 0]))
         edge_s = Arrow(s[0].get_center() , nodes[0][0][0].get_center(), color=RED, buff=rad)
         edge_t = Arrow(nodes[3][0][-1].get_center(), t[0].get_center(), color=RED, buff=rad)
 
         problem = TextMobject("星际转移问题", color=WHITE, background_stroke_color=WHITE).scale(1.3)
-        problem.add_background_rectangle(color=GOLD_D, opacity=1, buff=0.15).move_to(np.array([-5.5, 4, 0]))
+        problem.add_background_rectangle(color=GOLD_D, opacity=1, buff=0.15).next_to(nodes[1][0], UP, buff=0.5)
+        comment = VGroup(
+            TextMobject("未标记的边", color=GRAY, background_stroke_color=GRAY).scale(0.75),
+            TextMobject("容量为inf", color=BLUE, background_stroke_color=BLUE).scale(0.75)
+        ).arrange(DOWN, aligned_edge=LEFT).move_to(np.array([5.5, -0.5, 0]))
+        rec = SurroundingRectangle(comment, color=GRAY, buff=0.2)
+        author = TextMobject("by @鹤翔万里", background_stroke_color=ORANGE, opacity=0.8).scale(0.7).set_color(ORANGE)
+        author.move_to(np.array([5.5, -2.5, 0]))
+
+        vdots = VGroup(
+            *[TexMobject("\\vdots", color=BLACK).scale(0.8) for i in range(4)]
+        )
+        for i in range(4):
+            vdots[i].next_to(nodes[i][-1], DOWN, buff=0.2)
 
         edges = VGroup(edges_0, edges_1, edges_2, edges_3)
 
-        self.add(times, edges, cars, labels, edge_s, edge_t, nodes, s, t, problem)
+        self.add(times, edges, cars, labels, edge_s, edge_t, nodes, s, t, problem, comment, rec, vdots, author)
