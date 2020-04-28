@@ -370,3 +370,83 @@ class NF24P2754(Scene_):
         edges = VGroup(edges_0, edges_1, edges_2, edges_3)
 
         self.add(times, edges, cars, labels, edge_s, edge_t, nodes, s, t, problem)
+
+
+class MosAlgoCompare1(Scene_):
+    def construct(self):
+        line = [
+            [-3.8, [-3, -1.8, -0.2, 0.2, 1.8, 2.2, 3.8]],
+            [-1.8, [-1, 0.2, 1.8, 2.2, 3.8]],
+            [0.2, [1.8, 2.2, 3.8]],
+            [2.2, [3, 3.8]]
+        ]
+        lines = VGroup(
+            *[
+                VGroup(
+                    *[
+                        VGroup(
+                            Line(i * RIGHT, j * RIGHT, color=BLACK),
+                            Dot(i * RIGHT, color=DARK_GRAY, radius=0.05),
+                            Dot(j * RIGHT, color=DARK_GRAY, radius=0.05),
+                        ) for j in k
+                    ]
+                ).arrange(DOWN, False, buff=0.3, coor_mask=np.array([0, 1, 0]))
+                for i, k in line
+            ]
+        ).arrange(DOWN, buff=0.45, coor_mask=np.array([0, 1, 0]))
+        back = VGroup(
+            *[
+                DashedLine(np.array([i, 3.8, 0]), np.array([i, -3.8, 0]), color=GRAY)
+                for i in [-4, -2, 0, 2, 4]
+            ]
+        )
+        lines1 = VGroup()
+        for group in lines:
+            for i, j in enumerate(group):
+                if j != group[-1]:
+                    lines1.add(Line(j[-1].get_center(), group[i+1][-1].get_center(), color=RED).add_tip(0.15))
+        lines2 = VGroup()
+        for i, j in enumerate(lines):
+            if j != lines[-1]:
+                lines2.add(Line(j[-1][-1].get_center(), lines[i+1][0][-1].get_center(), color=BLUE_D).add_tip(0.15))
+        self.add(back, lines, lines1, lines2)
+
+
+class MosAlgoCompare2(Scene_):
+    def construct(self):
+        line = [
+            [-3.8, [-3, -1.8, -0.2, 0.2, 1.8, 2.2, 3.8]],
+            [-1.8, [3.8, 2.2, 1.8, 0.2, -1]],
+            [0.2, [1.8, 2.2, 3.8]],
+            [2.2, [3.8, 3]]
+        ]
+        lines = VGroup(
+            *[
+                VGroup(
+                    *[
+                        VGroup(
+                            Line(i * RIGHT, j * RIGHT, color=BLACK),
+                            Dot(i * RIGHT, color=DARK_GRAY, radius=0.05),
+                            Dot(j * RIGHT, color=DARK_GRAY, radius=0.05),
+                        ) for j in k
+                    ]
+                ).arrange(DOWN, False, buff=0.3, coor_mask=np.array([0, 1, 0]))
+                for i, k in line
+            ]
+        ).arrange(DOWN, buff=0.45, coor_mask=np.array([0, 1, 0]))
+        back = VGroup(
+            *[
+                DashedLine(np.array([i, 3.8, 0]), np.array([i, -3.8, 0]), color=GRAY)
+                for i in [-4, -2, 0, 2, 4]
+            ]
+        )
+        lines1 = VGroup()
+        for group in lines:
+            for i, j in enumerate(group):
+                if j != group[-1]:
+                    lines1.add(Line(j[-1].get_center(), group[i+1][-1].get_center(), color=RED).add_tip(0.15))
+        lines2 = VGroup()
+        for i, j in enumerate(lines):
+            if j != lines[-1]:
+                lines2.add(Line(j[-1][-1].get_center(), lines[i+1][0][-1].get_center(), color=BLUE_D).add_tip(0.15))
+        self.add(back, lines, lines1, lines2)
