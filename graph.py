@@ -463,3 +463,54 @@ class MosAlgoCompare2(Scene_):
             if j != lines[-1]:
                 lines2.add(Line(j[-1][-1].get_center(), lines[i+1][0][-1].get_center(), color=BLUE_D).add_tip(0.15))
         self.add(back, lines, lines1, lines2)
+
+
+class RollBackMosAlgo(Scene_):
+    def construct(self):
+        line = [
+            [-3.6, -0.4],
+            [-2.4, 0.4],
+            [-3.6, 2.4],
+            [-2.4, 3.6]
+        ]
+        lines = VGroup(
+            *[
+                VGroup(
+                    Line(i * RIGHT, j * RIGHT, color=BLACK),
+                    Dot(i * RIGHT, color=DARK_GRAY, radius=0.05),
+                    Dot(j * RIGHT, color=DARK_GRAY, radius=0.05),
+                )
+                for i, j in line
+            ]
+        ).arrange(DOWN, buff=0.5, coor_mask=np.array([0, 1, 0]))
+        back = VGroup(
+            *[
+                DashedLine(np.array([i, 3.8, 0]), np.array([i, -3.8, 0]), color=GRAY)
+                for i in [-4, -2, 0, 2, 4]
+            ]
+        )
+        s = np.array([-2, 1.5, 0])
+        # self.add(Dot(s, color=BLACK))
+        l = VGroup(
+            Line(s, lines[0][1].get_center(), color=ORANGE),
+            Line(lines[0][1].get_center(), np.array([-2, lines[0][1].get_center()[1], 0]), color=ORANGE),
+            Line(np.array([-2, lines[0][1].get_center()[1], 0]), lines[1][1].get_center(), color=ORANGE),
+            Line(lines[1][1].get_center(), np.array([-2, lines[1][1].get_center()[1], 0]), color=ORANGE),
+            Line(np.array([-2, lines[1][1].get_center()[1], 0]), lines[2][1].get_center(), color=ORANGE),
+            Line(lines[2][1].get_center(), np.array([-2, lines[2][1].get_center()[1], 0]), color=ORANGE),
+            Line(np.array([-2, lines[2][1].get_center()[1], 0]), lines[3][1].get_center(), color=ORANGE),
+            Line(lines[3][1].get_center(), np.array([-2, lines[3][1].get_center()[1], 0]), color=ORANGE),
+        )
+        for each in l:
+            each.add_tip(0.2)
+        r = VGroup(
+            Line(s, lines[0][2].get_center(), color=BLUE_D),
+            Line(lines[0][2].get_center(), lines[1][2].get_center(), color=BLUE_D),
+            Line(lines[1][2].get_center(), lines[2][2].get_center(), color=BLUE_D),
+            Line(lines[2][2].get_center(), lines[3][2].get_center(), color=BLUE_D),
+        )
+        for each in r:
+            each.add_tip(0.2)
+
+        self.add(lines, back, l, r)
+
