@@ -1317,3 +1317,318 @@ class Test88(Scene):
             Line(UP, RIGHT)
         )
         self.play(ShowCreation(lines))
+
+class Test89(Scene):
+    '''测试PMobject，用于画点，stroke_width表示点大小'''
+    def construct(self):
+        points = PMobject(stroke_width=1080)
+        points.add_points([ORIGIN], color=BLUE)
+        self.add(points)
+
+class Test90(Scene):
+    '''mk的一次作业，测试包络线'''
+    CONFIG = {
+        "camera_config": {
+            "background_color": WHITE,
+            "use_plot_depth": True,
+        },
+    }
+    def construct(self):
+        circle = Circle(radius = 3, color = DARK_BLUE, plot_depth=3).flip()
+        center = Dot(color=GREEN)
+        A = Dot(np.array([-2, 0, 0]), color = RED)
+        alpha = ValueTracker(0.0001)
+        B = Dot(color=BLUE, radius=0.07, plot_depth=4)
+        B.add_updater(lambda m: m.move_to(circle.point_from_proportion(alpha.get_value())))
+        line1 = DashedLine(A.get_center(), B.get_center(), color=DARK_BROWN)
+        line1.add_updater(lambda m: m.put_start_and_end_on(A.get_center(), B.get_center()))
+        C = Dot(color=BLUE, radius=0.07, plot_depth=4)
+        C.add_updater(lambda m: m.move_to(circle.point_from_proportion(alpha.get_value())).flip(axis=B.get_center()-A.get_center(), about_point=ORIGIN))
+        line2 = Line(B.get_center(), C.get_center(), color=ORANGE, stroke_width=3)
+        line2.add_updater(lambda m: m.put_start_and_end_on(B.get_center(), C.get_center()))
+
+        trace = VGroup()
+        self.i = 0
+        def update_trace(m):
+            self.i += 1
+            if self.i % 4 == 0:
+                m.add(line2.copy().clear_updaters())
+
+        self.wait(3)
+        self.play(ShowCreation(circle), ShowCreation(center))
+        self.wait()
+        self.play(ShowCreation(A))
+        alpha.set_value(0.2)
+        self.play(ShowCreation(B))
+        self.play(alpha.increment_value, 0.6, run_time=1.5)
+        self.play(alpha.increment_value, -0.6, run_time=1.6)
+        self.play(ShowCreation(line1))
+        self.wait()
+        ra = Right_angle(corner=B.get_center(), on_the_right=False, stroke_color=BLUE)
+        ra.move_corner_to(B.get_center())
+        ra.change_angle_to(line1.get_angle()+PI/2)
+        self.play(ShowCreation(C), ShowCreation(line2), ShowCreation(ra))
+        self.wait(2)
+        self.play(FadeOut(ra))
+        self.play(alpha.increment_value, 0.6, run_time=1.5)
+        self.play(alpha.increment_value, -0.7999, run_time=2, rate_func=linear)
+        self.wait()
+        self.add(trace)
+        line2.set_stroke(width=2)
+        self.wait(2)
+        trace.add_updater(update_trace)
+        alpha.set_value(0)
+        anim = ApplyMethod(alpha.increment_value, 1, run_time=8, rate_func=linear)
+        self.play(anim)
+        self.wait(2)
+
+        ellipse = Ellipse(width=6, height=2*np.sqrt(5), color=GREEN, plot_depth=10, run_time=2.5)
+        self.play(ShowCreationThenDestruction(ellipse))
+        self.wait(5)
+
+class Test91(Scene):
+    '''tex上色后会拆开'''
+    def construct(self):
+        tex = TexMobject("abcdefghijk")
+        VGroup(tex[0][:2], tex[0][3:5]).set_color(RED)
+        self.add(tex)
+        self.wait()
+        tex2 = VGroup(tex[0][2], tex[0][5])
+        self.play(tex2.set_color, BLUE)
+        self.wait(2)
+        self.remove(*tex[0])
+        self.wait(2)
+
+class Test92(Scene):
+    '''测试shift多参数'''
+    def construct(self):
+        plane = NumberPlane()
+        dot = Dot().shift(RIGHT, UP, LEFT)
+        self.add(plane, dot)
+
+class Test93(Scene):
+    '''测试切线，适用于所有带路径的，包括文字'''
+    def construct(self):
+        circle = Circle()
+        text = SingleStringTexMobject("j").scale(8)
+        tl = TangentLine(text[0], 0, length=5, stroke_width=1, color=BLUE)
+        value = ValueTracker(0)
+        tl.add_updater(
+            lambda m: m.become(
+                TangentLine(text[0], value.get_value(), length=5, stroke_wodth=1, color=BLUE)
+            )
+        )
+        self.add(text, tl)
+        self.wait()
+        self.play(value.increment_value, 1, run_time=10, rate_func=linear)
+        self.wait()
+
+class Test94(ThreeDScene):
+    '''3D移动相机中心，但是好像没有动画效果'''
+    def construct(self):
+        self.set_to_default_angled_camera_orientation()
+        cube = Cube()
+        axes = ThreeDAxes()
+        self.add(axes, cube)
+        self.wait()
+        self.play(self.camera.frame_center.move_to, LEFT*2, run_time=3)
+        self.wait()
+
+class Test95(Scene):
+    '''修Text的bug时用的，现在应该不好使了'''
+    def construct(self):
+        text = Text("abcdefghijklmnopqrstuvwkyz", font="庞门正道标题体", fill_opacity=0, debug=True).scale(1).set_stroke(width=5, opacity=1)
+        diff = VGroup(
+            Text("庞门正道标题体", font="庞门正道标题体", fill_opacity=0).scale(1).set_stroke(width=5, opacity=1),
+            Text("庞门正道标题体", font="庞门正道标题体", fill_opacity=0, debug=True).scale(1).set_stroke(width=5, opacity=1)
+        ).arrange(DOWN)
+        # points = text[0].get_points()
+        # print(points)
+        self.add(diff)
+        # debugTeX(self, points, 0.2)
+
+class Test96(Scene):
+    '''修Text的bug时用的，现在应该不好使了'''
+    def construct(self):
+        text = Text("a  b", font="庞门正道标题体",      debug=True).scale(3).shift(UP*2)
+        text3 = Text("abcd", font="庞门正道标题体",     debug=True).scale(3).shift(DOWN*2)
+        text4 = Text("啦 啦 啦", font="庞门正道标题体", debug=True).scale(3).shift(UP*2)
+        dot = Dot(ORIGIN, color=BLUE)
+        self.add(dot)
+        self.wait()
+        self.play(Write(text))
+        self.wait(2)
+        self.play(Transform(text, text3))
+        self.wait(2)
+        self.play(Transform(text, text4))
+        self.wait(3)
+        
+class Test97(Scene):
+    '''修Text的bug时用的，现在应该不好使了'''
+    def construct(self):
+        text = VGroup(
+            Text("manim", font="庞门正道标题体", debug=True).set_stroke(width=15, opacity=0.5),
+            Text("manim", font="庞门正道标题体", debug=True, fill_opacity=0).set_stroke(width=5)
+        ).scale(8).arrange(DOWN)
+        self.add(text)
+        for i in range(5):
+            points = text[1][i].get_points()
+            debugTeX(self, points)
+            
+class Test98(Scene):
+    '''修Text的bug时用的，现在应该不好使了'''
+    def construct(self):
+        text = VGroup(
+            Text("a  b", font="庞门正道标题体", debug=False).scale(3).shift(UP*1.5),
+            Text("a  b", font="庞门正道标题体").scale(3).shift(DOWN*1.5),
+        )
+        comment = VGroup(
+            Text("before:", font="Consolas").scale(2).next_to(text[0], LEFT, buff=1),
+            Text("after:", font="Consolas").scale(2).next_to(text[1], LEFT, buff=1),
+        )
+        self.add(text, comment)
+        for i in text:
+            debugTeX(self, i, 0.8)
+
+class Test99(Scene):
+    '''修Text的bug时用的，现在应该不好使了'''
+    def construct(self):
+        title = Text("default size compare", font="Consolas", color=BLUE).scale(1.5).shift(UP*2)
+        text = VGroup(
+            VGroup(
+                Text("before", font="Consolas").scale(2),
+                TextMobject("before"),
+            ).arrange(RIGHT),
+            VGroup(
+                Text("after", font="Consolas"),
+                TextMobject("after"),
+            ).arrange(RIGHT),
+        ).arrange(DOWN, buff=1)
+        self.add(text, title)
+
+class Test100(Scene):
+    '''测试ImageMobject导入gif，只保留第一帧，无动图'''
+    def construct(self):
+        img = ImageMobject("Test96.gif")
+        self.add(img)
+        self.wait(5)
+
+class Test101(Scene):
+    '''试验黑背景遮罩'''
+    CONFIG = {
+        "reverse_order": False,
+    }
+    def construct(self):
+        img = ImageMobject("latexlive.png", height=8)
+        self.add(img)
+        rects = VGroup(*[Rectangle() for x in range(2)])
+        rects.set_stroke(width=0)
+        rects.set_fill(GREY, 0.5)
+        rects.set_height(2.2, stretch=True)
+        rects.set_width(7.4, stretch=True)
+        rects[0].move_to(DOWN*0.1)
+        rects[1].set_height(1.5, stretch=True)
+        rects[1].set_width(3, stretch=True)
+        rects[1].move_to(DOWN*2.75)
+        inv_rects = VGroup()
+        for rect in rects:
+            fsr = FullScreenFadeRectangle()
+            fsr.append_points(rect.points[::-1])
+            inv_rects.add(fsr)
+        inv_rects.set_fill(BLACK, 0.7)
+        self.wait(2)
+        self.play(VFadeIn(inv_rects[0]))
+        self.wait(2)
+        self.play(Transform(inv_rects[0], inv_rects[1]))
+        self.wait(2)
+        self.play(VFadeOut(inv_rects[0]))
+        self.wait(2)
+
+class Test102(Scene):
+    '''同大小Image的Transform'''
+    def construct(self):
+        img1 = ImageMobject("latexlive.png", height=8)
+        img2 = ImageMobject("latexhelp.png", height=8)
+        self.add(img1)
+        self.wait(2)
+        self.play(
+            Transform(img1, img2), run_time=2
+        )
+        self.wait(2)
+
+class Test103(Scene):
+    '''测试Code'''
+    def construct(self):
+        helloworldcpp = Code(
+            "helloworldcpp.cpp",
+            tab_width=4,
+            insert_line_no=True,
+            style="autumn",
+            background_stroke_color=BLACK,
+            background="window",
+            language="cpp",
+        )
+        self.add(helloworldcpp)
+
+class Test104(Scene):
+    '''修Text的bug时用的'''
+    def construct(self):
+        text1 = Text("  ab\ncd", font="Consolas", size=2)
+        text2 = Text("ef\ngh", font="Consolas", size=2)
+        self.add(text1)
+        self.wait()
+        self.play(Transform(text1, text2))
+        self.wait()
+
+class Test105(Scene):
+    '''修Text的bug时用的'''
+    def construct(self):
+        text = Text("  ab\ncd\nef", font="Consolas", size=2)
+        text2 = Text("ab\n  cd\nef", font="Consolas", size=2)
+        text[2].set_color(YELLOW)
+        self.add(text)
+        self.wait()
+        self.play(Transform(text, text2))
+        self.wait()
+        debugTeX(self, text)
+
+class Test106(Scene):
+    '''https://github.com/3b1b/manim/pull/1072'''
+    CONFIG = {
+        "camera_config": {
+            "background_color": WHITE,
+        },
+    }
+    def construct(self):
+        plane = NumberPlane(axis_config={"stroke_color": BLACK})
+        plane.add_coordinates(number_config={"color": BLACK})
+        self.add(plane)
+
+class Test107(Scene):
+    '''临时做的一张图'''
+    CONFIG = {
+        "camera_config": {
+            "background_color": WHITE,
+        },
+    }
+    def construct(self):
+        main = Text("粉丝问答", font="思源黑体 CN Heavy", color=BLACK).set_width(6)
+        comment = Text("(凑够9张图)", font="思源黑体 CN Light", color=BLUE_D)
+        comment.next_to(main, DOWN)
+
+        self.add(main, comment)
+
+class Test108(Scene):
+    '''https://github.com/3b1b/manim/issues/1095'''
+    CONFIG = {
+        "v_coord_strings" : ["-1", "2"],
+    }
+    def construct(self):
+        rule = TexMobject(
+            "\\text{Transformed}\\vec{\\textbf{v}}",
+            " = %s"%self.v_coord_strings[0],
+            "(\\text{Transformed}\\hat{\\imath})",
+            "+%s"%self.v_coord_strings[1],
+            "(\\text{Transformed}\\hat{\\jmath})",
+        )
+        self.add(rule)
