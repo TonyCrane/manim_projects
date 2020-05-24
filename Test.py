@@ -1632,3 +1632,25 @@ class Test108(Scene):
             "(\\text{Transformed}\\hat{\\jmath})",
         )
         self.add(rule)
+
+class Test109(Scene):
+    '''生成README中的头图'''
+    CONFIG = {
+        "camera_config": {
+            "background_color": WHITE,
+        },
+    }
+    def construct(self):
+        logo = Logo(black_bg=False).set_height(2)
+        img = ImageMobject("Tony.png").set_height(2)
+        Group(logo, img).arrange(RIGHT, buff=1.5).center()
+        line = Line(UP, DOWN, stroke_width=8, color=BLACK).move_to(mid(logo.get_right(), img.get_left()))
+        line.set_length(1.4)
+        text = VGroup(
+            Text("Manim-Kindergarten", font="Orbitron", color=DARK_GRAY),
+            Text("鹤翔万里", font="庞门正道标题体", color=BLACK, size=2.3)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(img, buff=0.5)
+        text[0][0].set_color(logo.color_2[2])
+        text[0][6].set_color(logo.color_1[2])
+        self.add(logo, img, line, text)
+        Group(*self.mobjects).center()
