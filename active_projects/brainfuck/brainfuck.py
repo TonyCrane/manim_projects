@@ -176,9 +176,8 @@ class BFCode(Text):
     CONFIG = {
         "code": "",
         "font": "Consolas",
-        "size": 0.9,
+        "size": 0.58,
         "color": WHITE,
-        "line_spacing": 1.15
     }
 
     def __init__(self, code=None, **kwargs):
@@ -204,12 +203,11 @@ class BFCodePointer(RoundedRectangle):
         "stroke_color": YELLOW,
         "fill_opacity": 0,
         "stroke_opacity": 1,
-        "corner_radius": 0.08,
+        "corner_radius": 0.05,
         "text_config": {
             "font": "Consolas",
-            "size": 0.9,
+            "size": 0.58,
             "color": WHITE,
-            "line_spacing": 1.4
         },
     }
 
@@ -220,8 +218,8 @@ class BFCodePointer(RoundedRectangle):
         )
         RoundedRectangle.__init__(
             self,
-            width=base_char.get_width()+0.2,
-            height=base_char.get_height()+0.2,
+            width=base_char.get_width()+0.1,
+            height=base_char.get_height()+0.1,
             **kwargs
         )
         self.code = code
@@ -307,18 +305,22 @@ class BFScene(Scene):
             return
         elif command == "[" and self.memory.values[self.ptr] == 0: 
             self.codeptr = self.bracemap[self.codeptr]
-            self.play(self.codepointer.move, self.codeptr)
+            self.play(self.codepointer.move, self.codeptr, run_time=0.2)
         elif command == "]" and self.memory.values[self.ptr] != 0: 
             self.codeptr = self.bracemap[self.codeptr]
-            self.play(self.codepointer.move, self.codeptr)
+            self.play(self.codepointer.move, self.codeptr, run_time=0.2)
         elif command == ".":
             text = self.memory.get_char(self.ptr)
             self.play(
-                self.memorypointer.read_number, FadeInFromDown(text)
+                self.memorypointer.read_number, 
+                FadeInFromDown(text), 
+                run_time=0.5
             )
             self.wait(0.5)
             self.play(
-                self.output.append_char(text), self.memorypointer.finish_reading
+                self.memorypointer.finish_reading, 
+                self.output.append_char(text), 
+                run_time=0.5
             )
             self.wait(0.5)
             
@@ -340,3 +342,17 @@ class BrainFuckExample(BFScene):
 ++++ .""",
     }
 
+
+class HelloWorld(BFScene):
+    CONFIG = {
+        "code": """+++++ +++++
+[
+    > +++++ ++
+    > +++++ +++++
+    > +++
+    <<< -
+]
+> ++ . > + . +++++ ++ . .
++++ . < +++++ +++++ +++++ .
+> . +++ . ----- - . ----- --- . > +++ .""",
+    }
