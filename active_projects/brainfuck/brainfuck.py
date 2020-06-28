@@ -178,6 +178,13 @@ class BFCode(Text):
         "font": "Consolas",
         "size": 0.58,
         "color": WHITE,
+        "t2c": {
+            "[": RED,
+            "]": RED,
+            "<": BLUE,
+            ">": BLUE,
+            ".": GREEN,
+        }
     }
 
     def __init__(self, code=None, **kwargs):
