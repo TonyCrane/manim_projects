@@ -1654,3 +1654,307 @@ class Test109(Scene):
         text[0][6].set_color(logo.color_1[2])
         self.add(logo, img, line, text)
         Group(*self.mobjects).center()
+
+class Test110(Scene):
+    """给cigar的头图，效果不太好"""
+    CONFIG = {
+        "camera_config": {
+            "background_color": WHITE,
+        },
+    }
+    def construct(self):
+        logo = Logo(black_bg=False).set_height(2)
+        img = ImageMobject("cigar.png").set_height(2)
+        Group(logo, img).arrange(RIGHT, buff=1.5).center()
+        line = Line(UP, DOWN, stroke_width=8, color=BLACK).move_to(mid(logo.get_right(), img.get_left()))
+        line.set_length(1.4)
+        text = VGroup(
+            Text("Manim-Kindergarten", font="Orbitron", color=DARK_GRAY),
+            Text("cigar666", font="庞门正道标题体", color=BLACK, size=2.1)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(img, buff=0.5)
+        text[0][0].set_color(logo.color_2[2])
+        text[0][6].set_color(logo.color_1[2])
+        self.add(logo, img, line, text)
+        Group(*self.mobjects).center()
+
+class Test111(Scene):
+    """Fade和VFade的区别"""
+    def construct(self):
+        sq = VGroup(
+            Square(stroke_width=15, color=RED, opacity=0.5, fill_opacity=0.8),
+            Square(stroke_width=15, color=RED, opacity=0.5, fill_opacity=0.8),
+        ).arrange(RIGHT, buff=1)
+        texts = VGroup(
+            Text("FadeIn", font="Consolas", size=1.3).next_to(sq[0], DOWN),
+            Text("VFadeIn", font="Consolas", size=1.3).next_to(sq[1], DOWN),
+        )
+        text = VGroup(
+            Text("FadeOut", font="Consolas", size=1.3).next_to(sq[0], DOWN),
+            Text("VFadeOut", font="Consolas", size=1.3).next_to(sq[1], DOWN),
+        )
+        self.add(texts)
+        self.wait()
+        self.play(
+            FadeIn(sq[0]),
+            VFadeIn(sq[1]),
+            run_time=3
+        )
+        self.wait()
+        self.play(Transform(texts[0], text[0]), Transform(texts[1], text[1]))
+        self.wait()
+        self.play(
+            FadeOut(sq[0]),
+            VFadeOut(sq[1]),
+            run_time=3
+        )
+        self.wait()
+
+class Test112(Scene):
+    """给VGroup用for循环施加updater，需要转换全局变量i为局部变量n"""
+    def construct(self):
+        ups = VGroup(
+            *[
+                Dot(color=BLUE).move_to([i, 1, 0])
+                for i in range(-3, 4)
+            ]
+        )
+        downs = VGroup(
+            *[
+                Dot(color=YELLOW).move_to([i, -1, 0])
+                for i in range(-3, 4)
+            ]
+        )
+        lines = VGroup(
+            *[
+                Line(ups[i], downs[i])
+                for i in range(0, 7)
+            ]
+        )
+        for i in range(7):
+            lines[i].add_updater(lambda m, n=i: m.put_start_and_end_on(ups[n].get_bottom(), downs[n].get_top()))
+        self.add(ups, downs, lines)
+        self.wait()
+        self.play(
+            ups.shift, LEFT * 2
+        )
+        self.play(
+            downs.shift, RIGHT * 2
+        )
+        self.wait()
+
+class Test113(Scene):
+    def construct(self):
+        svg = SVGMobject("afed61182cb6d368.svg")
+        self.add(svg)
+
+class Test114(Scene):
+    """字母也能做切线"""
+    def construct(self):
+        ratio = ValueTracker(0)
+        text = TexMobject("S", fill_opacity=0, stroke_width=2).set_height(7)
+        point = Dot().add_updater(
+            lambda m: m.move_to(text[0][0].point_from_proportion(ratio.get_value()))
+        )
+        self.add(text, point)
+        self.wait()
+        self.play(ratio.set_value, 1, run_time=3, rate_func=linear)
+        self.wait()
+
+class Test115(Scene):
+    """Write的具体细节"""
+    def construct(self):
+        text = TextMobject("+").set_height(5)
+        self.wait()
+        progress = NumberLine(x_min=0, x_max=1, unit_size=10, tick_frequency=0.5).center().to_edge(DOWN)
+        alpha = ValueTracker(0)
+        tick = Triangle(fill_opacity=1).scale(0.2).rotate(PI)
+        tick.add_updater(lambda m: m.move_to(progress.n2p(alpha.get_value()), aligned_edge=DOWN))
+        self.add(progress, tick)
+        self.play(Write(text, stroke_width=30), alpha.set_value, 1, run_time=5, rate_func=linear)
+        self.wait()
+
+class Test116(Scene):
+    def construct(self):
+        test = ParametricFunction(
+            lambda t: np.array([
+                2*np.sin(3*t)*np.cos(t),
+                2*np.sin(3*t)*np.sin(t),
+                0
+            ]),
+            t_min=0, t_max=2*PI,
+        )
+        debugTeX(self, test.points)
+        self.add(test)
+
+class Test117(Scene):
+    def construct(self):
+        grid = NumberPlane(
+            center_point=LEFT*3,
+            x_max=15
+        )
+        self.add(grid)
+
+class Test118(Scene):
+    """好像是测试妈咪叔的latexlive写的"""
+    def construct(self):
+        text = TextMobject("\\begin{equation}  x = a_0 \+ \\cfrac{1}{a_1           \+ \\cfrac{1}{a_2           \+ \\cfrac{1}{a_3 \+ \\cfrac{1}{a_4} } } }\\end{equation}")
+        self.add(text)
+
+class Test119(Scene):
+    """mk的logo"""
+    def construct(self):
+        logo = Logo().set_height(8)
+        self.add(logo)
+
+
+class Test120(Scene):
+    """MaintainPositionRelativeTo"""
+    def construct(self):
+        dot = Dot()
+        circle = Circle()
+        triangle = Triangle()
+
+        self.play(
+            Write(circle),
+            Write(dot),
+            Write(triangle),
+            run_time=3
+        )
+        self.play(
+            dot.shift, UP,
+            MaintainPositionRelativeTo(triangle, dot)
+        )
+
+class Test121(Scene):
+    """VectorizedPoint不会被显示"""
+    def construct(self):
+        v = VectorizedPoint([1, 1, 0], stroke_width=10, stroke_opacity=1, fill_opacity=0, color=YELLOW, artificial_width=10, artificial_height=10)
+        self.add(v)
+
+class Test122(Scene):
+    """StreamLines"""
+    def construct(self):
+        sl = StreamLines(
+            lambda p: rotate_vector(p / 3, 90 * DEGREES), color_by_magnitude=True, color_by_arc_length=False
+        )
+        self.add(sl)
+        self.wait()
+        self.play(ShowPassingFlashWithThinningStrokeWidth(sl))
+        self.wait()
+
+class Test123(Scene):
+    """和Test112类似"""
+    def construct(self):
+        heights = [2, 3, 5, 7, 9]
+        trackers = [ValueTracker(h) for h in heights]
+        num_tex = [DecimalNumber(t.get_value())\
+                .add_updater(lambda v, x=t: v.set_value(x.get_value()))\
+                for t in trackers
+                ]
+        for i in range(len(num_tex)):
+            tex = num_tex[i]
+            tex.shift(i*RIGHT)
+            self.play(Write(tex))
+
+class Test124(Scene):
+    """discord上有个人问的动画"""
+    def construct(self):
+        tex = TexMobject("f(n)+f(n)=2f(n)")
+        self.wait()
+        self.play(Write(tex[0][:9]))
+        self.play(Write(tex[0][9]))
+        self.wait()
+        self.play(
+            TransformFromCopy(tex[0][:4], tex[0][-4:]),
+            TransformFromCopy(tex[0][5:9], tex[0][-4:].copy()),
+            FadeInFrom(tex[0][-5], RIGHT)
+        )
+        self.wait()
+
+class Test125(Scene):
+    """同上"""
+    def construct(self):
+        tex = TexMobject("f(n)+f(n)")
+        two = TexMobject("2").next_to(tex, LEFT, buff=0.02)
+        self.wait()
+        self.play(Write(tex))
+        self.wait()
+        self.play(
+            Transform(tex[0][5:], tex[0][:4].copy()),
+            FadeOut(tex[0][4]),
+            Write(two)
+        )
+        self.wait()
+
+class Test126(Scene):
+    """给LaTeX改字体，失败了qwq"""
+    def construct(self):
+        text = TextMobject("测试字体test")
+        self.add(text)
+
+class Test127(Scene):
+    """和Axes有关的测试"""
+    def construct(self):
+        axes = Axes(
+            x_min=-14, x_max=14,
+            y_min=-8,  y_max=8,
+            number_line_config={
+                "unit_size": 0.5,
+                "tick_frequency": 2,
+            }
+        )
+        axes.add_coordinates(
+            [-6, -4, -2, 2, 4, 6],
+            [-4, -2, 2, 4]
+        )
+        graph = VGroup()
+        graph.add(axes.get_graph(lambda x: -(np.exp(-x)-3), color=RED, x_min=-2.9))
+        graph.add(axes.get_graph(lambda x: x, color=PURPLE))
+        graph.add(axes.get_graph(lambda x: -np.log(3-x), color=BLUE, step_size=0.001))
+        self.add(axes, graph)
+
+class Test128(Scene):
+    """给action_renderer项目做的头图"""
+    CONFIG = {
+        "camera_config": {
+            "background_color": WHITE,
+        },
+    }
+    def construct(self):
+        logo = Logo(black_bg=False).set_height(2)
+        img = ImageMobject("action.png").set_height(2)
+        Group(logo, img).arrange(RIGHT, buff=1.3).center()
+        line = Line(UP, DOWN, stroke_width=8, color=BLACK).move_to(mid(logo.get_right(), img.get_left()))
+        line.set_length(1.4)
+        text = VGroup(
+            Text("Manim-Kindergarten", font="Orbitron", color=DARK_GRAY),
+            Text("manim_action_renderer", font="庞门正道标题体", color=BLACK, size=1.4)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(img, buff=0.5)
+        text[0][0].set_color(logo.color_2[2])
+        text[0][6].set_color(logo.color_1[2])
+        self.add(logo, img, line, text)
+        Group(*self.mobjects).center()
+
+class Test129(Scene):
+    """updater中特判点重合"""
+    def construct(self):
+        A = Dot(3 * RIGHT)
+        B = Dot(2 * RIGHT)
+        label_A = TexMobject('A').next_to(A, DOWN, buff=SMALL_BUFF)
+        label_B = TexMobject('B').next_to(B, DOWN, buff=SMALL_BUFF)
+
+        m = -5*RIGHT
+        C = A.copy()
+        l = Line(A.get_center(), C.get_center())
+        label_C = TexMobject('C').next_to(C, UP, buff=SMALL_BUFF)
+        label_C.add_updater(lambda m: m.next_to(C, UP, buff=SMALL_BUFF))
+
+        def up_loca(mbj):
+            if all(A.get_center() == C.get_center()):
+                pass
+            else:
+                mbj.put_start_and_end_on(A.get_center(), C.get_center())
+
+        l.add_updater(up_loca)
+        self.add(A, B, label_A, label_B, label_C, l)
+        self.play(C.move_to, m, run_time=5)
