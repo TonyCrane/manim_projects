@@ -5,7 +5,7 @@
 '''
 
 from manimlib.imports import *
-from manim_projects.MyUsefulScene.VideoStart import *
+from manim_projects.tony_useful.imports import *
 
 array_fini = np.array([
     ["0", "0", "0", "0", "0", "0", "0", "0", "0"],
@@ -29,13 +29,15 @@ class VideoCover(Scene):
         back[0][18].set_color(GREEN)
         back[0][27].set_color(GREEN)
         back[0][36].set_color(GREEN)
+        back[1:].set_opacity(0)
 
-        dp1 = TextMobject("\\texttt{F[i][j] = max(F[i-1][j], F[i-1][j-v[i]]+c[i])}").move_to(DOWN*1.5).set_color(RED).set_opacity(0.5)
-        dp2 = TextMobject("\\texttt{F[j] = max(F[j], F[j - v[i]] + c[i])}").move_to(DOWN*2.3).set_color(RED).set_opacity(0.5)
+        dp1 = TextMobject("\\texttt{F[i][j] = max(F[i-1][j], F[i-1][j-v[i]]+c[i])}").move_to(DOWN*2.7).set_color(RED).set_opacity(0.5)
+        dp2 = TextMobject("\\texttt{F[j] = max(F[j], F[j - v[i]] + c[i])}").move_to(DOWN*3.5).set_color(RED).set_opacity(0.5)
 
         title = TextMobject("0/1\\ 背\\ 包\\ 问\\ 题").scale(2.7).set_color(BLUE).move_to(UP*0.5)
-        entitle = TextMobject("\\texttt{0/1 Knapsack Problem}").scale(1.8).next_to(title, UP).set_color(YELLOW)
-        author = TextMobject("@鹤翔万里").set_color([BLUE, YELLOW, ORANGE, RED]).next_to(title, DOWN, buff=1.2)
+        title = Text("0/1  背  包  问  题", font="思源宋体 CN Medium", background_stroke_width=2.3, background_stroke_color=BLUE).scale(3).set_color(BLUE).move_to(UP*0.5)
+        entitle = TextMobject("\\texttt{0/1 Knapsack Problem}", background_stroke_width=1, background_stroke_color=YELLOW).match_width(title).next_to(title, UP).set_color(YELLOW)
+        author = TextMobject("@鹤翔万里", stroke_width=1).scale(1.3).set_color([BLUE, YELLOW, ORANGE, RED]).next_to(title, DOWN, buff=1.2)
 
         self.add(back, dp1, dp2, title, entitle, author)
 

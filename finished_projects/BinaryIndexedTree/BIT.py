@@ -5,8 +5,7 @@
 '''
 
 from manimlib.imports import *
-from manim_projects.MyUsefulScene.VideoStart import VideoStart
-from manim_projects.MyUsefulScene.bilibili import TripleScene
+from manim_projects.tony_useful.imports import *
 
 class TreeScene(Scene):
     def build(self, low_opacity=False):
@@ -55,10 +54,10 @@ class TreeScene(Scene):
         )
         if low_opacity:
             for element in BIT_tree:
-                element.set_stroke(opacity=0.3)
+                element.set_stroke(opacity=0.5)
             for i in range(1, 9):
-                textt[i].set_opacity(0.3)
-                texta[i].set_opacity(0.3)
+                textt[i].set_opacity(0.5)
+                texta[i].set_opacity(0.5)
         return BIT_tree
 
 
@@ -73,8 +72,9 @@ class VideoCover(TreeScene):
         BIT_tree = self.build(low_opacity=True)
 
         title = TextMobject("树\\ \\ 状\\ \\ 数\\ \\ 组").scale(3).set_color(BLUE).move_to(UP*0.5)
-        entitle = TextMobject("\\texttt{Binary Indexed Tree}").scale(1.8).next_to(title, UP).set_color(YELLOW)
-        author = TextMobject("@鹤翔万里").set_color([BLUE, YELLOW, ORANGE, RED]).next_to(title, DOWN, buff=1.2)
+        title = Text("树  状  数  组", font="思源宋体 CN Medium", background_stroke_width=2.4, background_stroke_color=BLUE).scale(3.7).set_color(BLUE).move_to(UP*0.5)
+        entitle = TextMobject("\\texttt{Binary Indexed Tree}", background_stroke_width=1.3, background_stroke_color=YELLOW).scale(1.9).next_to(title, UP).set_color(YELLOW)
+        author = TextMobject("@鹤翔万里", stroke_width=1.2).scale(1.3).set_color([BLUE, YELLOW, ORANGE, RED]).next_to(title, DOWN, buff=1.2)
         
         self.add(BIT_tree)
         self.add(title)

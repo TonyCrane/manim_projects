@@ -5,7 +5,7 @@
 '''
 
 from manimlib.imports import *
-from manim_projects.MyUsefulScene.VideoStart import VideoStart
+from manim_projects.tony_useful.imports import *
 
 
 class VideoTitle(VideoStart):
@@ -38,8 +38,9 @@ class VideoCover(Scene):
         ).set_opacity(0.25).move_to(RIGHT*3.1)
 
         title = TextMobject("莫\\ 比\\ 乌\\ 斯\\ 反\\ 演").scale(2.3).set_color(BLUE).move_to(UP*0.5)
-        entitle = TextMobject("\\texttt{Möbius Inversion}").scale(2.1).next_to(title, UP).set_color(YELLOW)
-        author = TextMobject("@鹤翔万里").set_color([BLUE, YELLOW, ORANGE, RED]).next_to(title, DOWN, buff=1.2)
+        title = Text("莫 比 乌 斯 反 演", font="思源宋体 CN Medium", background_stroke_width=2.3, background_stroke_color=BLUE).scale(3).set_color(BLUE).move_to(UP*0.5)
+        entitle = TextMobject("\\texttt{Möbius Inversion}", background_stroke_width=1, background_stroke_color=YELLOW).match_width(title).next_to(title, UP).set_color(YELLOW)
+        author = TextMobject("@鹤翔万里", stroke_width=1).scale(1.3).set_color([BLUE, YELLOW, ORANGE, RED]).next_to(title, DOWN, buff=1.2)
 
         self.add(tex1)
         self.add(tex2)

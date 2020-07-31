@@ -161,7 +161,9 @@ class VideoCover(FFTScene):
 
     def add_main(self):
         title  = TextMobject("快\\ 速\\ 傅\\ 里\\ 叶\\ 变\\ 换").scale(2.3).set_color(BLUE).move_to(UP*0.5)
-        entitle = TextMobject("\\texttt{Fast }","\\texttt{Fourier }", "\\texttt{Transform}").next_to(title, UP).set_color(YELLOW).set_width(title.get_width())
+        title = Text("快 速 傅 里 叶 变 换", font="思源宋体 CN Medium", background_stroke_width=2.1, background_stroke_color=BLUE).scale(2.4).set_color(BLUE).move_to(UP*0.5)
+        entitle = TextMobject("\\texttt{Fast }","\\texttt{Fourier }", "\\texttt{Transform}", background_stroke_width=1.2, \
+            background_stroke_color=YELLOW).next_to(title, UP).set_color(YELLOW).set_width(title.get_width())
         fast1 = TextMobject("\\texttt{Fast }").set_color(GRAY).set_width(entitle[0].get_width()).next_to(entitle[0], UP)
         fast2 = TextMobject("\\texttt{Fast }").set_color(GRAY).set_width(entitle[0].get_width()).next_to(entitle[1], UP)
         tle   = TextMobject("\\texttt{TLE}").set_color(GRAY).set_height(entitle[0].get_height()).next_to(entitle[2], UP)
@@ -178,8 +180,9 @@ class VideoCover(FFTScene):
     def add_subscripts(self):
         square = Square().rotate(PI / 4).scale(1.5).set_fill(BLUE, 1).set_color(BLUE)
         square.move_to(LEFT * 7.3 + UP * 4.6)
-        text = Text("互动", font='Source Han Serif CN', stroke_width=1.5).scale(0.55).rotate(PI / 4).next_to(square.get_edge_center(DOWN), buff=0)
-        text.shift(UP * 1.2 + RIGHT * 0.25)
+        square.scale(1.2)
+        text = Text("互动", font='Source Han Serif CN', stroke_width=2).scale(1.3).rotate(PI / 4).next_to(square.get_edge_center(DOWN), buff=0)
+        text.shift(UP * 1.5 + RIGHT * 0.3)
 
         self.add(square, text)
 
