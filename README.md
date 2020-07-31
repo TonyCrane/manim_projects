@@ -13,10 +13,8 @@
 如果想要交流manim的话，欢迎加入QQ群：862671480<br/>
 [鹤翔万里的b站主页](https://space.bilibili.com/171431343 '求关注求三连ღ( ´･ᴗ･` )')
 
-其中一些素材和地址等由于某些文件的移动path可能有点不对，finished_projects中的文件对应的manim版本较老（需要改改才能运行）<br/>    
+其中一些素材和地址等由于某些文件的移动path可能有点不对，`old`中的文件对应的manim版本较老（需要改改才能运行）<br/>    
 此外，由于编程水平有限，加上对Grant的代码理解有限，代码有时会出现不太好的实现方式，敬请谅解
-
-documents文件夹中存放的是[manim常见问题](https://github.com/Tony031218/manim-projects/blob/master/documents/manim%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98v2.0.pdf)的tex源代码和pdf文件，如果manim安装和使用有什么问题，可以先参考这个文档
 
 ## 视频地址: 
 __均投放在B站上__，mk团队稿件没算在内
@@ -55,3 +53,5 @@ __均投放在B站上__，mk团队稿件没算在内
 - [cigar666的github](https://github.com/cigar666)
 - [manim-kindergarten中整理的一些代码](https://github.com/manim-kindergarten/manim_sandbox 'manim sandbox')<br>
 - [mk整理的manim版本](https://github.com/manim-kindergarten/manim)
+- [manim中文文档](https://manim.ml/)
+- [一个在GitHub服务器上渲染视频的action](https://github.com/manim-kindergarten/manim_action_renderer)
