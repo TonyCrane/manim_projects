@@ -8,7 +8,7 @@ class SquareToCircle(Scene):
         print(f"circle plot_depth = {circle.plot_depth}")
         print(f"square plot_depth = {square.plot_depth}")
     
-        self.play(FadeIn(VGroup(circle, square)))  # all good
+        self.play(FadeIn(circle), FadeIn(square))  # all good
         print("after FadeIn...")
         print(f"circle plot_depth = {circle.plot_depth}")
         print(f"square plot_depth = {square.plot_depth}")
