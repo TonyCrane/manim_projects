@@ -16,6 +16,7 @@ jobs:
         with:
           source_file: render.py
           args: "--high_quality"
+          scene_names: SquareToCircle 
  #         extra_repos: |
  #           https://github.com/Tony031218/manim_projects 
  #           https://github.com/manim-kindergarten/manim_sandbox
