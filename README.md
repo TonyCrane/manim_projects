@@ -1,10 +1,10 @@
 <p align="center">
-    <a herf="https://github.com/Tony031218/manim_projects">
+    <a herf="https://github.com/TonyCrane/manim_projects">
         <img src="assets/raster_images/title.png" />
     </a>
 </p>
 
-[![MIT License](https://img.shields.io/github/license/Tony031218/manim_projects)](https://choosealicense.com/licenses/apache-2.0/)
+[![MIT License](https://img.shields.io/github/license/TonyCrane/manim_projects)](https://choosealicense.com/licenses/apache-2.0/)
 [![mk](https://img.shields.io/badge/org-manim__kindergarten-blue)](https://github.com/manim-kindergarten/)
 [![manim_sandbox](https://img.shields.io/badge/mk-manim__sandbox-brightgreen.svg)](https://github.com/manim-kindergarten/manim_sandbox/)
 [![manim](https://img.shields.io/badge/manim-ver.MK-orange.svg)](https://github.com/manim-kindergarten/manim)

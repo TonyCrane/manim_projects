@@ -72,6 +72,11 @@ class FadeInRandom(WriteRandom):
         "anim_type": FadeIn
     }
 
+class FadeInFromCenterRandom(WriteRandom):
+    CONFIG = {
+        "anim_type": FadeInFromCenter
+    }
+
 class FadeOutRandom(WriteRandom):
     CONFIG = {
         "anim_type": FadeOut
